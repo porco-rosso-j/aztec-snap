@@ -26,6 +26,10 @@
     "start": "mm-snap watch"
   },
   "dependencies": {
+    "@aztec/aztec.js": "^0.14.2",
+    "@aztec/foundation": "^0.14.2",
+    "@aztec/noir-contracts": "^0.14.2",
+    "@aztec/types": "^0.14.2",
     "@metamask/key-tree": "^7.0.0",
     "@metamask/snaps-types": "^0.32.2",
     "@metamask/snaps-ui": "^0.32.2",
@@ -33,18 +37,31 @@
     "buffer": "^6.0.3",
     "coininfo": "^5.2.1",
     "dotenv": "^16.1.4",
-    "envify": "^4.1.0"
+    "envify": "^4.1.0",
+    "stream-browserify": "^3.0.0",
+    "tty-browserify": "^0.0.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.3",
+    "@babel/plugin-proposal-decorators": "^7.23.3",
+    "@babel/plugin-syntax-import-attributes": "^7.23.3",
+    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-typescript": "^7.23.3",
     "@lavamoat/allow-scripts": "^2.0.3",
     "@metamask/auto-changelog": "^2.6.0",
     "@metamask/eslint-config": "^10.0.0",
     "@metamask/eslint-config-jest": "^10.0.0",
     "@metamask/eslint-config-nodejs": "^10.0.0",
     "@metamask/eslint-config-typescript": "^10.0.0",
-    "@metamask/snaps-cli": "flask",
+    "@metamask/snaps-cli": "^3.0.2",
+    "@metamask/snaps-webpack-plugin": "3.1.0",
+    "@swc/register": "^0.1.10",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
+    "babel-loader": "^9.1.3",
+    "bundler": "^0.8.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "esbuild-loader": "^4.0.2",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.26.0",
@@ -54,13 +71,32 @@
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.11",
+    "resolve-typescript-plugin": "^2.0.1",
     "rimraf": "^3.0.2",
     "through2": "^4.0.2",
-    "typescript": "^4.7.4"
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   },
   "packageManager": "yarn@3.2.1",
   "engines": {
     "node": ">=16.0.0"
+  },
+  "browserslist": {
+    "production": [
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "publishConfig": {
     "access": "public",

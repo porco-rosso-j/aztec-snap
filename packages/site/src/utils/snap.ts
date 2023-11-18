@@ -68,7 +68,8 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
     params: {
       snapId: defaultSnapOrigin,
       request: {
-        method: `doge_${args.snapRpcMethod}`,
+        // method: `azt_${args.snapRpcMethod}`,
+        method: `doge_${args.snapRpcMethod as string}`,
         params: 'params' in args ? args.params : undefined,
       },
     },

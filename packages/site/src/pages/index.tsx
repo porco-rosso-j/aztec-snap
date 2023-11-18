@@ -185,20 +185,20 @@ const Index = () => {
                   <form onSubmit={handleSendDoge}>
                     <p>
                       <input
-                        type="text"
+                        type="string"
                         name="toAddress"
-                        placeholder="Address"
+                        placeholder="0x000aztec"
                       />
                     </p>
                     <p>
                       <input
                         type="number"
                         name="amountInDoge"
-                        placeholder="Amount in DOGE"
+                        placeholder="100"
                       />
                     </p>
                     <button disabled={isTxLoading} type="submit">
-                      Send DOGETEST
+                      Send AZT Token
                     </button>
                   </form>
                   {lastTxId && (

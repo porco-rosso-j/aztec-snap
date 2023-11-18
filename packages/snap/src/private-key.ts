@@ -18,3 +18,13 @@ export const getAccount = async (): Promise<BIP44Node> => {
 
   return deriveDogecoinTestnetPrivateKey(0);
 };
+
+export const getECDSAAccount = async (): Promise<any> => {
+  // option 1: fetch Account object from browser storage.
+  // as everytime user login, we ask signature which creates some entropy
+  // to derive signing key which is stored in local storage.
+  // 1: get signing key & encryption key from local storage
+  // 2: create ECDSAAccount instance
+  // return ECDSAAccount
+  // option 2: fresh wallet
+};

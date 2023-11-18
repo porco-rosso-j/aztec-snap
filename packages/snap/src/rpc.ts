@@ -7,7 +7,7 @@ import {
   getAllTxnsForAddress,
   getBalanceForAddress,
   getFees,
-  getTransactionHex,
+  // getTransactionHex,
   getUtxosForValue,
 } from './tatum';
 import { BroadcastTransactionResponse, TatumTransaction } from './tatum-types';
@@ -119,16 +119,16 @@ export const makeTransaction = async ({
   const fees = await getFees();
   const feePerByte = fees.medium;
 
-  await Promise.all(
-    utxos.map(async (utxo) => {
-      const txHex = await getTransactionHex(utxo.txHash);
-      psbt.addInput({
-        hash: utxo.txHash,
-        index: utxo.index,
-        nonWitnessUtxo: Buffer.from(txHex, 'hex'),
-      });
-    }),
-  );
+  // await Promise.all(
+  //   utxos.map(async (utxo) => {
+  //     const txHex = await getTransactionHex(utxo.txHash);
+  //     psbt.addInput({
+  //       hash: utxo.txHash,
+  //       index: utxo.index,
+  //       nonWitnessUtxo: Buffer.from(txHex, 'hex'),
+  //     });
+  //   }),
+  // );
 
   const estimatedTxSize = utxos.length * 180 + 2 * 34 + 10;
   const fee = Math.floor(estimatedTxSize * feePerByte);
