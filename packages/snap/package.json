@@ -27,6 +27,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aztec/aztec.js": "^0.14.2",
+    "@aztec/circuits.js": "^0.14.2",
+    "@aztec/foundation": "^0.14.2",
+    "@aztec/types": "^0.15.0",
     "@metamask/snaps-types": "^3.0.1",
     "@metamask/snaps-ui": "^3.0.1",
     "buffer": "^6.0.3"
@@ -58,7 +62,6 @@
     "ts-jest": "^29.1.0",
     "typescript": "^4.7.4"
   },
-  "packageManager": "yarn@3.2.1",
   "engines": {
     "node": ">=18.6.0"
   },
