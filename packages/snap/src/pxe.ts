@@ -2,6 +2,15 @@ import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
 // import { TokenContract } from '@aztec/noir-contracts';
 // import { getECDSAAccount } from './account';
 // import { MakeTransactionParams } from './pxe-types';
+import {
+  createPXEClient,
+  GrumpkinScalar,
+  Fr,
+  SingleKeyAccountContract,
+  SchnorrAccountContract,
+  AccountManager,
+} from '@aztec/aztec.js';
+
 import { MakeTransactionParams } from './types';
 import { PXE_URL } from './constants';
 import { VotingContract } from './contract-types/Voting';
@@ -18,35 +27,36 @@ import { VotingContract } from './contract-types/Voting';
  * This demo wallet uses a single account/address.
  */
 
-const pk = '0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281';
-
 export const getAddress = async (): Promise<string> => {
-  const aztec = await import('@aztec/aztec.js');
-  // const encryptionPrivateKey = new aztec.GrumpkinScalar(new aztec.Fr(pk));
-  // console.log('1');
-  const pxe = await aztec.createPXEClient(PXE_URL);
+  // const pk = 0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281;
+  // const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
+  const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
+  console.log('encryptionPrivateKey: ', encryptionPrivateKey);
+  const pxe = await createPXEClient(PXE_URL);
   console.log('pxe: ', pxe);
-  // const accountContract = new aztec.SingleKeyAccountContract(
-  //   encryptionPrivateKey,
-  // );
-  // console.log('3');
-  // const accountManager = new aztec.AccountManager(
-  //   pxe,
-  //   encryptionPrivateKey,
-  //   accountContract,
-  // );
-  // console.log('4');
+
+  console.log('node info: ', await pxe.getNodeInfo());
+  const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
+  console.log('accountContract: ', accountContract);
+  const accountManager = new AccountManager(
+    pxe,
+    encryptionPrivateKey,
+    accountContract,
+  );
+  console.log('4');
+  console.log('accountManager: ', accountManager);
 
   // const wallet = await accountManager.getWallet();
-  // console.log('5');
-  // const votingContract = await VotingContract.at(
-  //   '0x1254268ac4d842d5c3acd9e555015b13e2785a3e51b3272cd6578534e59d1c87',
-  //   wallet,
-  // );
-  // console.log('6');
-  // const adminAddr = await votingContract.methods.admin().view();
-  // return adminAddr.toString();
-  return '';
+  const wallet = await accountManager.waitDeploy();
+  console.log('5');
+  console.log('wallet: ', wallet);
+  const votingContract = await VotingContract.at(
+    '0x149a9593f1ca604b7aeb9c8d7732b872b84b358ac765e4a03af2093d2cb6da0e',
+    wallet,
+  );
+  console.log('6');
+  const adminAddr = await votingContract.methods.admin().view();
+  return adminAddr.toString();
 };
 
 export const getTx = async (): Promise<any[]> => {

@@ -106,7 +106,7 @@ const Index = () => {
   return (
     <Container>
       <Heading>
-        Welcome to <Span>dogecoin-snap 🐶</Span>
+        Welcome to <Span>aztec-snap</Span>
       </Heading>
       <CardContainer>
         {state.error && (
@@ -161,7 +161,7 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Your Dogecoin Testnet Address',
+              title: 'Your AZT Testnet Address',
               description: address,
             }}
           />
@@ -170,7 +170,7 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Your Dogecoin Testnet Balance',
+              title: 'Your AZT Testnet Balance',
               description: `${balance} DOGETEST`,
             }}
           />
@@ -179,7 +179,7 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Send DOGETEST',
+              title: 'Send AZT',
               description: (
                 <>
                   <form onSubmit={handleSendDoge}>

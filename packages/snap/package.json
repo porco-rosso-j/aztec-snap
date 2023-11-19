@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@aztec/aztec.js": "^0.14.2",
+    "@aztec/circuits.js": "^0.15.0",
     "@aztec/foundation": "^0.14.2",
     "@aztec/noir-contracts": "^0.14.2",
     "@aztec/types": "^0.14.2",
@@ -39,7 +40,8 @@
     "dotenv": "^16.1.4",
     "envify": "^4.1.0",
     "stream-browserify": "^3.0.0",
-    "tty-browserify": "^0.0.1"
+    "tty-browserify": "^0.0.1",
+    "webpack-browser-plugin": "^1.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
@@ -69,6 +71,7 @@
     "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "http-proxy-middleware": "^2.0.6",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.11",
     "resolve-typescript-plugin": "^2.0.1",

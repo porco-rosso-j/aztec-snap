@@ -62,8 +62,8 @@ export const Header = ({
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <SnapLogo color={theme.colors.icon.default} size={36} />
-        <Title>dogecoin-snap</Title>
+        {/* <SnapLogo color={theme.colors.icon.default} size={36} /> */}
+        <Title>aztec-snap</Title>
       </LogoWrapper>
       <RightContainer>
         <Toggle

@@ -7,7 +7,9 @@ export const useAddress = (isSnapInstalled: boolean) => {
   useEffect(() => {
     if (isSnapInstalled) {
       (async () => {
+        console.log('getAddress');
         const addressResponse = await getAddress();
+        console.log('addressResponse');
         if (addressResponse) {
           setAddress(addressResponse);
         }

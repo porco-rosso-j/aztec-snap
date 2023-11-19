@@ -7,6 +7,8 @@ import { OnRpcRequestHandler } from '@metamask/snaps-types';
 // } from './rpc';
 import { getAddress, getAztBalance, getTx, makeTransaction } from './pxe';
 import { assertIsMakeTransactionParams } from './types';
+// eslint-disable-next-line import/no-unassigned-import
+import './worker-registration';
 
 // export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
 //   switch (request.method) {

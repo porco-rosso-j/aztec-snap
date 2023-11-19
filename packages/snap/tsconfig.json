@@ -8,6 +8,7 @@
   "compilerOptions": {
     "composite": true,
     "resolveJsonModule":true,
+    "lib": ["webworker", "dom"],
     "baseUrl": "./",
     "experimentalDecorators": true,
   }

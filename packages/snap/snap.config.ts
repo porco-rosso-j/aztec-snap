@@ -1,10 +1,13 @@
+// import path, { dirname, resolve } from 'path';
+import { resolve } from 'path';
 import type { SnapConfig } from '@metamask/snaps-cli';
 import { merge } from '@metamask/snaps-cli';
 // import SnapsWebpackPlugin from '@metamask/snaps-webpack-plugin';
+// eslint-disable-next-line import/default
 // import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { EsbuildPlugin } from 'esbuild-loader';
-// import { dirname, resolve } from 'path';
-import { resolve } from 'path';
+// import browserPlugin from 'webpack-browser-plugin';
+
 // import ResolveTypeScriptPlugin from 'resolve-typescript-plugin';
 // import type { Configuration } from 'webpack';
 
@@ -24,9 +27,11 @@ const config: SnapConfig = {
     //   type: 'commonjs',
     // },
   },
+
   server: {
     enabled: true,
-    port: 8080,
+    // root: 'src',
+    port: 8081,
   },
   experimental: {
     wasm: true,
@@ -89,11 +94,10 @@ const config: SnapConfig = {
       //   new CopyWebpackPlugin({
       //     patterns: [
       //       {
-      //         from: `${dirname(require.resolve(`@aztec/circuits.js`)).replace(
-      //           /\/dest$/u,
-      //           '',
-      //         )}/resources/aztec3-circuits.wasm`,
-      //         to: 'aztec3-circuits.wasm',
+      //         from: `${path
+      //           .dirname(require.resolve(`@aztec/circuits.js`))
+      //           .replace(/\/dest$/u, '')}/resources/aztec3-circuits.wasm`,
+      //         to: 'public/aztec3-circuits.wasm', // Adjust the destination directory
       //       },
       //     ],
       //   }),

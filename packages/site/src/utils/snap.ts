@@ -69,7 +69,7 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
       snapId: defaultSnapOrigin,
       request: {
         // method: `azt_${args.snapRpcMethod}`,
-        method: `doge_${args.snapRpcMethod as string}`,
+        method: `azt_${args.snapRpcMethod as string}`,
         params: 'params' in args ? args.params : undefined,
       },
     },
@@ -82,6 +82,7 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
 export const getAddress = async () => {
+  console.log('1');
   return snapRpcRequest({
     snapRpcMethod: 'getAddress',
   });
