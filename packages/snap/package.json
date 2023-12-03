@@ -26,11 +26,11 @@
     "start": "mm-snap watch"
   },
   "dependencies": {
-    "@aztec/aztec.js": "^0.14.2",
-    "@aztec/circuits.js": "^0.15.0",
-    "@aztec/foundation": "^0.14.2",
-    "@aztec/noir-contracts": "^0.14.2",
-    "@aztec/types": "^0.14.2",
+    "@aztec/aztec.js": "^0.16.1",
+    "@aztec/circuits.js": "^0.16.1",
+    "@aztec/foundation": "^0.16.1",
+    "@aztec/noir-contracts": "^0.16.1",
+    "@aztec/types": "^0.16.1",
     "@metamask/key-tree": "^7.0.0",
     "@metamask/snaps-types": "^0.32.2",
     "@metamask/snaps-ui": "^0.32.2",
@@ -85,21 +85,7 @@
   },
   "packageManager": "yarn@3.2.1",
   "engines": {
-    "node": ">=16.0.0"
-  },
-  "browserslist": {
-    "production": [
-      "chrome >= 67",
-      "edge >= 79",
-      "firefox >= 68",
-      "opera >= 54",
-      "safari >= 14"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "node": ">=18.0.0"
   },
   "publishConfig": {
     "access": "public",

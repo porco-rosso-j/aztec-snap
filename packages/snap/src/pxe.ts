@@ -5,11 +5,14 @@ import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
 import {
   createPXEClient,
   GrumpkinScalar,
-  Fr,
-  SingleKeyAccountContract,
-  SchnorrAccountContract,
-  AccountManager,
+  AccountWallet,
+  getSandboxAccountsWallets,
+  // Fr,
+  // SingleKeyAccountContract,
+  // SchnorrAccountContract,
+  // AccountManager,
 } from '@aztec/aztec.js';
+// import { GrumpkinScalar } from '@aztec/foundation';
 
 import { MakeTransactionParams } from './types';
 import { PXE_URL } from './constants';
@@ -36,27 +39,32 @@ export const getAddress = async (): Promise<string> => {
   console.log('pxe: ', pxe);
 
   console.log('node info: ', await pxe.getNodeInfo());
-  const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
-  console.log('accountContract: ', accountContract);
-  const accountManager = new AccountManager(
-    pxe,
-    encryptionPrivateKey,
-    accountContract,
-  );
-  console.log('4');
-  console.log('accountManager: ', accountManager);
+  const accountWallets: AccountWallet[] = await getSandboxAccountsWallets(pxe);
+  console.log('accountWallets: ', accountWallets);
+  // const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
+  // console.log('accountContract: ', accountContract);
+  // const accountManager = new AccountManager(
+  //   pxe,
+  //   encryptionPrivateKey,
+  //   accountContract,
+  // );
+  // console.log('4');
+  // console.log('accountManager: ', accountManager);
 
-  // const wallet = await accountManager.getWallet();
-  const wallet = await accountManager.waitDeploy();
-  console.log('5');
-  console.log('wallet: ', wallet);
+  // // const wallet = await accountManager.getWallet();
+  // const wallet = await accountManager.waitDeploy();
+  // console.log('5');
+  // console.log('wallet: ', wallet);
+
   const votingContract = await VotingContract.at(
     '0x149a9593f1ca604b7aeb9c8d7732b872b84b358ac765e4a03af2093d2cb6da0e',
-    wallet,
+    accountWallets[0],
   );
   console.log('6');
   const adminAddr = await votingContract.methods.admin().view();
-  return adminAddr.toString();
+  return adminAddr;
+  // const adminAddr = '1223';
+  // return adminAddr.toString();
 };
 
 export const getTx = async (): Promise<any[]> => {

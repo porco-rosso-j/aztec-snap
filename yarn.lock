@@ -65,25 +65,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aztec/aztec.js@npm:0.14.2, @aztec/aztec.js@npm:^0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/aztec.js@npm:0.14.2"
+"@aztec/aztec.js@npm:0.16.1, @aztec/aztec.js@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/aztec.js@npm:0.16.1"
   dependencies:
-    "@aztec/circuits.js": 0.14.2
-    "@aztec/ethereum": 0.14.2
-    "@aztec/foundation": 0.14.2
-    "@aztec/types": 0.14.2
+    "@aztec/circuits.js": 0.16.1
+    "@aztec/ethereum": 0.16.1
+    "@aztec/foundation": 0.16.1
+    "@aztec/types": 0.16.1
     lodash.every: ^4.6.0
     lodash.partition: ^4.6.0
     lodash.zip: ^4.2.0
     tslib: ^2.4.0
-  checksum: 22c369cb1e2232f21649895c2ab51799b7e9efc57680b6582a1fc257e321d377d3ddf9605ad201ae3974c5a119980eb3fe59f0dcddbac3ed6214275759716b8b
+  checksum: 70dd576da6436729023ce47df0f64f5ec78e13b6ea1341a328bacb9f990bee72292360a003e764ccefd4d6a3e685e65f2d93229409addfe4ed434714b290f70b
   languageName: node
   linkType: hard
 
-"@aztec/bb.js@npm:0.15.0":
-  version: 0.15.0
-  resolution: "@aztec/bb.js@npm:0.15.0"
+"@aztec/bb.js@npm:0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/bb.js@npm:0.16.1"
   dependencies:
     comlink: ^4.4.1
     commander: ^10.0.1
@@ -91,95 +91,41 @@ __metadata:
     tslib: ^2.4.0
   bin:
     bb.js: dest/node/main.js
-  checksum: 05480ef0821c87cd285a832e42ba3d507c3aaa4d63cdf1911dcecaa304726a6ecfac76127090a75b311fe85db82628fe557d1666eeeda666fe2c83d5b969cdce
+  checksum: a1c8a9a2ebdb71ada7b7eb86d50a88dcffba34ef68e999c286ffbacdd2dc5035ad3055ae01b683210ad81bb8a21d2a339035e6999fceb86b2b56607bb374fcc1
   languageName: node
   linkType: hard
 
-"@aztec/circuits.js@npm:0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/circuits.js@npm:0.14.2"
+"@aztec/circuits.js@npm:0.16.1, @aztec/circuits.js@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/circuits.js@npm:0.16.1"
   dependencies:
-    "@aztec/foundation": 0.14.2
-    "@msgpack/msgpack": ^3.0.0-beta2
-    "@noble/curves": ^1.0.0
-    "@types/lodash.camelcase": ^4.3.7
-    "@types/lodash.times": ^4.3.7
-    cross-fetch: ^3.1.5
-    detect-node: ^2.1.0
+    "@aztec/bb.js": 0.16.1
+    "@aztec/foundation": 0.16.1
     eslint: ^8.35.0
-    lodash.capitalize: ^4.2.1
     lodash.chunk: ^4.2.0
-    lodash.mapvalues: ^4.6.0
-    lodash.snakecase: ^4.1.1
     lodash.times: ^4.3.2
     tslib: ^2.4.0
-  checksum: 2346772c921227417d329fdf0d8a0c117697a3d3576f1a93b7c1c35d10109291cd6a96b3ce4bee65d59bf79f1b249ee96d446c6b67a97a340e7d92ba79d50477
+  checksum: 1580b268d4338f3bd587cea5335b7383fe6fb83403afa8894492461ab6f3f592a05bd1b22bd87d5d573677077dd3ba3182e509ee7b54dfecddea1f99fddcaeac
   languageName: node
   linkType: hard
 
-"@aztec/circuits.js@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "@aztec/circuits.js@npm:0.15.0"
+"@aztec/ethereum@npm:0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/ethereum@npm:0.16.1"
   dependencies:
-    "@aztec/foundation": 0.15.0
-    "@msgpack/msgpack": ^3.0.0-beta2
-    "@noble/curves": ^1.0.0
-    "@types/lodash.camelcase": ^4.3.7
-    "@types/lodash.times": ^4.3.7
-    cross-fetch: ^3.1.5
-    detect-node: ^2.1.0
-    eslint: ^8.35.0
-    lodash.capitalize: ^4.2.1
-    lodash.chunk: ^4.2.0
-    lodash.mapvalues: ^4.6.0
-    lodash.snakecase: ^4.1.1
-    lodash.times: ^4.3.2
-    tslib: ^2.4.0
-  checksum: d79426bad7fee39b56a12ce0ef82b564bfa469fe8cf37948567e60f28b028bd2fc8cfa30e63b3f1b4e79dee36fcc496c8c7c33543ceb1b6c470de48a4c4376a9
-  languageName: node
-  linkType: hard
-
-"@aztec/ethereum@npm:0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/ethereum@npm:0.14.2"
-  dependencies:
-    "@aztec/foundation": 0.14.2
+    "@aztec/foundation": 0.16.1
     dotenv: ^16.0.3
     tslib: ^2.4.0
     viem: ^1.2.5
-  checksum: 9853e792bc333d4c2a4d1cf0afa89f403fa63e1929a43c9d955bcd60c3fc8048105a572d6cca6326219424e897512958541a9cb9bddbd1444a17f71c7d2a3e7c
+  checksum: a127ed58f277ae50c106ad74e1be88a74549f88213e608a2f56342ab84a0a6a4579817da96caad82ad4ed31ca24fa479d19b43e12ee9c7020b1296d02d09b833
   languageName: node
   linkType: hard
 
-"@aztec/foundation@npm:0.14.2, @aztec/foundation@npm:^0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/foundation@npm:0.14.2"
+"@aztec/foundation@npm:0.16.1, @aztec/foundation@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/foundation@npm:0.16.1"
   dependencies:
-    "@koa/cors": ^4.0.0
-    "@noble/curves": ^1.2.0
-    debug: ^4.3.4
-    detect-node: ^2.1.0
-    hash.js: ^1.1.7
-    koa: ^2.14.2
-    koa-bodyparser: ^4.4.0
-    koa-compress: ^5.1.0
-    koa-router: ^12.0.0
-    leveldown: ^6.1.1
-    levelup: ^5.1.1
-    lodash.clonedeepwith: ^4.5.0
-    memdown: ^6.1.1
-    pako: ^2.1.0
-    sha3: ^2.1.4
-    zod: ^3.22.4
-  checksum: 44387c921ae5c019a65d1e7011ed71fb23d886fb6814fae9ddd4c038d8dc824fa04d98991dd60c8edd2679b010b1a382fe2aa1c96d56d2d4c04f083a88278bc7
-  languageName: node
-  linkType: hard
-
-"@aztec/foundation@npm:0.15.0":
-  version: 0.15.0
-  resolution: "@aztec/foundation@npm:0.15.0"
-  dependencies:
-    "@aztec/bb.js": 0.15.0
+    "@aztec/bb.js": 0.16.1
     "@koa/cors": ^4.0.0
     "@noble/curves": ^1.2.0
     bn.js: ^5.2.1
@@ -198,35 +144,35 @@ __metadata:
     pako: ^2.1.0
     sha3: ^2.1.4
     zod: ^3.22.4
-  checksum: 6aaca813b95f516bd033242e9b67f38aff542959e7c4ff2720e770d393aac8c59bcb7c096f16b01b26aa0918ce89b49deed5ed9e8fe00882d22ba491d8b9cda4
+  checksum: 2fe1677da247a50a2d38bf1198a03fccf685771579c84a6c41cf8253ebb60afb755408fb830e1f92c27ea7c20e51a6212a86158c5feef3a22255cb656511b8b1
   languageName: node
   linkType: hard
 
-"@aztec/noir-contracts@npm:^0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/noir-contracts@npm:0.14.2"
+"@aztec/noir-contracts@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/noir-contracts@npm:0.16.1"
   dependencies:
-    "@aztec/aztec.js": 0.14.2
-    "@aztec/foundation": 0.14.2
+    "@aztec/aztec.js": 0.16.1
+    "@aztec/foundation": 0.16.1
     lodash.omit: ^4.5.0
     tslib: ^2.4.0
-  checksum: 5f27cdb6c7f9a5731dbd493437c494865f9ea9ed841a35438f29abde3160245d4fc4c5d704efe0001863758a33b722416ddabe7f195fdde22a694ef978031911
+  checksum: f1aeed16aef8afcec02e3f423e69cb08bff8205bfc4e653cf04c8adf4a5358ef3ba21d972918dd31d75b91fdaa8fc5fe461ef74eca70535c531dd613b4401d22
   languageName: node
   linkType: hard
 
-"@aztec/types@npm:0.14.2, @aztec/types@npm:^0.14.2":
-  version: 0.14.2
-  resolution: "@aztec/types@npm:0.14.2"
+"@aztec/types@npm:0.16.1, @aztec/types@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@aztec/types@npm:0.16.1"
   dependencies:
-    "@aztec/circuits.js": 0.14.2
-    "@aztec/ethereum": 0.14.2
-    "@aztec/foundation": 0.14.2
+    "@aztec/circuits.js": 0.16.1
+    "@aztec/ethereum": 0.16.1
+    "@aztec/foundation": 0.16.1
     browserify-cipher: ^1.0.1
     lodash.clonedeep: ^4.5.0
     lodash.isequal: ^4.5.0
     lodash.times: ^4.3.2
     tslib: ^2.5.0
-  checksum: 2fcf3205f4f36d244737bb0c22b77e7b681bba0a38ea43784effdd89b98157294157d4e27cf96c940cd43d58852fd66d5bc01a5debe9f3939ed0f1b7e6d75ce6
+  checksum: 3399d1bcfd460c702fcb5702426a3bc96e557cb1e51cf6fceb939409152345a9beb53cfd31535831ce626114aa2a0c6ad21d2071b2ffc71e8c7b9995e0bf3abb
   languageName: node
   linkType: hard
 
@@ -3355,13 +3301,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@msgpack/msgpack@npm:^3.0.0-beta2":
-  version: 3.0.0-beta2
-  resolution: "@msgpack/msgpack@npm:3.0.0-beta2"
-  checksum: d86e5d48146051952d6bea35a6cf733a401cf65ad5614d79689aa48c7076021737ca2c782978dd1b6c0c9c45888b246e379e45ae906179e3a0e8ef4ee6f221c1
-  languageName: node
-  linkType: hard
-
 "@msgpackr-extract/msgpackr-extract-darwin-arm64@npm:3.0.2":
   version: 3.0.2
   resolution: "@msgpackr-extract/msgpackr-extract-darwin-arm64@npm:3.0.2"
@@ -3422,7 +3361,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@noble/curves@npm:1.2.0, @noble/curves@npm:^1.0.0, @noble/curves@npm:^1.2.0, @noble/curves@npm:~1.2.0":
+"@noble/curves@npm:1.2.0, @noble/curves@npm:^1.2.0, @noble/curves@npm:~1.2.0":
   version: 1.2.0
   resolution: "@noble/curves@npm:1.2.0"
   dependencies:
@@ -4982,25 +4921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash.camelcase@npm:^4.3.7":
-  version: 4.3.9
-  resolution: "@types/lodash.camelcase@npm:4.3.9"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: f54132d38ffa72b25bce2111e4d28f339599f6d4fcfc1248a89d1d96445512d7a431f0b0e74f6e6c8d6bc09fe53cf94d9426e188d8feacb3ffe04cd9c3a602e7
-  languageName: node
-  linkType: hard
-
-"@types/lodash.times@npm:^4.3.7":
-  version: 4.3.9
-  resolution: "@types/lodash.times@npm:4.3.9"
-  dependencies:
-    "@types/lodash": "*"
-  checksum: 452374b3db98bb805e77b3a53955aa76c1e78a7d48c400b08d48b6424ed9328ad826d98364b82506ea2756089320503d3a5797a1456bcdac11451763be536e62
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.92":
+"@types/lodash@npm:^4.14.92":
   version: 4.14.201
   resolution: "@types/lodash@npm:4.14.201"
   checksum: 484be655298e9b2dc2d218ea934071b2ea31e4a531c561dd220dbda65237e8d08c20dc2d457ac24f29be7fe167415bf7bb9360ea0d80bdb8b0f0ec8d8db92fae
@@ -5805,11 +5726,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ziad-saab/dogecoin-snap@workspace:packages/snap"
   dependencies:
-    "@aztec/aztec.js": ^0.14.2
-    "@aztec/circuits.js": ^0.15.0
-    "@aztec/foundation": ^0.14.2
-    "@aztec/noir-contracts": ^0.14.2
-    "@aztec/types": ^0.14.2
+    "@aztec/aztec.js": ^0.16.1
+    "@aztec/circuits.js": ^0.16.1
+    "@aztec/foundation": ^0.16.1
+    "@aztec/noir-contracts": ^0.16.1
+    "@aztec/types": ^0.16.1
     "@babel/core": ^7.23.3
     "@babel/plugin-proposal-decorators": ^7.23.3
     "@babel/plugin-syntax-import-attributes": ^7.23.3
@@ -14482,13 +14403,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.capitalize@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "lodash.capitalize@npm:4.2.1"
-  checksum: d9195f31d48c105206f1099946d8bbc8ab71435bc1c8708296992a31a992bb901baf120fdcadd773098ac96e62a79e6b023ee7d26a2deb0d6c6aada930e6ad0a
-  languageName: node
-  linkType: hard
-
 "lodash.chunk@npm:^4.2.0":
   version: 4.2.0
   resolution: "lodash.chunk@npm:4.2.0"
@@ -14566,13 +14480,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.mapvalues@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "lodash.mapvalues@npm:4.6.0"
-  checksum: 0ff1b252fda318fc36e47c296984925e98fbb0fc5a2ecc4ef458f3c739a9476d47e40c95ac653e8314d132aa59c746d4276527b99d6e271940555c6e12d2babd
-  languageName: node
-  linkType: hard
-
 "lodash.maxby@npm:^4.6.0":
   version: 4.6.0
   resolution: "lodash.maxby@npm:4.6.0"
@@ -14612,13 +14519,6 @@ __metadata:
   version: 4.6.0
   resolution: "lodash.partition@npm:4.6.0"
   checksum: 57c01e3b790c4c4352bffd8be281bd98ed09f6076985d764163478b5a27db3183454cc8c9c25231210d3c69ae2bea37b78911a794bc82c296865eba8b6bd314f
-  languageName: node
-  linkType: hard
-
-"lodash.snakecase@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "lodash.snakecase@npm:4.1.1"
-  checksum: 1685ed3e83dda6eae5a4dcaee161a51cd210aabb3e1c09c57150e7dd8feda19e4ca0d27d0631eabe8d0f4eaa51e376da64e8c018ae5415417c5890d42feb72a8
   languageName: node
   linkType: hard
 
