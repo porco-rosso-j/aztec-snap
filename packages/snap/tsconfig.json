@@ -1,7 +1,14 @@
 {
   "extends": "../../tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "src",
+    "src/**/*.json"
+  ],
   "compilerOptions": {
-    "baseUrl": "./"
-  },
-  "include": ["**/*.ts"]
+    "composite": true,
+    "resolveJsonModule":true,
+    "baseUrl": "./",
+    "experimentalDecorators": true,
+  }
 }
