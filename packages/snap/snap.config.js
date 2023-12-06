@@ -46,9 +46,9 @@ module.exports = {
           {
             test: /\.(cjs|js|mjs|ts)$/u,
             // exclude: [/node_modules/u],
-            loader: 'o',
+            loader: 'esbuild-loader',
             options: {
-              target: 'es2022',
+              target: 'esnext',
               tsconfig: './tsconfig.json',
               sourcemap: true,
             },
@@ -56,8 +56,8 @@ module.exports = {
         ],
       },
 
-      // target: 'web',
-      // mode: 'production',
+      target: 'web',
+      mode: 'production',
 
       resolve: {
         plugins: [new ResolveTypeScriptPlugin()],
@@ -79,7 +79,7 @@ module.exports = {
         minimize: true,
         minimizer: [
           new EsbuildPlugin({
-            target: 'es2022',
+            target: 'esnext',
             css: true,
           }),
         ],

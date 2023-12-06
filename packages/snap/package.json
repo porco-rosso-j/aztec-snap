@@ -28,9 +28,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@aztec/aztec.js": "0.15.1",
-    "@aztec/foundation": "0.15.1",
-    "@aztec/types": "0.15.1",
+    "@aztec/aztec.js": "0.16.1",
+    "@aztec/foundation": "0.16.1",
+    "@aztec/types": "0.16.1",
     "@metamask/snaps-types": "^3.0.1",
     "@metamask/snaps-ui": "^3.0.1",
     "buffer": "^6.0.3"
