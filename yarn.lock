@@ -4716,7 +4716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-execution-environments@npm:^3.1.0, @metamask/snaps-execution-environments@npm:^3.4.1":
+"@metamask/snaps-execution-environments@npm:^3.4.1":
   version: 3.4.1
   resolution: "@metamask/snaps-execution-environments@npm:3.4.1"
   dependencies:
@@ -4735,19 +4735,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-jest@npm:^3.0.0":
-  version: 3.1.0
-  resolution: "@metamask/snaps-jest@npm:3.1.0"
+"@metamask/snaps-jest@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@metamask/snaps-jest@npm:4.0.1"
   dependencies:
     "@jest/environment": ^29.5.0
     "@jest/expect": ^29.5.0
     "@jest/globals": ^29.5.0
-    "@metamask/snaps-execution-environments": ^3.1.0
-    "@metamask/snaps-rpc-methods": ^3.2.0
-    "@metamask/snaps-simulator": ^2.2.0
-    "@metamask/snaps-ui": ^3.1.0
-    "@metamask/snaps-utils": ^3.2.0
-    "@metamask/utils": ^8.1.0
+    "@metamask/snaps-execution-environments": ^3.4.1
+    "@metamask/snaps-sdk": ^1.2.0
+    "@metamask/snaps-simulator": ^2.4.1
+    "@metamask/snaps-utils": ^5.0.0
+    "@metamask/utils": ^8.2.1
     express: ^4.18.2
     jest-environment-node: ^29.5.0
     jest-matcher-utils: ^29.5.0
@@ -4755,7 +4754,7 @@ __metadata:
     puppeteer: 21.1.1
     superstruct: ^1.0.3
     webdriverio: ^8.19.0
-  checksum: 074ed096dc35f2198ebc05262123eac166aa92474cf1a58b12af13759c41788ed87a1848962b2a76b2ba78ab133cb47f4f34a17bc37a9f4bfdab33198c17842d
+  checksum: 75929bd0872255595cd8ea0bf0a45c485e105031d5fd78684d3d49ee5983951d67c6a72e0f9690e6d92e0daaa62ebe4f25b3c92b5ecca0d07955025e7678e14c
   languageName: node
   linkType: hard
 
@@ -4770,7 +4769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-rpc-methods@npm:^3.2.0, @metamask/snaps-rpc-methods@npm:^3.3.0":
+"@metamask/snaps-rpc-methods@npm:^3.3.0":
   version: 3.3.0
   resolution: "@metamask/snaps-rpc-methods@npm:3.3.0"
   dependencies:
@@ -4816,7 +4815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-simulator@npm:^2.2.0":
+"@metamask/snaps-simulator@npm:^2.4.1":
   version: 2.4.1
   resolution: "@metamask/snaps-simulator@npm:2.4.1"
   dependencies:
@@ -4881,7 +4880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-utils@npm:^3.2.0, @metamask/snaps-utils@npm:^3.3.0":
+"@metamask/snaps-utils@npm:^3.3.0":
   version: 3.3.0
   resolution: "@metamask/snaps-utils@npm:3.3.0"
   dependencies:
@@ -22024,7 +22023,7 @@ __metadata:
     "@metamask/eslint-config-nodejs": ^12.0.0
     "@metamask/eslint-config-typescript": ^12.0.0
     "@metamask/snaps-cli": ^3.0.1
-    "@metamask/snaps-jest": ^3.0.0
+    "@metamask/snaps-jest": ^4.0.1
     "@metamask/snaps-types": ^3.0.1
     "@metamask/snaps-ui": ^3.0.1
     "@metamask/snaps-webpack-plugin": ^3.1.0
