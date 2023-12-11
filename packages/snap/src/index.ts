@@ -1,6 +1,7 @@
 import {
+  init,
   createPXEClient,
-  Fr,
+  PXE,
   GrumpkinScalar,
   getSandboxAccountsWallets,
 } from '@aztec/aztec.js';
@@ -9,20 +10,23 @@ import { PXE_URL } from './constants';
 // import { GrumpkinPrivateKey } from '@aztec/types';
 // import { panel, text } from '@metamask/snaps-ui';
 
+//     "./interfaces/pxe": "./dest/api/interfaces/pxe.js",
+
 export async function getAddress(): Promise<string> {
   // const pk =
   //   0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281n;
   // const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
   // const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
   // console.log('encryptionPrivateKey: ', encryptionPrivateKey);
+  await init();
   const pxe = createPXEClient(PXE_URL);
   // const pxe = createPXEClient(PXE_URL, makeFetch([1, 2, 3, 4, 5], true));
   console.log('pxe: ', pxe);
-
   console.log('node info: ', await pxe.getNodeInfo());
   // console.log('waitForSandbox: ', waitForSandbox(pxe));
   const accountWallets = await getSandboxAccountsWallets(pxe);
   console.log('accountWallets: ', accountWallets);
+  console.log('acc 0: ', accountWallets[0]?.getAddress().toString());
 
   // console.log('node info: ', await pxe.getNodeInfo());
   // const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
@@ -46,7 +50,8 @@ export async function getAddress(): Promise<string> {
   console.log('6');
   // const adminAddr = await votingContract.methods.admin().view();
   // return adminAddr.toString();
-  return accountWallets[0]?.getAddress().toString();
+  // return accountWallets[0]?.getAddress().toString();
+  return 'sada';
 }
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.

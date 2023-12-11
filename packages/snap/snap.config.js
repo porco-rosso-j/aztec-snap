@@ -1,7 +1,9 @@
 const { merge } = require('@metamask/snaps-cli');
 const { EsbuildPlugin } = require('esbuild-loader');
-const { resolve } = require('path');
+const path = require('path');
+const { dirname, resolve } = require('path');
 const ResolveTypeScriptPlugin = require('resolve-typescript-plugin');
+const webpack = require('webpack')
 
 module.exports = {
   bundler: 'webpack',
@@ -30,6 +32,7 @@ module.exports = {
   },
   stats: {
     verbose: false,
+    // builtIns: false,
   },
   polyfills: {
     buffer: true,
@@ -61,9 +64,11 @@ module.exports = {
 
       resolve: {
         plugins: [new ResolveTypeScriptPlugin()],
-        extensions: ['.ts', '.js', '.cjs', '.mjs'],
+        extensions: ['.ts', '.js', '.cjs', '.mjs', '.wasm'],
         alias: {
           './node/index.js': false,
+          '@aztec/aztec.js': path.resolve(__dirname, '../../node_modules/@aztec/aztec.js/dest/index.js'),
+          // 'bb.js': path.resolve(__dirname, '../../node_modules/@aztec/bb.js/browser')
         },
         fallback: {
           crypto: false,
@@ -73,8 +78,20 @@ module.exports = {
           url: false,
           events: false,
           buffer: require.resolve('buffer/'),
+          util: require.resolve('util/'),
+          stream: require.resolve('stream-browserify'),
+          tty: require.resolve('tty-browserify'),
         },
       },
+
+      plugins: [
+        new webpack.ProvidePlugin({
+          // why need to add .js? 
+          process: "process/browser.js",
+          Buffer: ["buffer", "Buffer"],
+        }),
+      ],
+
       optimization: {
         minimize: true,
         minimizer: [
