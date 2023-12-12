@@ -2,55 +2,72 @@ import {
   init,
   createPXEClient,
   PXE,
+  Contract,
   GrumpkinScalar,
   getSandboxAccountsWallets,
+  SchnorrAccountContract,
+  AccountManager,
 } from '@aztec/aztec.js';
+// @ts-ignore
+import { TokenContractArtifact } from '@aztec/noir-contracts/artifacts';
 import type { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { PXE_URL } from './constants';
-// import { GrumpkinPrivateKey } from '@aztec/types';
 // import { panel, text } from '@metamask/snaps-ui';
 
-//     "./interfaces/pxe": "./dest/api/interfaces/pxe.js",
-
 export async function getAddress(): Promise<string> {
-  // const pk =
-  //   0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281n;
-  // const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
-  // const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-  // console.log('encryptionPrivateKey: ', encryptionPrivateKey);
   await init();
-  const pxe = createPXEClient(PXE_URL);
-  // const pxe = createPXEClient(PXE_URL, makeFetch([1, 2, 3, 4, 5], true));
+  const pxe: PXE = createPXEClient(PXE_URL);
   console.log('pxe: ', pxe);
   console.log('node info: ', await pxe.getNodeInfo());
-  // console.log('waitForSandbox: ', waitForSandbox(pxe));
   const accountWallets = await getSandboxAccountsWallets(pxe);
   console.log('accountWallets: ', accountWallets);
   console.log('acc 0: ', accountWallets[0]?.getAddress().toString());
+  const ownerWallet = accountWallets[0];
 
-  // console.log('node info: ', await pxe.getNodeInfo());
-  // const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
-  // console.log('accountContract: ', accountContract);
-  // const accountManager = new AccountManager(
-  //   pxe,
-  //   encryptionPrivateKey,
-  //   accountContract,
-  // );
-  // console.log('4');
-  // console.log('accountManager: ', accountManager);
+  const completeAddr = ownerWallet.getCompleteAddress();
+  console.log('completeAddr: ', completeAddr.toString());
+  console.log('TokenContractArtifact: ', TokenContractArtifact);
 
-  // // const wallet = await accountManager.getWallet();
-  // const wallet = await accountManager.waitDeploy();
-  // console.log('5');
-  // console.log('wallet: ', wallet);
-  // const votingContract = await VotingContract.at(
-  //   '0x149a9593f1ca604b7aeb9c8d7732b872b84b358ac765e4a03af2093d2cb6da0e',
-  //   wallet,
-  // );
+  const tx = Contract.deploy(ownerWallet, TokenContractArtifact, [
+    completeAddr,
+  ]);
+  console.log('tx: ', tx);
+  const token = tx.send();
+  console.log('tx hash: ', (await token.getTxHash()).toString());
+  console.log('token: ', token);
+  const tokenContract = await token.deployed();
+
+  console.log(`Token deployed at ${tokenContract.address.toString()}`);
+  return 'sada';
+}
+
+export async function deployTokenFromSchnorrAccountContract(): Promise<string> {
+  const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
+  console.log('encryptionPrivateKey: ', encryptionPrivateKey);
+  await init();
+  const pxe: PXE = createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
+  console.log('node info: ', await pxe.getNodeInfo());
+  const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
+  console.log('accountContract: ', accountContract);
+  const accountManager = new AccountManager(
+    pxe,
+    encryptionPrivateKey,
+    accountContract,
+  );
+  console.log('4');
+  console.log('accountManager: ', accountManager);
+
+  const wallet = await accountManager.waitDeploy();
+  console.log('5');
+  console.log('wallet: ', wallet);
+  const tokenContract = await Contract.deploy(wallet, TokenContractArtifact, [
+    wallet.getCompleteAddress(),
+  ])
+    .send()
+    .deployed();
   console.log('6');
-  // const adminAddr = await votingContract.methods.admin().view();
-  // return adminAddr.toString();
-  // return accountWallets[0]?.getAddress().toString();
+  console.log(`Token deployed at ${tokenContract.address.toString()}`);
   return 'sada';
 }
 /**

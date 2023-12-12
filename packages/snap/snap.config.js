@@ -32,13 +32,14 @@ module.exports = {
   },
   stats: {
     verbose: false,
-    // builtIns: false,
+    builtIns: false,
   },
   polyfills: {
+    process: true,
     buffer: true,
     stream: true,
     tty: true,
-    util: true,
+
   },
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
@@ -48,7 +49,6 @@ module.exports = {
         rules: [
           {
             test: /\.(cjs|js|mjs|ts)$/u,
-            // exclude: [/node_modules/u],
             loader: 'esbuild-loader',
             options: {
               target: 'esnext',
@@ -68,7 +68,6 @@ module.exports = {
         alias: {
           './node/index.js': false,
           '@aztec/aztec.js': path.resolve(__dirname, '../../node_modules/@aztec/aztec.js/dest/index.js'),
-          // 'bb.js': path.resolve(__dirname, '../../node_modules/@aztec/bb.js/browser')
         },
         fallback: {
           crypto: false,
@@ -77,10 +76,11 @@ module.exports = {
           path: false,
           url: false,
           events: false,
+          worker_threads: false,
           buffer: require.resolve('buffer/'),
           util: require.resolve('util/'),
           stream: require.resolve('stream-browserify'),
-          tty: require.resolve('tty-browserify'),
+          tty: require.resolve('tty-browserify')
         },
       },
 

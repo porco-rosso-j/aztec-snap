@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example",
+  "description": "AztecSnap written in TypeScript.",
+  "proposedName": "AztecSnap",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "bWoVoBMIw0W/rohYHuFYe6hyunSqGEoTiJ1VlDIgqsk=",
+    "shasum": "QlLpP3kaN4UKUtOH+Zsz98l7EZqbZmccbZxDBl72Vbs=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
