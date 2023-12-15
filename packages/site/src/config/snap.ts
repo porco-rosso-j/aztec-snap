@@ -5,4 +5,3 @@
 // export const defaultSnapOrigin =
 //   process.env.SNAP_ORIGIN ?? `local:http://localhost:8081`;
 export const defaultSnapOrigin = `local:http://localhost:8081`;
-// export const defaultSnapOrigin = `http://localhost:8081/`;

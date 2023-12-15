@@ -23,7 +23,9 @@ export const useSendDoge = () => {
           toAddress,
           amountInDoge: Number(amountInDoge),
         });
+        console.log('response: ', response);
         setLastTxId(response.txId);
+        // setLastTxId('0x00000');
       }
     } catch (err: unknown) {
       if (err instanceof Error) {

@@ -141,7 +141,7 @@ const Index = () => {
             disabled={!state.isFlask}
           />
         )}
-        {shouldDisplayReconnectButton(state.installedSnap) && (
+        {/* {shouldDisplayReconnectButton(state.installedSnap) && (
           <Card
             content={{
               title: 'Reconnect',
@@ -156,12 +156,12 @@ const Index = () => {
             }}
             disabled={!state.installedSnap}
           />
-        )}
+        )} */}
         {address && (
           <Card
             fullWidth
             content={{
-              title: 'Your AZT Testnet Address',
+              title: 'Your Sandbox Address',
               description: address,
             }}
           />
@@ -170,8 +170,8 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Your AZT Testnet Balance',
-              description: `${balance} DOGETEST`,
+              title: 'Your AZT Balance',
+              description: `${balance} AZT`,
             }}
           />
         )}
@@ -187,7 +187,7 @@ const Index = () => {
                       <input
                         type="string"
                         name="toAddress"
-                        placeholder="0x000aztec"
+                        placeholder="0x000"
                       />
                     </p>
                     <p>

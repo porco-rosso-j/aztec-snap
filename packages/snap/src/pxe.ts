@@ -1,70 +1,37 @@
-import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
-// import { TokenContract } from '@aztec/noir-contracts';
-// import { getECDSAAccount } from './account';
-// import { MakeTransactionParams } from './pxe-types';
 import {
+  init,
   createPXEClient,
+  PXE,
+  Contract,
   GrumpkinScalar,
-  AccountWallet,
   getSandboxAccountsWallets,
-  // Fr,
-  // SingleKeyAccountContract,
-  // SchnorrAccountContract,
-  // AccountManager,
+  SchnorrAccountContract,
+  AccountManager,
+  AztecAddress,
 } from '@aztec/aztec.js';
-// import { GrumpkinScalar } from '@aztec/foundation';
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { TokenContract } from '@aztec/noir-contracts/types';
+// import { TokenContract } from '@aztec/noir-contracts';
+import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
 import { MakeTransactionParams } from './types';
-import { PXE_URL } from './constants';
-import { VotingContract } from './contract-types/Voting';
+import { PXE_URL, TOKEN_ADDRESS } from './constants';
+// const pk = 0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281;
+// const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
+// const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
 
-// /**
-//  * This demo wallet uses a single account/address.
-//  */
-// export const getAddress = async (): Promise<string> => {
-//   const account = await getECDSAAccount();
-//   return await account.getAddress();
-// };
-
-/**
- * This demo wallet uses a single account/address.
- */
-
+// eslint-disable-next-line jsdoc/require-jsdoc
 export const getAddress = async (): Promise<string> => {
-  // const pk = 0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281;
-  // const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
-  const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-  console.log('encryptionPrivateKey: ', encryptionPrivateKey);
-  const pxe = await createPXEClient(PXE_URL);
+  const pxe = createPXEClient(PXE_URL);
   console.log('pxe: ', pxe);
-
-  console.log('node info: ', await pxe.getNodeInfo());
-  const accountWallets: AccountWallet[] = await getSandboxAccountsWallets(pxe);
+  await init();
+  const accountWallets = await getSandboxAccountsWallets(pxe);
   console.log('accountWallets: ', accountWallets);
-  // const accountContract = new SchnorrAccountContract(encryptionPrivateKey);
-  // console.log('accountContract: ', accountContract);
-  // const accountManager = new AccountManager(
-  //   pxe,
-  //   encryptionPrivateKey,
-  //   accountContract,
-  // );
-  // console.log('4');
-  // console.log('accountManager: ', accountManager);
-
-  // // const wallet = await accountManager.getWallet();
-  // const wallet = await accountManager.waitDeploy();
-  // console.log('5');
-  // console.log('wallet: ', wallet);
-
-  const votingContract = await VotingContract.at(
-    '0x149a9593f1ca604b7aeb9c8d7732b872b84b358ac765e4a03af2093d2cb6da0e',
-    accountWallets[0],
-  );
-  console.log('6');
-  const adminAddr = await votingContract.methods.admin().view();
+  const aztecAddress = await accountWallets[0].getAddress();
+  console.log('aztecAddress: ', aztecAddress);
+  const adminAddr = aztecAddress.toString();
+  console.log('adminAddr: ', adminAddr);
   return adminAddr;
-  // const adminAddr = '1223';
-  // return adminAddr.toString();
 };
 
 export const getTx = async (): Promise<any[]> => {
@@ -75,26 +42,35 @@ export const getTx = async (): Promise<any[]> => {
 };
 
 export const getAztBalance = async (): Promise<number> => {
-  // instantiate TokenContract
-  // see private balance
-  /*
-    https://github.com/porco-rosso-j/aztec_lend/blob/34e70cbc335222413c2edba1bae0a424a33288f1/src/scripts/cross-chain.ts#L436
-          const l2tokenContract = await TokenContract.at(
-              l2TokenAddress,
-              await userWallet()
-              );
-              return await l2tokenContract.methods
-              .balance_of_public(userAztecAddr)
-              .view({ from: userAztecAddr });
-    */
+  const pxe = createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
+  await init();
+  const accountWallets = await getSandboxAccountsWallets(pxe);
+  const aztecAddress = await accountWallets[0].getAddress();
 
-  return 0;
+  // https://github.com/porco-rosso-j/aztec_lend/blob/34e70cbc335222413c2edba1bae0a424a33288f1/src/scripts/cross-chain.ts#L436
+  const l2tokenContract = await TokenContract.at(
+    AztecAddress.fromString(TOKEN_ADDRESS),
+    accountWallets[0],
+  );
+
+  console.log('l2tokenContract: ', l2tokenContract);
+
+  const balance = await l2tokenContract.methods
+    .balance_of_public(aztecAddress)
+    .view({ from: aztecAddress });
+  console.log('balance: ', balance);
+
+  return Number(balance);
 };
 
 export const makeTransaction = async ({
   toAddress,
   amountInSatoshi,
 }: MakeTransactionParams): Promise<any> => {
+  console.log('toAddress: ', toAddress);
+  console.log('amountInSatoshi: ', amountInSatoshi);
+
   const amount = amountInSatoshi;
   const confirmationResponse = await snap.request({
     method: 'snap_dialog',
@@ -115,16 +91,36 @@ export const makeTransaction = async ({
     throw new Error('Transaction must be approved by user');
   }
 
-  // const account = await getECDSAAccount();
-  // const userAddress = await account.getAddress();
+  const pxe = createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
 
-  // FaucetableTokenCotnract: anyone can mint
-  // const l2Token: TokenContract = await TokenContract.at(
-  //   'l2TokenAddress',
-  //   account,
-  // );
+  await init();
+  const accountWallets = await getSandboxAccountsWallets(pxe);
+  console.log('accountWallets: ', accountWallets);
+  const aztecAddress = await accountWallets[0].getAddress();
+  const recipient = AztecAddress.fromString(toAddress);
 
-  // const tx = l2Token.methods.mint_public(userAddress, amount).send();
-  // const receipt = await tx.wait();
-  // return receipt;
+  const l2tokenContract = await TokenContract.at(
+    AztecAddress.fromString(TOKEN_ADDRESS),
+    accountWallets[0],
+  );
+
+  console.log('l2tokenContract: ', l2tokenContract);
+
+  const tx = await l2tokenContract.methods
+    .transfer_public(aztecAddress, recipient, amountInSatoshi, 0)
+    .send();
+
+  const response = await tx.wait();
+  console.log('response: ', response);
+  console.log('tx hash: ', response.txHash.toString());
+  const res: txResponse = { txId: '' };
+  res.txId = response.txHash.toString();
+  console.log('res: ', res);
+
+  return res;
+};
+
+type txResponse = {
+  txId: string;
 };

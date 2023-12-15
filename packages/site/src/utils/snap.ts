@@ -2,8 +2,6 @@ import type { RpcMethodTypes } from '@ziad-saab/dogecoin-snap';
 import { defaultSnapOrigin } from '../config';
 import { GetSnapsResponse, Snap } from '../types';
 
-const SATOSHI_TO_DOGE = 100_000_000;
-
 /**
  * Get the installed snaps in MetaMask.
  *
@@ -82,7 +80,6 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
 export const getAddress = async () => {
-  console.log('1');
   return snapRpcRequest({
     snapRpcMethod: 'getAddress',
   });
@@ -112,7 +109,8 @@ export const makeTransaction = async ({
   toAddress,
   amountInDoge,
 }: MakeTransactionParams) => {
-  const amountInSatoshi = amountInDoge * SATOSHI_TO_DOGE;
+  // const amountInSatoshi = amountInDoge * SATOSHI_TO_DOGE;
+  const amountInSatoshi = amountInDoge;
   return snapRpcRequest({
     snapRpcMethod: 'makeTransaction',
     params: {
