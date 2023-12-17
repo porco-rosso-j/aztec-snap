@@ -1,7 +1,6 @@
-import { FunctionComponent, ReactNode, useContext } from 'react';
+import React, { FunctionComponent, ReactNode, useContext } from 'react';
 import styled from 'styled-components';
 import { Footer, Header } from './components';
-
 import { GlobalStyle } from './config/theme';
 import { ToggleThemeContext } from './Root';
 
@@ -13,11 +12,11 @@ const Wrapper = styled.div`
   max-width: 100vw;
 `;
 
-export type AppProps = {
+type AppProps = {
   children: ReactNode;
 };
 
-export const App: FunctionComponent<AppProps> = ({ children }) => {
+const App: FunctionComponent<AppProps> = ({ children }) => {
   const toggleTheme = useContext(ToggleThemeContext);
 
   return (
@@ -31,3 +30,5 @@ export const App: FunctionComponent<AppProps> = ({ children }) => {
     </>
   );
 };
+
+export default App;

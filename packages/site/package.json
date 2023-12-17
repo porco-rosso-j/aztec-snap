@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "license": "(MIT-0 OR Apache-2.0)",
+  "files": [
+    "dest/"
+  ],
   "scripts": {
-    "build": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby build",
+    "build": "webpack",
     "clean": "rimraf public",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "start": "cross-env GATSBY_TELEMETRY_DISABLED=1 gatsby develop"
+    "start": "react-scripts start"
   },
   "browserslist": {
     "production": [
@@ -25,11 +28,15 @@
     ]
   },
   "dependencies": {
+    "@aztec/aztec.js": "0.16.7",
+    "@aztec/noir-contracts": "0.16.7",
     "@metamask/providers": "^9.0.0",
-    "@ziad-saab/dogecoin-snap": "*",
+    "@ziad-saab/dogecoin-snap": "file:../snap",
+    "buffer": "^6.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
+    "sass-loader": "^13.3.2",
     "styled-components": "5.3.3"
   },
   "devDependencies": {
@@ -37,7 +44,7 @@
     "@metamask/eslint-config-jest": "^10.0.0",
     "@metamask/eslint-config-nodejs": "^10.0.0",
     "@metamask/eslint-config-typescript": "^10.0.0",
-    "@svgr/webpack": "^6.4.0",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^8.17.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -48,7 +55,8 @@
     "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
-    "cross-env": "^7.0.3",
+    "css-loader": "^6.8.1",
+    "esbuild-loader": "^4.0.2",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.26.0",
@@ -56,13 +64,17 @@
     "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "gatsby": "^4.24.4",
-    "gatsby-plugin-manifest": "^4.24.0",
-    "gatsby-plugin-styled-components": "^5.24.0",
-    "gatsby-plugin-svgr": "^3.0.0-beta.0",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
+    "react-scripts": "^5.0.1",
+    "resolve-typescript-plugin": "^2.0.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.7.4"
+    "stream-browserify": "^3.0.0",
+    "tty-browserify": "^0.0.1",
+    "typescript": "^5.0.4",
+    "util": "^0.12.5",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }

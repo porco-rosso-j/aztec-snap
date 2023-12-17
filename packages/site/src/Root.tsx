@@ -1,10 +1,15 @@
-import { createContext, FunctionComponent, ReactNode, useState } from 'react';
+import React, {
+  createContext,
+  FunctionComponent,
+  ReactNode,
+  useState,
+} from 'react';
 import { ThemeProvider } from 'styled-components';
 import { getThemePreference, setLocalStorage } from './utils';
 import { dark, light } from './config/theme';
 import { MetaMaskProvider } from './hooks';
 
-export type RootProps = {
+type RootProps = {
   children: ReactNode;
 };
 
@@ -14,7 +19,7 @@ export const ToggleThemeContext = createContext<ToggleTheme>(
   (): void => undefined,
 );
 
-export const Root: FunctionComponent<RootProps> = ({ children }) => {
+const Root: FunctionComponent<RootProps> = ({ children }) => {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
 
   const toggleTheme: ToggleTheme = () => {
@@ -30,3 +35,5 @@ export const Root: FunctionComponent<RootProps> = ({ children }) => {
     </ToggleThemeContext.Provider>
   );
 };
+
+export default Root;

@@ -1,11 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "esnext",
+    "composite": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve"
+    "experimentalDecorators": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "paths": {
+        "@ziad-saab/dogecoin-snap": ["../snap"]
+    }
   },
   "include": ["src"],
   "references": [

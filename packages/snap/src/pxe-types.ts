@@ -13,8 +13,3 @@ export type RpcMethodTypes = {
     output: ReturnType<RpcMethods[Method]>;
   };
 };
-
-export type MakeTransactionParams = {
-  toAddress: string;
-  amount: number;
-};

@@ -10,7 +10,8 @@ import {
 } from '../components';
 import { useAddress } from '../hooks/useAddress';
 import { useBalance } from '../hooks/useBalance';
-import { useSendDoge } from '../hooks/useSendDoge';
+// import { useSendDoge } from '../hooks/useSendDoge';
+import { useSendTx } from '../hooks/useSendTx';
 
 const Container = styled.div`
   display: flex;
@@ -83,20 +84,36 @@ const Index = () => {
     }
   };
 
+  // const {
+  //   error: txError,
+  //   isLoading: isTxLoading,
+  //   lastTxId,
+  //   sendDoge,
+  // } = useSendDoge();
+
+  // const handleSendDoge: React.FormEventHandler<HTMLFormElement> = async (
+  //   event,
+  // ) => {
+  //   event.preventDefault();
+  //   const form = event.currentTarget;
+  //   const formData = new FormData(form);
+  //   sendDoge(formData);
+  // };
+
   const {
     error: txError,
     isLoading: isTxLoading,
     lastTxId,
-    sendDoge,
-  } = useSendDoge();
+    sendTx,
+  } = useSendTx();
 
-  const handleSendDoge: React.FormEventHandler<HTMLFormElement> = async (
+  const handleSendTx: React.FormEventHandler<HTMLFormElement> = async (
     event,
   ) => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
-    sendDoge(formData);
+    sendTx(formData);
   };
 
   const isSnapInstalled = Boolean(state.installedSnap);
@@ -182,7 +199,7 @@ const Index = () => {
               title: 'Send AZT',
               description: (
                 <>
-                  <form onSubmit={handleSendDoge}>
+                  <form onSubmit={handleSendTx}>
                     <p>
                       <input
                         type="string"

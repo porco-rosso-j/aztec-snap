@@ -41,7 +41,7 @@ export const getTx = async (): Promise<any[]> => {
   return [0];
 };
 
-export const getAztBalance = async (): Promise<number> => {
+export const getBalance = async (): Promise<number> => {
   const pxe = createPXEClient(PXE_URL);
   console.log('pxe: ', pxe);
   await init();
@@ -62,6 +62,10 @@ export const getAztBalance = async (): Promise<number> => {
   console.log('balance: ', balance);
 
   return Number(balance);
+};
+
+type txResponse = {
+  txId: string;
 };
 
 export const makeTransaction = async ({
@@ -121,6 +125,59 @@ export const makeTransaction = async ({
   return res;
 };
 
-type txResponse = {
-  txId: string;
+export const sendTx = async ({
+  toAddress,
+  amountInSatoshi,
+}: MakeTransactionParams): Promise<any> => {
+  console.log('toAddress: ', toAddress);
+  console.log('amountInSatoshi: ', amountInSatoshi);
+
+  const amount = amountInSatoshi;
+  const confirmationResponse = await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel([
+        heading('Confirm transaction'),
+        // divider(),
+        // text('Send the following amount:'),
+        // copyable(amount.toString()),
+        // text('To the following address:'),
+        // copyable(toAddress),
+      ]),
+    },
+  });
+
+  if (confirmationResponse !== true) {
+    throw new Error('Transaction must be approved by user');
+  }
+
+  const pxe = createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
+
+  await init();
+  const accountWallets = await getSandboxAccountsWallets(pxe);
+  console.log('accountWallets: ', accountWallets);
+  const aztecAddress = await accountWallets[0].getAddress();
+  const recipient = AztecAddress.fromString(toAddress);
+
+  const l2tokenContract = await TokenContract.at(
+    AztecAddress.fromString(TOKEN_ADDRESS),
+    accountWallets[0],
+  );
+
+  console.log('l2tokenContract: ', l2tokenContract);
+
+  const tx = await l2tokenContract.methods
+    .transfer_public(aztecAddress, recipient, amountInSatoshi, 0)
+    .send();
+
+  const response = await tx.wait();
+  console.log('response: ', response);
+  console.log('tx hash: ', response.txHash.toString());
+  const res: txResponse = { txId: '' };
+  res.txId = response.txHash.toString();
+  console.log('res: ', res);
+
+  return res;
 };
