@@ -1,18 +1,18 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
 import { connectSnap, getSnap, shouldDisplayReconnectButton } from '../utils';
+import { Card } from '../components';
+import { useAddress } from '../hooks/useAddress';
+import { useBalance } from '../hooks/useBalance';
+import { useSendAZT } from '../hooks/useSendAZT';
 import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  Card,
-} from '../components';
-import { useAddress } from '../hooks/useAddress';
-import { useBalance } from '../hooks/useBalance';
-// import { useSendDoge } from '../hooks/useSendDoge';
-import { useSendTx } from '../hooks/useSendTx';
+} from '../components/Buttons';
 
+// small
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -104,8 +104,8 @@ const Index = () => {
     error: txError,
     isLoading: isTxLoading,
     lastTxId,
-    sendTx,
-  } = useSendTx();
+    sendAZT,
+  } = useSendAZT();
 
   const handleSendTx: React.FormEventHandler<HTMLFormElement> = async (
     event,
@@ -113,7 +113,7 @@ const Index = () => {
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
-    sendTx(formData);
+    sendAZT(formData);
   };
 
   const isSnapInstalled = Boolean(state.installedSnap);
@@ -158,22 +158,6 @@ const Index = () => {
             disabled={!state.isFlask}
           />
         )}
-        {/* {shouldDisplayReconnectButton(state.installedSnap) && (
-          <Card
-            content={{
-              title: 'Reconnect',
-              description:
-                'While connected to a local running snap this button will always be displayed in order to update the snap if a change is made.',
-              button: (
-                <ReconnectButton
-                  onClick={handleConnectClick}
-                  disabled={!state.installedSnap}
-                />
-              ),
-            }}
-            disabled={!state.installedSnap}
-          />
-        )} */}
         {address && (
           <Card
             fullWidth

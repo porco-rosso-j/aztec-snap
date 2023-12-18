@@ -1,17 +1,40 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
+    "lib": ["esnext", "dom", "DOM.Iterable"],
+    // "composite": true,
+    "noEmit": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "baseUrl": "./",
     "skipLibCheck": true,
-    "paths": {
-        "@ziad-saab/dogecoin-snap": ["../snap"]
-    }
+    "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "references": [
-    {"path": "../snap"}
-  ]
+  "include": ["src", "src/**/*.json"],
 }
+
+
+/*
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dest",
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "target": "esnext",
+    "lib": ["esnext", "dom", "DOM.Iterable"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "declarationMap": true,
+    "importHelpers": true,
+    "composite": true,
+    "skipLibCheck": true,
+    "jsx": "react"
+  },
+*/

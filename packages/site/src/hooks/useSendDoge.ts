@@ -19,12 +19,12 @@ export const useSendDoge = () => {
       const amountInDoge = data.get('amountInDoge');
 
       if (typeof toAddress === 'string' && typeof amountInDoge === 'string') {
-        const response = await makeTransaction({
-          toAddress,
-          amountInDoge: Number(amountInDoge),
-        });
-        console.log('response: ', response);
-        setLastTxId(response.txId);
+        // const response = await makeTransaction({
+        //   toAddress,
+        //   amountInSatoshi: Number(amountInDoge),
+        // });
+        // console.log('response: ', response);
+        // setLastTxId(response.txId);
         // setLastTxId('0x00000');
       }
     } catch (err: unknown) {

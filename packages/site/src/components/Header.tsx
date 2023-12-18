@@ -6,6 +6,7 @@ import { HeaderButtons } from './Buttons';
 import { SnapLogo } from './SnapLogo';
 import { Toggle } from './Toggle';
 
+// border
 const HeaderWrapper = styled.header`
   display: flex;
   flex-direction: row;

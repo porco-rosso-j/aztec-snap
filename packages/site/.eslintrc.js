@@ -6,13 +6,15 @@ module.exports = {
       files: ['**/*.{ts,tsx}'],
       rules: {
         'jsdoc/require-jsdoc': 0,
+        'import/no-extraneous-dependencies': [
+          'error',
+          { devDependencies: true },
+        ],
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-shadow': 'off',
       },
     },
   ],
-
-  rules: {
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-  },
 
   ignorePatterns: ['!.eslintrc.js', 'build/'],
 };

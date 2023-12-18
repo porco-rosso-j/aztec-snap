@@ -1,4 +1,8 @@
-import type { RpcMethodTypes } from '@ziad-saab/dogecoin-snap/src/pxe-types';
+import type {
+  RpcMethodTypes,
+  MakeTransactionParams,
+  SendTxParams,
+} from '@ziad-saab/dogecoin-snap';
 import { defaultSnapOrigin } from '../config';
 import { GetSnapsResponse, Snap } from '../types';
 
@@ -58,6 +62,10 @@ type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
     ? { snapRpcMethod: M }
     : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };
 
+// const snapRpcRequest = async () => {
+//   return '';
+// };
+
 const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
   args: SnapRpcRequestParams<M>,
 ) => {
@@ -76,9 +84,26 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
   return result as unknown as RpcMethodTypes[M]['output'];
 };
 
+// export const sendTxSnap = async () => {
+//   return '';
+// };
+
+export const sendTxSnap = async ({ funcCall }: SendTxParams) => {
+  return snapRpcRequest({
+    snapRpcMethod: 'sendTx',
+    params: {
+      funcCall,
+    },
+  });
+};
+
 /**
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
+
+// export const getAddress = async () => {
+//   return '';
+// };
 export const getAddress = async () => {
   return snapRpcRequest({
     snapRpcMethod: 'getAddress',
@@ -88,29 +113,20 @@ export const getAddress = async () => {
 /**
  * Invoke the "doge_getBalance" RPC method from the snap.
  */
+
+// export const getBalance = async () => {
+//   return '';
+// };
 export const getBalance = async () => {
   return snapRpcRequest({
     snapRpcMethod: 'getBalance',
   });
 };
 
-type MakeTransactionParams = {
-  amountInDoge: number;
-  toAddress: string;
-};
-/**
- * Invoke the "doge_makeTransaction" RPC method from the snap.
- *
- * @param params - The transaction parameters.
- * @param params.toAddress - The address to send DOGETEST to.
- * @param params.amountInDoge - The amount to send in DOGETEST.
- */
 export const makeTransaction = async ({
   toAddress,
-  amountInDoge,
+  amountInSatoshi,
 }: MakeTransactionParams) => {
-  // const amountInSatoshi = amountInDoge * SATOSHI_TO_DOGE;
-  const amountInSatoshi = amountInDoge;
   return snapRpcRequest({
     snapRpcMethod: 'makeTransaction',
     params: {
@@ -120,24 +136,6 @@ export const makeTransaction = async ({
   });
 };
 
-/**
- * Invoke the "doge_makeTransaction" RPC method from the snap.
- *
- * @param params - The transaction parameters.
- * @param params.toAddress - The address to send DOGETEST to.
- * @param params.amountInDoge - The amount to send in DOGETEST.
- */
-export const sendTx = async ({
-  toAddress,
-  amountInDoge,
-}: MakeTransactionParams) => {
-  // const amountInSatoshi = amountInDoge * SATOSHI_TO_DOGE;
-  const amountInSatoshi = amountInDoge;
-  return snapRpcRequest({
-    snapRpcMethod: 'sendTx',
-    params: {
-      toAddress,
-      amountInSatoshi,
-    },
-  });
-};
+// export const makeTransaction = async () => {
+//   return '';
+// };

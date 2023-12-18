@@ -3242,7 +3242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/snaps-webpack-plugin@npm:3.1.1, @metamask/snaps-webpack-plugin@npm:^3.1.1":
+"@metamask/snaps-webpack-plugin@npm:^3.1.1":
   version: 3.1.1
   resolution: "@metamask/snaps-webpack-plugin@npm:3.1.1"
   dependencies:
@@ -4104,7 +4104,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^13.3.0":
+"@testing-library/react@npm:^13.4.0":
   version: 13.4.0
   resolution: "@testing-library/react@npm:13.4.0"
   dependencies:
@@ -4484,11 +4484,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 20.10.4
-  resolution: "@types/node@npm:20.10.4"
+  version: 20.10.5
+  resolution: "@types/node@npm:20.10.5"
   dependencies:
     undici-types: ~5.26.4
-  checksum: 054b296417e771ab524bea63cf3289559c6bdf290d45428f7cc68e9b00030ff7a0ece47b8c99a26b4f47a443919813bcf42beadff2f0bea7d8125fa541d92eb0
+  checksum: e216b679f545a8356960ce985a0e53c3a58fff0eacd855e180b9e223b8db2b5bd07b744a002b8c1f0c37f9194648ab4578533b5c12df2ec10cc02f61d20948d2
   languageName: node
   linkType: hard
 
@@ -4550,7 +4550,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.0.6":
+"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.10":
   version: 18.2.18
   resolution: "@types/react-dom@npm:18.2.18"
   dependencies:
@@ -4559,7 +4559,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.15":
+"@types/react@npm:*, @types/react@npm:^18.2.25":
   version: 18.2.45
   resolution: "@types/react@npm:18.2.45"
   dependencies:
@@ -5074,16 +5074,17 @@ __metadata:
     "@svgr/webpack": ^8.1.0
     "@testing-library/dom": ^8.17.1
     "@testing-library/jest-dom": ^5.16.4
-    "@testing-library/react": ^13.3.0
+    "@testing-library/react": ^13.4.0
     "@testing-library/user-event": ^13.5.0
     "@types/jest": ^27.5.2
-    "@types/react": ^18.0.15
-    "@types/react-dom": ^18.0.6
+    "@types/react": ^18.2.25
+    "@types/react-dom": ^18.2.10
     "@types/styled-components": ^5.1.25
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     "@ziad-saab/dogecoin-snap": "file:../snap"
     buffer: ^6.0.3
+    crypto-browserify: ^3.12.0
     css-loader: ^6.8.1
     esbuild-loader: ^4.0.2
     eslint: ^8.21.0
@@ -5096,17 +5097,17 @@ __metadata:
     prettier: ^2.2.1
     prettier-plugin-packagejson: ^2.2.18
     react: ^18.2.0
+    react-app-rewired: ^2.2.1
     react-dom: ^18.2.0
-    react-is: ^18.2.0
     react-scripts: ^5.0.1
-    resolve-typescript-plugin: ^2.0.1
     rimraf: ^3.0.2
     sass-loader: ^13.3.2
     stream-browserify: ^3.0.0
     styled-components: 5.3.3
     tty-browserify: ^0.0.1
-    typescript: ^5.0.4
+    typescript: 5.0.4
     util: ^0.12.5
+    web-vitals: ^3.5.0
     webpack: ^5.88.2
     webpack-cli: ^5.1.4
     webpack-dev-server: ^4.15.1
@@ -5115,7 +5116,7 @@ __metadata:
 
 "@ziad-saab/dogecoin-snap@file:../snap::locator=%40ziad-saab%2Fdogecoin-dapp%40workspace%3Apackages%2Fsite":
   version: 0.1.0
-  resolution: "@ziad-saab/dogecoin-snap@file:../snap#../snap::hash=8ef95a&locator=%40ziad-saab%2Fdogecoin-dapp%40workspace%3Apackages%2Fsite"
+  resolution: "@ziad-saab/dogecoin-snap@file:../snap#../snap::hash=6287fa&locator=%40ziad-saab%2Fdogecoin-dapp%40workspace%3Apackages%2Fsite"
   dependencies:
     "@aztec/aztec.js": 0.16.7
     "@aztec/noir-contracts": 0.16.7
@@ -5126,7 +5127,7 @@ __metadata:
     buffer: ^6.0.3
     coininfo: ^5.2.1
     envify: ^4.1.0
-  checksum: 4c4868b57bcf4f9189660296d0636c5fd8c346d0a2266b1772f0865e637c021f242b99c3f6b438d57083d9779bc924789e0bbe3e0682b14a08695784b96fbdf5
+  checksum: 4580bbc57e6c89836c87b261345696fe4a745709b3a4f29844e2d5756f2b7cd890ba2cc50b50eaaf2606b5d63c5eb3f7f1f17f31ea9f89e058a1794e1ab5d246
   languageName: node
   linkType: hard
 
@@ -5146,7 +5147,6 @@ __metadata:
     "@metamask/snaps-cli": ^3.0.5
     "@metamask/snaps-types": ^3.0.1
     "@metamask/snaps-ui": ^3.0.1
-    "@metamask/snaps-webpack-plugin": 3.1.1
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     bitcoinjs-lib: ^5.2.0
@@ -5166,10 +5166,9 @@ __metadata:
     resolve-typescript-plugin: ^2.0.1
     rimraf: ^3.0.2
     stream-browserify: ^3.0.0
-    through2: ^4.0.2
     ts-loader: ^9.5.1
     tty-browserify: ^0.0.1
-    typescript: ^5.0.4
+    typescript: 5.0.4
     webpack: ^5.88.2
     webpack-cli: ^5.1.4
   languageName: unknown
@@ -8242,7 +8241,7 @@ __metadata:
     postinstall-postinstall: ^2.1.0
     prettier: ^2.2.1
     prettier-plugin-packagejson: ^2.2.18
-    typescript: ^5.0.4
+    typescript: 5.0.4
   languageName: unknown
   linkType: soft
 
@@ -15681,6 +15680,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-app-rewired@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "react-app-rewired@npm:2.2.1"
+  dependencies:
+    semver: ^5.6.0
+  peerDependencies:
+    react-scripts: ">=2.1.3"
+  bin:
+    react-app-rewired: bin/index.js
+  checksum: 0b330c2b46413dc5fbb68e68c07704830397b1cfc8335f65d8f856bfbb6c4d8259fad049fc2a117c18794f321e726b844649266f42ff4c3fa044f00be48c1850
+  languageName: node
+  linkType: hard
+
 "react-dev-utils@npm:^12.0.1":
   version: 12.0.1
   resolution: "react-dev-utils@npm:12.0.1"
@@ -15746,7 +15758,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^18.0.0, react-is@npm:^18.2.0":
+"react-is@npm:^18.0.0":
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
@@ -15871,17 +15883,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:3, readable-stream@npm:^3.0.6, readable-stream@npm:^3.4.0, readable-stream@npm:^3.5.0, readable-stream@npm:^3.6.0, readable-stream@npm:^3.6.2":
-  version: 3.6.2
-  resolution: "readable-stream@npm:3.6.2"
-  dependencies:
-    inherits: ^2.0.3
-    string_decoder: ^1.1.1
-    util-deprecate: ^1.0.1
-  checksum: bdcbe6c22e846b6af075e32cf8f4751c2576238c5043169a1c221c92ee2878458a816a4ea33f4c67623c0b6827c8a400409bfb3cf0bf3381392d0b1dfb52ac8d
-  languageName: node
-  linkType: hard
-
 "readable-stream@npm:^2.0.1, readable-stream@npm:^2.0.2, readable-stream@npm:^2.2.2, readable-stream@npm:^2.3.3, readable-stream@npm:~2.3.6":
   version: 2.3.8
   resolution: "readable-stream@npm:2.3.8"
@@ -15897,16 +15898,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"readable-stream@npm:^3.0.6, readable-stream@npm:^3.4.0, readable-stream@npm:^3.5.0, readable-stream@npm:^3.6.0, readable-stream@npm:^3.6.2":
+  version: 3.6.2
+  resolution: "readable-stream@npm:3.6.2"
+  dependencies:
+    inherits: ^2.0.3
+    string_decoder: ^1.1.1
+    util-deprecate: ^1.0.1
+  checksum: bdcbe6c22e846b6af075e32cf8f4751c2576238c5043169a1c221c92ee2878458a816a4ea33f4c67623c0b6827c8a400409bfb3cf0bf3381392d0b1dfb52ac8d
+  languageName: node
+  linkType: hard
+
 "readable-stream@npm:^3.6.2 || ^4.4.2":
-  version: 4.4.2
-  resolution: "readable-stream@npm:4.4.2"
+  version: 4.5.0
+  resolution: "readable-stream@npm:4.5.0"
   dependencies:
     abort-controller: ^3.0.0
     buffer: ^6.0.3
     events: ^3.3.0
     process: ^0.11.10
     string_decoder: ^1.3.0
-  checksum: 6f4063763dbdb52658d22d3f49ca976420e1fbe16bbd241f744383715845350b196a2f08b8d6330f8e219153dff34b140aeefd6296da828e1041a7eab1f20d5e
+  checksum: 6481da85d41bc5e291cd5356e57f8dfb76e3cc5d753d5c4327fc5a2cf8601541b5eeff57dbc89372f0d0a060cbac6463a176bbb107440caf3deed0582f9f39a6
   languageName: node
   linkType: hard
 
@@ -16542,6 +16554,15 @@ __metadata:
     "@types/node-forge": ^1.3.0
     node-forge: ^1
   checksum: 38b91c56f1d7949c0b77f9bbe4545b19518475cae15e7d7f0043f87b1626710b011ce89879a88969651f650a19d213bb15b7d5b4c2877df9eeeff7ba8f8b9bfa
+  languageName: node
+  linkType: hard
+
+"semver@npm:^5.6.0":
+  version: 5.7.2
+  resolution: "semver@npm:5.7.2"
+  bin:
+    semver: bin/semver
+  checksum: fb4ab5e0dd1c22ce0c937ea390b4a822147a9c53dbd2a9a0132f12fe382902beef4fbf12cf51bb955248d8d15874ce8cd89532569756384f994309825f10b686
   languageName: node
   linkType: hard
 
@@ -17780,15 +17801,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"through2@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "through2@npm:4.0.2"
-  dependencies:
-    readable-stream: 3
-  checksum: ac7430bd54ccb7920fd094b1c7ff3e1ad6edd94202e5528331253e5fde0cc56ceaa690e8df9895de2e073148c52dfbe6c4db74cacae812477a35660090960cc0
-  languageName: node
-  linkType: hard
-
 "through@npm:>=2.2.7 <3, through@npm:~2.3.4":
   version: 2.3.8
   resolution: "through@npm:2.3.8"
@@ -18125,23 +18137,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.4":
-  version: 5.3.3
-  resolution: "typescript@npm:5.3.3"
+"typescript@npm:5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2007ccb6e51bbbf6fde0a78099efe04dc1c3dfbdff04ca3b6a8bc717991862b39fd6126c0c3ebf2d2d98ac5e960bcaa873826bb2bb241f14277034148f41f6a2
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.0.4#~builtin<compat/typescript>":
-  version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=7ad353"
+"typescript@patch:typescript@5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: f61375590b3162599f0f0d5b8737877ac0a7bc52761dbb585d67e7b8753a3a4c42d9a554c4cc929f591ffcf3a2b0602f65ae3ce74714fd5652623a816862b610
+  checksum: 6a1fe9a77bb9c5176ead919cc4a1499ee63e46b4e05bf667079f11bf3a8f7887f135aa72460a4c3b016e6e6bb65a822cb8689a6d86cbfe92d22cc9f501f09213
   languageName: node
   linkType: hard
 
@@ -18536,6 +18548,13 @@ __metadata:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
+  languageName: node
+  linkType: hard
+
+"web-vitals@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "web-vitals@npm:3.5.0"
+  checksum: d8d760772a7ac33c9569f1d92619a0d2582ffe61bb667b0a2f9de9749ae861842b8a0d83c5126226afb792e63eb57bc461a0cb2e568dce03c81cf6b46677f442
   languageName: node
   linkType: hard
 

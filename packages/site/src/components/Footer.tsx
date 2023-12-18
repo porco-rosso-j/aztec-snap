@@ -1,4 +1,4 @@
-import styled, { useTheme } from 'styled-components';
+import styled, { useTheme, DefaultTheme } from 'styled-components';
 import { ReactComponent as MetaMaskFox } from '../assets/metamask_fox.svg';
 import { MetaMask } from './MetaMask';
 import { PoweredBy } from './PoweredBy';
@@ -31,14 +31,18 @@ const PoweredByContainer = styled.div`
 `;
 
 export const Footer = () => {
-  const theme = useTheme();
+  const theme: DefaultTheme = useTheme();
+  console.log('theme: ', theme);
+  console.log('theme.colors: ', theme.colors);
+  console.log('theme.colors.text: ', theme.colors.text);
+  console.log('theme.colors.text.muted: ', theme.colors.text.muted);
 
   return (
     <FooterWrapper>
       <PoweredByButton href="https://docs.metamask.io/" target="_blank">
-        <MetaMaskFox />
+        {/* <MetaMaskFox /> */}
         <PoweredByContainer>
-          <PoweredBy color={theme.colors.text.muted} />
+          <PoweredBy color={theme.colors.text.muted} /> {/* here */}
           <MetaMask color={theme.colors.text.default} />
         </PoweredByContainer>
       </PoweredByButton>

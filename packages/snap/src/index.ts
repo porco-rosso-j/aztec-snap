@@ -1,6 +1,6 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
 import { getAddress, getBalance, getTx, makeTransaction, sendTx } from './pxe';
-import { assertIsMakeTransactionParams } from './types';
+import { assertIsSendTxParams, assertIsMakeTransactionParams } from './types';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
   switch (request.method) {
@@ -18,7 +18,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       return makeTransaction(request.params);
 
     case 'azt_sendTx':
-      assertIsMakeTransactionParams(request.params);
+      assertIsSendTxParams(request.params);
       return sendTx(request.params);
 
     default:

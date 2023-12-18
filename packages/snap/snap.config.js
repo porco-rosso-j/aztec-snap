@@ -1,4 +1,5 @@
 const path = require('path');
+// eslint-disable-next-line no-unused-vars
 const { dirname, resolve } = require('path');
 const { merge } = require('@metamask/snaps-cli');
 const { EsbuildPlugin } = require('esbuild-loader');
@@ -80,6 +81,7 @@ module.exports = {
           events: false,
           worker_threads: false,
           buffer: require.resolve('buffer/'),
+          // eslint-disable-next-line node/no-extraneous-require
           util: require.resolve('util/'),
           stream: require.resolve('stream-browserify'),
           tty: require.resolve('tty-browserify'),

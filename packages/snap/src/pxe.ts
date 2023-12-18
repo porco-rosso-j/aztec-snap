@@ -2,11 +2,7 @@ import {
   init,
   createPXEClient,
   PXE,
-  Contract,
-  GrumpkinScalar,
   getSandboxAccountsWallets,
-  SchnorrAccountContract,
-  AccountManager,
   AztecAddress,
 } from '@aztec/aztec.js';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -14,11 +10,8 @@ import {
 import { TokenContract } from '@aztec/noir-contracts/types';
 // import { TokenContract } from '@aztec/noir-contracts';
 import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
-import { MakeTransactionParams } from './types';
+import { MakeTransactionParams, SendTxParams } from './types';
 import { PXE_URL, TOKEN_ADDRESS } from './constants';
-// const pk = 0x2153536ff6628eee01cf4024889ff977a18d9fa61d0e414422f7681cf085c281;
-// const encryptionPrivateKey = new GrumpkinScalar(new Fr(pk).fromS);
-// const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const getAddress = async (): Promise<string> => {
@@ -68,6 +61,43 @@ type txResponse = {
   txId: string;
 };
 
+export const sendTx = async ({ funcCall }: SendTxParams): Promise<any> => {
+  console.log('funcCall: ', funcCall);
+  const confirmationResponse = await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel([
+        heading('Confirm transaction'),
+        divider(),
+        text('Send the tx to :'),
+        copyable(funcCall.to.toString()),
+        text('Function selector:'),
+        copyable(funcCall.functionData.selector.toString()),
+      ]),
+    },
+  });
+
+  if (confirmationResponse !== true) {
+    throw new Error('Transaction must be approved by user');
+  }
+
+  const pxe: PXE = createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
+
+  await init();
+  const accountWallet = (await getSandboxAccountsWallets(pxe))[0];
+  console.log('accountWallets: ', accountWallet);
+
+  const txRequest = await accountWallet.createTxExecutionRequest([funcCall]);
+
+  const simulatedTx = await accountWallet.simulateTx(txRequest, true);
+  const txHash = await accountWallet.sendTx(simulatedTx);
+  const res: txResponse = { txId: '' };
+  res.txId = txHash.toString();
+  return res;
+};
+
 export const makeTransaction = async ({
   toAddress,
   amountInSatoshi,
@@ -87,63 +117,6 @@ export const makeTransaction = async ({
         copyable(amount.toString()),
         text('To the following address:'),
         copyable(toAddress),
-      ]),
-    },
-  });
-
-  if (confirmationResponse !== true) {
-    throw new Error('Transaction must be approved by user');
-  }
-
-  const pxe = createPXEClient(PXE_URL);
-  console.log('pxe: ', pxe);
-
-  await init();
-  const accountWallets = await getSandboxAccountsWallets(pxe);
-  console.log('accountWallets: ', accountWallets);
-  const aztecAddress = await accountWallets[0].getAddress();
-  const recipient = AztecAddress.fromString(toAddress);
-
-  const l2tokenContract = await TokenContract.at(
-    AztecAddress.fromString(TOKEN_ADDRESS),
-    accountWallets[0],
-  );
-
-  console.log('l2tokenContract: ', l2tokenContract);
-
-  const tx = await l2tokenContract.methods
-    .transfer_public(aztecAddress, recipient, amountInSatoshi, 0)
-    .send();
-
-  const response = await tx.wait();
-  console.log('response: ', response);
-  console.log('tx hash: ', response.txHash.toString());
-  const res: txResponse = { txId: '' };
-  res.txId = response.txHash.toString();
-  console.log('res: ', res);
-
-  return res;
-};
-
-export const sendTx = async ({
-  toAddress,
-  amountInSatoshi,
-}: MakeTransactionParams): Promise<any> => {
-  console.log('toAddress: ', toAddress);
-  console.log('amountInSatoshi: ', amountInSatoshi);
-
-  const amount = amountInSatoshi;
-  const confirmationResponse = await snap.request({
-    method: 'snap_dialog',
-    params: {
-      type: 'confirmation',
-      content: panel([
-        heading('Confirm transaction'),
-        // divider(),
-        // text('Send the following amount:'),
-        // copyable(amount.toString()),
-        // text('To the following address:'),
-        // copyable(toAddress),
       ]),
     },
   });

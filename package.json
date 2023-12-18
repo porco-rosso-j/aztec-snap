@@ -45,7 +45,7 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
-    "typescript": "^5.0.4"
+    "typescript": "5.0.4"
   },
   "engines": {
     "node": ">=16.0.0"
