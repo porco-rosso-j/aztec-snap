@@ -1,18 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "include": [
-    // "src",
-    "src/types.ts",
-    "src/pxe-types.ts"
+    "src",
   ],
   "compilerOptions": {
     "composite": true,
     "resolveJsonModule": true,
     "baseUrl": "./",
     "experimentalDecorators": true,
-    "declarationDir": "./dist/types",  
+    "rootDir": "src",
     "outDir": "./dist",
-    "emitDeclarationOnly": true,  
   },
   "exclude": ["node_modules", "dist"]
 }

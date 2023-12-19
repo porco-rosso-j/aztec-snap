@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getAddress } from '../utils';
+// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { getPxeAddress } from '@abstract-crypto/aztec-snap-lib/helpers';
 
 export const useAddress = (isSnapInstalled: boolean) => {
   const [address, setAddress] = useState<string | undefined>();
@@ -8,7 +10,7 @@ export const useAddress = (isSnapInstalled: boolean) => {
     if (isSnapInstalled) {
       (async () => {
         console.log('getAddress');
-        const addressResponse = await getAddress();
+        const addressResponse = await getPxeAddress();
         console.log('addressResponse');
         if (addressResponse) {
           setAddress(addressResponse);

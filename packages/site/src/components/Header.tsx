@@ -1,7 +1,10 @@
 import { useContext } from 'react';
 import styled, { useTheme } from 'styled-components';
+// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib/helpers';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { connectSnap, getThemePreference, getSnap } from '../utils';
+import { getThemePreference } from '../utils';
 import { HeaderButtons } from './Buttons';
 import { SnapLogo } from './SnapLogo';
 import { Toggle } from './Toggle';

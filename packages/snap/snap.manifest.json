@@ -7,11 +7,11 @@
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "NINbM/opwNtX80mwjAzgZwigL/+wj+A5KSLChi4i3lo=",
+    "shasum": "77L4gth5C2Hsdye6UnLFckx4WcqZtCC4ptWBV84pF34=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
-        "packageName": "@ziad-saab/dogecoin-snap",
+        "packageName": "@abstract-crypto/aztec-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

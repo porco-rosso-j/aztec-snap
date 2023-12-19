@@ -1,12 +1,5 @@
-import { FunctionCall } from '@aztec/aztec.js';
-
-export type MakeTransactionParams = {
-  toAddress: string;
-  amountInSatoshi: number;
-};
-
 export type SendTxParams = {
-  funcCall: FunctionCall;
+  txRequest: string;
 };
 
 /**
@@ -14,38 +7,17 @@ export type SendTxParams = {
  *
  * @param params - The value to be checked.
  */
-export function assertIsMakeTransactionParams(
+export function assertIsSendTxParams(
   params: unknown,
-): asserts params is MakeTransactionParams {
+): asserts params is SendTxParams {
   if (
     !(
       typeof params === 'object' &&
       params !== null &&
-      'toAddress' in params &&
-      typeof params.toAddress === 'string' &&
-      'amountInSatoshi' in params &&
-      typeof params.amountInSatoshi === 'number'
+      'txRequest' in params &&
+      typeof params.txRequest === 'string'
     )
   ) {
     throw new Error('params must be instance of `MakeTransactionParams`');
   }
-}
-
-// eslint-disable-next-line jsdoc/require-jsdoc
-export function assertIsSendTxParams(
-  params: unknown,
-): asserts params is SendTxParams {
-  // type check should be here
-  // if (
-  //   !(
-  //     typeof params === 'object' &&
-  //     params !== null &&
-  //     'toAddress' in params &&
-  //     typeof params.toAddress === 'string' &&
-  //     'amountInSatoshi' in params &&
-  //     typeof params.amountInSatoshi === 'number'
-  //   )
-  // ) {
-  //   throw new Error('params must be instance of `MakeTransactionParams`');
-  // }
 }

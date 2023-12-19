@@ -1,21 +1,15 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { getAddress, getBalance, getTx, makeTransaction, sendTx } from './pxe';
-import { assertIsSendTxParams, assertIsMakeTransactionParams } from './types';
+import { assertIsSendTxParams } from './types';
+import { getAddress, getTx, sendTx } from './pxe';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
+  console.log('request: ', request);
   switch (request.method) {
-    case 'azt_getAddress':
+    case 'azt_getAddress': // will be replaced by getAccount()
       return getAddress();
 
     case 'azt_getTransactions':
       return getTx();
-
-    case 'azt_getBalance':
-      return getBalance();
-
-    case 'azt_makeTransaction':
-      assertIsMakeTransactionParams(request.params);
-      return makeTransaction(request.params);
 
     case 'azt_sendTx':
       assertIsSendTxParams(request.params);

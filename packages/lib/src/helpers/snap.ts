@@ -1,10 +1,10 @@
 import type {
   RpcMethodTypes,
-  MakeTransactionParams,
   SendTxParams,
-} from '@ziad-saab/dogecoin-snap';
-import { defaultSnapOrigin } from '../config';
-import { GetSnapsResponse, Snap } from '../types';
+  GetSnapsResponse,
+  Snap,
+} from '../types/index.js';
+import { defaultSnapOrigin } from './constants.js';
 
 /**
  * Get the installed snaps in MetaMask.
@@ -35,12 +35,6 @@ export const connectSnap = async (
   });
 };
 
-/**
- * Get the snap from MetaMask.
- *
- * @param version - The version of the snap to install (optional).
- * @returns The snap object returned by the extension.
- */
 export const getSnap = async (version?: string): Promise<Snap | undefined> => {
   try {
     const snaps = await getSnaps();
@@ -62,37 +56,32 @@ type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
     ? { snapRpcMethod: M }
     : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };
 
-// const snapRpcRequest = async () => {
-//   return '';
-// };
-
 const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
   args: SnapRpcRequestParams<M>,
 ) => {
+  console.log('7');
+  console.log('args.snapRpcMethod', args.snapRpcMethod);
+  console.log('args.params', args);
   const result = await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: {
       snapId: defaultSnapOrigin,
       request: {
-        // method: `azt_${args.snapRpcMethod}`,
         method: `azt_${args.snapRpcMethod as string}`,
         params: 'params' in args ? args.params : undefined,
       },
     },
   });
-
+  console.log('result', result);
   return result as unknown as RpcMethodTypes[M]['output'];
 };
 
-// export const sendTxSnap = async () => {
-//   return '';
-// };
-
-export const sendTxSnap = async ({ funcCall }: SendTxParams) => {
+export const sendTxSnap = async ({ txRequest }: SendTxParams) => {
+  console.log('6');
   return snapRpcRequest({
     snapRpcMethod: 'sendTx',
     params: {
-      funcCall,
+      txRequest,
     },
   });
 };
@@ -104,38 +93,8 @@ export const sendTxSnap = async ({ funcCall }: SendTxParams) => {
 // export const getAddress = async () => {
 //   return '';
 // };
-export const getAddress = async () => {
+export const getPxeAddress = async () => {
   return snapRpcRequest({
     snapRpcMethod: 'getAddress',
   });
 };
-
-/**
- * Invoke the "doge_getBalance" RPC method from the snap.
- */
-
-// export const getBalance = async () => {
-//   return '';
-// };
-export const getBalance = async () => {
-  return snapRpcRequest({
-    snapRpcMethod: 'getBalance',
-  });
-};
-
-export const makeTransaction = async ({
-  toAddress,
-  amountInSatoshi,
-}: MakeTransactionParams) => {
-  return snapRpcRequest({
-    snapRpcMethod: 'makeTransaction',
-    params: {
-      toAddress,
-      amountInSatoshi,
-    },
-  });
-};
-
-// export const makeTransaction = async () => {
-//   return '';
-// };

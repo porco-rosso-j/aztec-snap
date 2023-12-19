@@ -1,68 +1,46 @@
 {
-  "name": "@abstract-crypto/aztec-snap",
+  "name": "@abstract-crypto/aztec-snap-lib",
   "version": "0.1.0",
   "private": true,
-  "description": "A MetaMask snap for managing Dogecoin assets",
+  "description": "A MetaMask snap libary for Aztec Snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "license": "(MIT-0 OR Apache-2.0)",
-  "files": [
-    "dist/",
-    "images/",
-    "snap.manifest.json"
-  ],
+  "type": "module",
+  "exports": {
+    "./helpers": "./dest/helpers/index.js",
+    "./types": "./dest/types/index.d.ts"
+  },
   "scripts": {
-    "build": "mm-snap build",
+    "build": "tsc -b",
     "build:clean": "yarn clean && yarn build",
     "clean": "rimraf dist",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
-    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
-    "serve": "mm-snap serve",
-    "start": "mm-snap watch"
+    "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore"
   },
   "dependencies": {
     "@aztec/aztec.js": "0.16.7",
     "@aztec/noir-contracts": "0.16.7",
-    "@metamask/key-tree": "^7.0.0",
-    "@metamask/snaps-types": "^3.0.1",
-    "@metamask/snaps-ui": "^3.0.1",
-    "bitcoinjs-lib": "^5.2.0",
-    "buffer": "^6.0.3",
-    "coininfo": "^5.2.1",
-    "envify": "^4.1.0"
+    "buffer": "^6.0.3"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
-    "@metamask/auto-changelog": "^2.6.0",
-    "@metamask/eslint-config": "^10.0.0",
-    "@metamask/eslint-config-jest": "^10.0.0",
-    "@metamask/eslint-config-nodejs": "^10.0.0",
-    "@metamask/eslint-config-typescript": "^10.0.0",
-    "@metamask/snaps-cli": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
-    "esbuild-loader": "^4.0.2",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.8.2",
     "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.11",
-    "resolve-typescript-plugin": "^2.0.1",
     "rimraf": "^3.0.2",
-    "stream-browserify": "^3.0.0",
-    "ts-loader": "^9.5.1",
-    "tty-browserify": "^0.0.1",
-    "typescript": "5.0.4",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "typescript": "5.0.4"
   },
   "packageManager": "yarn@3.2.1",
   "engines": {

@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+// import { connectSnap, getSnap, shouldDisplayReconnectButton } from '../utils';
+// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib/helpers';
 import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { connectSnap, getSnap, shouldDisplayReconnectButton } from '../utils';
 import { Card } from '../components';
 import { useAddress } from '../hooks/useAddress';
 import { useBalance } from '../hooks/useBalance';
 import { useSendAZT } from '../hooks/useSendAZT';
+// import { useSendDoge } from '../hooks/useSendDoge';
 import {
   ConnectButton,
   InstallFlaskButton,
@@ -84,22 +88,6 @@ const Index = () => {
     }
   };
 
-  // const {
-  //   error: txError,
-  //   isLoading: isTxLoading,
-  //   lastTxId,
-  //   sendDoge,
-  // } = useSendDoge();
-
-  // const handleSendDoge: React.FormEventHandler<HTMLFormElement> = async (
-  //   event,
-  // ) => {
-  //   event.preventDefault();
-  //   const form = event.currentTarget;
-  //   const formData = new FormData(form);
-  //   sendDoge(formData);
-  // };
-
   const {
     error: txError,
     isLoading: isTxLoading,
@@ -114,6 +102,7 @@ const Index = () => {
     const form = event.currentTarget;
     const formData = new FormData(form);
     sendAZT(formData);
+    // sendDoge(formData);
   };
 
   const isSnapInstalled = Boolean(state.installedSnap);

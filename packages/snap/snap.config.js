@@ -28,7 +28,7 @@ module.exports = {
   },
   environment: {
     NODE_DEBUG: false,
-    NODE_ENV: 'production',
+    NODE_ENV: 'development',
     DEBUG: false,
   },
   stats: {
