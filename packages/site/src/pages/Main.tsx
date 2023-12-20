@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-// import { connectSnap, getSnap, shouldDisplayReconnectButton } from '../utils';
 // eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib/helpers';
@@ -9,7 +8,6 @@ import { Card } from '../components';
 import { useAddress } from '../hooks/useAddress';
 import { useBalance } from '../hooks/useBalance';
 import { useSendAZT } from '../hooks/useSendAZT';
-// import { useSendDoge } from '../hooks/useSendDoge';
 import {
   ConnectButton,
   InstallFlaskButton,

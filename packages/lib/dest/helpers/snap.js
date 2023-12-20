@@ -48,11 +48,9 @@ const snapRpcRequest = async (args) => {
             },
         },
     });
-    console.log('result', result);
     return result;
 };
 export const sendTxSnap = async ({ txRequest }) => {
-    console.log('6');
     return snapRpcRequest({
         snapRpcMethod: 'sendTx',
         params: {
@@ -61,11 +59,8 @@ export const sendTxSnap = async ({ txRequest }) => {
     });
 };
 /**
- * Invoke the "doge_getAddress" RPC method from the snap.
+ * Invoke the "azte_getAddress" RPC method from the snap.
  */
-// export const getAddress = async () => {
-//   return '';
-// };
 export const getPxeAddress = async () => {
     return snapRpcRequest({
         snapRpcMethod: 'getAddress',

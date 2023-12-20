@@ -3,7 +3,6 @@ import { init, AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { useState } from 'react';
-// import {  } from '../utils';
 // eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { SnapWallet } from '@abstract-crypto/aztec-snap-lib/helpers';
