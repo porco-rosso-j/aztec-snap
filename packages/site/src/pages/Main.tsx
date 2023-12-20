@@ -1,18 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib/helpers';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { Card } from '../components';
-import { useAddress } from '../hooks/useAddress';
-import { useBalance } from '../hooks/useBalance';
-import { useSendAZT } from '../hooks/useSendAZT';
+import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib';
 import {
-  ConnectButton,
-  InstallFlaskButton,
-  ReconnectButton,
-} from '../components/Buttons';
+  MetamaskActions,
+  MetaMaskContext,
+  useAddress,
+  useBalance,
+  useSendAZT,
+} from '../hooks';
+import { Card } from '../components';
+import { ConnectButton, InstallFlaskButton } from '../components/Buttons';
 
 // small
 const Container = styled.div`

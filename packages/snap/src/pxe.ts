@@ -6,10 +6,19 @@ import {
   FunctionCall,
   TxExecutionRequest,
   AccountWalletWithPrivateKey,
+  getEcdsaAccount,
 } from '@aztec/aztec.js';
 import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
 import { SendTxParams } from './types';
 import { PXE_URL } from './constants';
+import { getECDSAKey } from './account';
+
+export const createAccount = async (): Promise<string> => {
+  const privateKey = await getECDSAKey();
+
+  // https://github.com/AztecProtocol/aztec-packages/pull/1429
+  const ecdsaAccount = await getEcdsaAccount;
+};
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const getAddress = async (): Promise<string> => {
@@ -30,24 +39,19 @@ export const sendTx = async ({ txRequest }: SendTxParams): Promise<string> => {
   console.log('txRequest: ', txRequest);
 
   const _txRequest = TxExecutionRequest.fromString(txRequest);
-  console.log('_txRequest: ', _txRequest);
 
   const functionCall: FunctionCall = {
     to: _txRequest.origin,
     functionData: _txRequest.functionData,
     args: _txRequest.packedArguments[0].args,
   };
-  console.log('functionCall: ', functionCall);
 
   const pxe: PXE = createPXEClient(PXE_URL);
-  console.log('pxe: ', pxe);
 
   await init();
   const accountWallet: AccountWalletWithPrivateKey = (
     await getSandboxAccountsWallets(pxe)
   )[0];
-
-  console.log('accountWallets: ', accountWallet);
 
   const confirmationResponse = await snap.request({
     method: 'snap_dialog',

@@ -8,10 +8,7 @@ import {
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts/types';
-
-export const PXE_URL = 'http://localhost:8080';
-export const TOKEN_ADDRESS =
-  '0x1acaf802b574911d610eb70d30eb70a22656146a17a4805d675909eee2a19344';
+import { PXE_URL, TOKEN_ADDRESS } from '../utils/constants';
 
 const getBalance = async (): Promise<number> => {
   const pxe = createPXEClient(PXE_URL);

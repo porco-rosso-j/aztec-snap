@@ -1,7 +1,7 @@
 import { createContext, FunctionComponent, ReactNode, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { getThemePreference, setLocalStorage } from './utils';
-import { dark, light } from './config/theme';
+import { dark, light } from './styled/theme';
 import { MetaMaskProvider } from './hooks';
 
 type RootProps = {

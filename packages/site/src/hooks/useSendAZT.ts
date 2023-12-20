@@ -3,16 +3,8 @@ import { init, AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { useState } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { SnapWallet } from '@abstract-crypto/aztec-snap-lib/helpers';
-// import { makeTransaction, sendTxSnap } from '../utils';
-
-export const PXE_URL = 'http://localhost:8080';
-export const TOKEN_ADDRESS =
-  '0x1acaf802b574911d610eb70d30eb70a22656146a17a4805d675909eee2a19344';
-const sender =
-  '0x06357cc85cb8fc561adbf741f63cd75efa26ffba1c80d431ec77d036d8edf022';
+import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
+import { PXE_URL, TOKEN_ADDRESS, SANDBOX_ADDRESS1 } from '../utils/constants';
 
 export const useSendAZT = () => {
   const [lastTxId, setLastTxId] = useState<string | undefined>();
@@ -49,7 +41,7 @@ export const useSendAZT = () => {
 
         const sentTx: SentTx = await token.methods
           .transfer_public(
-            AztecAddress.fromString(sender),
+            AztecAddress.fromString(SANDBOX_ADDRESS1),
             AztecAddress.fromString(toAddress),
             Number(amount), // Fr.fromString() doesn't work
             0,

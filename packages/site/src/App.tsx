@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode, useContext } from 'react';
 import styled from 'styled-components';
 import { Footer, Header } from './components';
-import { GlobalStyle } from './config/theme';
+import { GlobalStyle } from './styled/theme';
 import Root, { ToggleThemeContext } from './Root';
 import Main from './pages/Main';
 

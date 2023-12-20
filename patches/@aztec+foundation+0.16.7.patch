@@ -22,3 +22,6 @@ index 253ca99..7069b7e 100644
      }
      /**
       * Returns the time elapsed since the Timer instance was created, in seconds.
+
+
+diff -u node_modules/@aztec/aztec.js/dest/index.js.original node_modules/@aztec/aztec.js/dest/index.js > patches/@aztec+aztec.js+0.16.7.patch

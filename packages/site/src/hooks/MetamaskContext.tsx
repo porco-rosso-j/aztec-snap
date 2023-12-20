@@ -6,12 +6,7 @@ import {
   useEffect,
   useReducer,
 } from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import type { Snap } from '@abstract-crypto/aztec-snap-lib/types';
-// eslint-disable-next-line import/no-extraneous-dependencies, @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { isFlask, getSnap } from '@abstract-crypto/aztec-snap-lib/helpers';
+import { type Snap, isFlask, getSnap } from '@abstract-crypto/aztec-snap-lib';
 
 export type MetamaskState = {
   isFlask: boolean;

@@ -76,8 +76,11 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
   return result as unknown as RpcMethodTypes[M]['output'];
 };
 
+/**
+ * Invoke the "azte_sendTx" RPC method from the snap.
+ */
+
 export const sendTxSnap = async ({ txRequest }: SendTxParams) => {
-  console.log('6');
   return snapRpcRequest({
     snapRpcMethod: 'sendTx',
     params: {
@@ -90,9 +93,6 @@ export const sendTxSnap = async ({ txRequest }: SendTxParams) => {
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
 
-// export const getAddress = async () => {
-//   return '';
-// };
 export const getPxeAddress = async () => {
   return snapRpcRequest({
     snapRpcMethod: 'getAddress',
