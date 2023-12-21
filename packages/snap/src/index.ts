@@ -1,25 +1,61 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { assertIsSendTxParams } from './types';
+import {
+  ApiParams,
+  ApiRequestParams,
+  SnapState,
+} from '@abstract-crypto/aztec-snap-lib';
+// import { assertIsSendTxParams } from './types';
 import { createAccount, getAddress, getTx, sendTx } from './pxe';
-
+import { getAddressKeyDeriver } from './account';
 // declare const snap;
 
 export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
-  console.log('request: ', request);
-  switch (request.method) {
-    // case 'azt_createAccount':
-    case 'azt_sendTx':
-      return createAccount();
+  const requestParams = request?.params as unknown as ApiRequestParams;
 
-    case 'azt_getAddress': // will be replaced by getAccount()
-      return getAddress();
+  let state: SnapState = await snap.request({
+    method: 'snap_manageState',
+    params: {
+      operation: 'get',
+    },
+  });
+  if (!state) {
+    state = {
+      accounts: [],
+    };
+
+    // initialize state if empty and set default data
+    await snap.request({
+      method: 'snap_manageState',
+      params: {
+        operation: 'update',
+        newState: state,
+      },
+    });
+  }
+
+  console.log('request: ', request);
+
+  const apiParams: ApiParams = {
+    state,
+    requestParams,
+  };
+
+  switch (request.method) {
+    case 'azt_createAccount':
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return createAccount(apiParams);
+
+    case 'azt_getAddress':
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return getAddress(apiParams);
 
     case 'azt_getTransactions':
       return getTx();
 
-    // case 'azt_sendTx':
-    //   assertIsSendTxParams(request.params);
-    //   return sendTx(request.params);
+    case 'azt_sendTx':
+      // assertIsSendTxParams(request.params);
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return sendTx(apiParams);
 
     default:
       throw new Error('Method not found.');

@@ -12,7 +12,7 @@
   "main": "./dest/index.js",
   "scripts": {
     "build": "tsc -b",
-    "build:clean": "yarn clean && yarn build",
+    "build:clean": "yarn clean && rm tsconfig.tsbuildinfo && rm -r dest && yarn build",
     "clean": "rimraf dist",
     "lint": "yarn lint:eslint && yarn lint:misc --check",
     "lint:eslint": "eslint . --cache --ext js,ts",

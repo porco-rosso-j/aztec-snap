@@ -59,9 +59,6 @@ type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
 const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
   args: SnapRpcRequestParams<M>,
 ) => {
-  console.log('7');
-  console.log('args.snapRpcMethod', args.snapRpcMethod);
-  console.log('args.params', args);
   const result = await window.ethereum.request({
     method: 'wallet_invokeSnap',
     params: {
@@ -93,8 +90,39 @@ export const sendTxSnap = async ({ txRequest }: SendTxParams) => {
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
 
-export const getPxeAddress = async () => {
-  return snapRpcRequest({
-    snapRpcMethod: 'getAddress',
-  });
+export const getAddressSnap = async (): Promise<string | undefined> => {
+  try {
+    const address = snapRpcRequest({
+      snapRpcMethod: 'getAddress',
+    });
+    return address;
+  } catch (e) {
+    console.log('e: ', e);
+    return undefined;
+  }
 };
+
+export const createAccountSnap = async (): Promise<string | undefined> => {
+  try {
+    const address = snapRpcRequest({
+      snapRpcMethod: 'createAccount',
+    });
+    return address;
+  } catch (e) {
+    console.log('e: ', e);
+    return undefined;
+  }
+};
+
+// export const getAddressSnap = async (): Promise<string | undefined> => {
+//   const address = (await window.ethereum.request({
+//     method: 'wallet_invokeSnap',
+//     params: {
+//       snapId : defaultSnapOrigin,
+//       request: {
+//         method: 'azt_getAddress',
+//       },
+//     },
+//   })) as string;
+//   return address;
+// };

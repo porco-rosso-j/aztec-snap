@@ -1,15 +1,19 @@
+import { SendTxParams } from './snap.js';
 // not sure if this would be compatible w/ real funcs in service/pxe
 export declare const getAddress: () => Promise<string>;
+export declare const createAccount: () => Promise<string>;
 export declare const getTx: () => Promise<any[]>;
 export declare const sendTx: ({ txRequest }: SendTxParams) => Promise<string>;
 
 // Type for getAddress function
 export type GetAddressFunction = () => Promise<string>;
+export type createAccountFunction = () => Promise<string>;
 export type GetTxFunction = () => Promise<any[]>; // Replace 'any' with a more specific type if possible
 export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
 
 export type RpcMethods = {
   getAddress: GetAddressFunction;
+  createAccount: createAccountFunction;
   getTx: GetTxFunction;
   sendTx: SendTxFunction;
 };
@@ -25,8 +29,4 @@ export type RpcMethodTypes = {
     input: InferArgs<Method>;
     output: ReturnType<RpcMethods[Method]>;
   };
-};
-
-export type SendTxParams = {
-  txRequest: string;
 };

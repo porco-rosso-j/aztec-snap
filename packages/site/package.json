@@ -37,7 +37,7 @@
     ]
   },
   "dependencies": {
-    "@abstract-crypto/aztec-snap-lib": "file:../lib",
+    "@abstract-crypto/aztec-snap-lib": "workspace:^",
     "@aztec/aztec.js": "0.16.7",
     "@aztec/noir-contracts": "0.16.7",
     "@metamask/providers": "^9.0.0",

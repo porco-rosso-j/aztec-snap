@@ -9,7 +9,12 @@ import {
   useSendAZT,
 } from '../hooks';
 import { Card } from '../components';
-import { ConnectButton, InstallFlaskButton } from '../components/Buttons';
+import {
+  ConnectButton,
+  InstallFlaskButton,
+  CreateAccountButton,
+  GetFaucetButton,
+} from '../components/Buttons';
 
 // small
 const Container = styled.div`
@@ -67,6 +72,9 @@ const ErrorMessage = styled.div`
 
 const Index = () => {
   const [state, dispatch] = useContext(MetaMaskContext);
+  const isSnapInstalled = Boolean(state.installedSnap);
+  const { address, createAccount } = useAddress(isSnapInstalled);
+  const { balance, getFacuet } = useBalance(isSnapInstalled, address);
 
   const handleConnectClick = async () => {
     try {
@@ -83,8 +91,29 @@ const Index = () => {
     }
   };
 
+  const handleCreateAccountClick = async () => {
+    try {
+      await createAccount();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleFaucet = async () => {
+    try {
+      if (address) {
+        await getFacuet(address);
+      } else {
+        console.log('no addr detected');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const {
     error: txError,
+    recipientBalance,
     isLoading: isTxLoading,
     lastTxId,
     sendAZT,
@@ -93,16 +122,17 @@ const Index = () => {
   const handleSendTx: React.FormEventHandler<HTMLFormElement> = async (
     event,
   ) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    sendAZT(formData);
+    if (address) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const formData = new FormData(form);
+      sendAZT(formData, address);
+    } else {
+      console.log('no addr detected');
+    }
+
     // sendDoge(formData);
   };
-
-  const isSnapInstalled = Boolean(state.installedSnap);
-  const { address } = useAddress(isSnapInstalled);
-  const { balance } = useBalance(isSnapInstalled);
 
   return (
     <Container>
@@ -142,12 +172,26 @@ const Index = () => {
             disabled={!state.isFlask}
           />
         )}
-        {address && (
+        {address ? (
           <Card
             fullWidth
             content={{
-              title: 'Your Sandbox Address',
+              title: 'Your Account Address',
               description: address,
+            }}
+          />
+        ) : (
+          <Card
+            fullWidth
+            content={{
+              title: 'Create Account',
+              description: '',
+              button: (
+                <CreateAccountButton
+                  onClick={handleCreateAccountClick}
+                  disabled={!state.isFlask}
+                />
+              ),
             }}
           />
         )}
@@ -157,6 +201,12 @@ const Index = () => {
             content={{
               title: 'Your AZT Balance',
               description: `${balance} AZT`,
+              button: (
+                <GetFaucetButton
+                  onClick={handleFaucet}
+                  disabled={!state.isFlask}
+                />
+              ),
             }}
           />
         )}
@@ -176,29 +226,17 @@ const Index = () => {
                       />
                     </p>
                     <p>
-                      <input
-                        type="number"
-                        name="amountInDoge"
-                        placeholder="100"
-                      />
+                      <input type="number" name="amount" placeholder="100" />
                     </p>
                     <button disabled={isTxLoading} type="submit">
                       Send AZT Token
                     </button>
                   </form>
-                  {lastTxId && (
-                    <p>
-                      Latest transaction:{' '}
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={`https://sochain.com/tx/DOGETEST/${lastTxId}`}
-                      >
-                        {lastTxId}
-                      </a>
-                    </p>
-                  )}
+                  {lastTxId && <p>Latest transaction: {`0x${lastTxId}`}</p>}
                   {txError && <ErrorMessage>{txError}</ErrorMessage>}
+                  {recipientBalance && (
+                    <p>Recipient's balanace: {recipientBalance} AZT</p>
+                  )}
                 </>
               ),
             }}

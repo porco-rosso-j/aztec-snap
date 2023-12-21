@@ -12,18 +12,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@abstract-crypto/aztec-snap-lib@file:../lib::locator=%40abstract-crypto%2Fsnap-dapp%40workspace%3Apackages%2Fsite":
+"@abstract-crypto/aztec-snap-lib@file:../lib::locator=%40abstract-crypto%2Faztec-snap%40workspace%3Apackages%2Fsnap":
   version: 0.1.0
-  resolution: "@abstract-crypto/aztec-snap-lib@file:../lib#../lib::hash=5ff74e&locator=%40abstract-crypto%2Fsnap-dapp%40workspace%3Apackages%2Fsite"
+  resolution: "@abstract-crypto/aztec-snap-lib@file:../lib#../lib::hash=3190ae&locator=%40abstract-crypto%2Faztec-snap%40workspace%3Apackages%2Fsnap"
   dependencies:
     "@aztec/aztec.js": 0.16.7
     "@aztec/noir-contracts": 0.16.7
     buffer: ^6.0.3
-  checksum: 198c9415b951409c57de03665a01664bfa9a440175f1124ea57d18b39db54f17eaa44024d7093345e653be1e6816414aa1428166bf933ee8eab7bfd196656ab5
+  checksum: 630cf59dfa4081104bc15c6744c3f3646618898a1dfe4f1a54d42e5a44bc8ee59cb5d00f6bf3143581e6a1853d6dc1d02a5396e38aa9d77dd6d286ca659860ff
   languageName: node
   linkType: hard
 
-"@abstract-crypto/aztec-snap-lib@workspace:packages/lib":
+"@abstract-crypto/aztec-snap-lib@workspace:^, @abstract-crypto/aztec-snap-lib@workspace:packages/lib":
   version: 0.0.0-use.local
   resolution: "@abstract-crypto/aztec-snap-lib@workspace:packages/lib"
   dependencies:
@@ -50,6 +50,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@abstract-crypto/aztec-snap@workspace:packages/snap"
   dependencies:
+    "@abstract-crypto/aztec-snap-lib": "file:../lib"
     "@aztec/aztec.js": 0.16.7
     "@aztec/noir-contracts": 0.16.7
     "@lavamoat/allow-scripts": ^2.0.3
@@ -94,7 +95,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@abstract-crypto/snap-dapp@workspace:packages/site"
   dependencies:
-    "@abstract-crypto/aztec-snap-lib": "file:../lib"
+    "@abstract-crypto/aztec-snap-lib": "workspace:^"
     "@aztec/aztec.js": 0.16.7
     "@aztec/noir-contracts": 0.16.7
     "@metamask/eslint-config": ^10.0.0
@@ -4824,12 +4825,12 @@ __metadata:
   linkType: hard
 
 "@types/eslint@npm:*, @types/eslint@npm:^7.29.0 || ^8.4.1":
-  version: 8.44.9
-  resolution: "@types/eslint@npm:8.44.9"
+  version: 8.56.0
+  resolution: "@types/eslint@npm:8.56.0"
   dependencies:
     "@types/estree": "*"
     "@types/json-schema": "*"
-  checksum: 6f8889e94e67a5e43c15f5a2530798f864ace08c270bfb3f153cb705da4e30a80e0e9a0fc05317c8642c8dda909d528968172089eb4d52aca9f212761df25d90
+  checksum: 8eca14c1ca8a4dbbcbf6bed67775db9dd2f9947802d6da39fa0c4c297a1e5465e898332232bb51980586a9a45b1b21bc13fd79fcc81adcd4c86062372e9bab6d
   languageName: node
   linkType: hard
 
@@ -15416,13 +15417,13 @@ __metadata:
   linkType: hard
 
 "postcss-modules-scope@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "postcss-modules-scope@npm:3.0.0"
+  version: 3.1.0
+  resolution: "postcss-modules-scope@npm:3.1.0"
   dependencies:
     postcss-selector-parser: ^6.0.4
   peerDependencies:
     postcss: ^8.1.0
-  checksum: 330b9398dbd44c992c92b0dc612c0626135e2cc840fee41841eb61247a6cfed95af2bd6f67ead9dd9d0bb41f5b0367129d93c6e434fa3e9c58ade391d9a5a138
+  checksum: 919d02e2e31956fa3dae2036d4f3259c9b8c5361bd58ee55867edededbee03507df88e98f418b5e553e47f3888daba9ea9ef0b18a82c41cf96cdb74df15322c7
   languageName: node
   linkType: hard
 
@@ -18958,8 +18959,8 @@ __metadata:
   linkType: hard
 
 "viem@npm:^1.2.5":
-  version: 1.20.2
-  resolution: "viem@npm:1.20.2"
+  version: 1.20.3
+  resolution: "viem@npm:1.20.3"
   dependencies:
     "@adraffy/ens-normalize": 1.10.0
     "@noble/curves": 1.2.0
@@ -18974,7 +18975,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 861c72a2f273d1d1ecd102f61a8f5fac1f9f423169542ba7d58a4398c5c3d01dbcf49c33a59e879d3e5a01ef4d2f13e5e95cb7d97c315234704506135b3887c6
+  checksum: 92fffbc1715482969b6af7ac6df51cbd4cfe4e6d55226562eb0658a16b9a9b3df743c1ec1aebb63221b5117d4956fb2f71788bc06f6316d054ac402406614b31
   languageName: node
   linkType: hard
 

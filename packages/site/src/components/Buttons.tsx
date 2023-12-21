@@ -85,6 +85,24 @@ export const ConnectButton = (props: ComponentProps<typeof Button>) => {
   );
 };
 
+export const CreateAccountButton = (props: ComponentProps<typeof Button>) => {
+  return (
+    <Button {...props}>
+      {/* <FlaskFox /> */}
+      <ButtonText>Create Account</ButtonText>
+    </Button>
+  );
+};
+
+export const GetFaucetButton = (props: ComponentProps<typeof Button>) => {
+  return (
+    <Button {...props}>
+      {/* <FlaskFox /> */}
+      <ButtonText>Get Faucet: 100 AZT</ButtonText>
+    </Button>
+  );
+};
+
 export const ReconnectButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>

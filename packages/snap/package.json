@@ -25,6 +25,7 @@
     "start": "mm-snap watch"
   },
   "dependencies": {
+    "@abstract-crypto/aztec-snap-lib": "file:../lib",
     "@aztec/aztec.js": "0.16.7",
     "@aztec/noir-contracts": "0.16.7",
     "@metamask/key-tree": "^7.0.0",

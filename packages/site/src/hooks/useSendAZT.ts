@@ -1,17 +1,27 @@
-import { init, AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
+import {
+  init,
+  AztecAddress,
+  createPXEClient,
+  SentTx,
+  ContractFunctionInteraction,
+} from '@aztec/aztec.js';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { useState } from 'react';
 import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
 import { PXE_URL, TOKEN_ADDRESS, SANDBOX_ADDRESS1 } from '../utils/constants';
+import { getBalance } from './useBalance';
 
 export const useSendAZT = () => {
   const [lastTxId, setLastTxId] = useState<string | undefined>();
+  const [recipientBalance, setRecipientBalance] = useState<
+    number | undefined
+  >();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  const sendAZT = async (data: FormData) => {
+  const sendAZT = async (data: FormData, from: string) => {
     if (isLoading) {
       return;
     }
@@ -21,7 +31,7 @@ export const useSendAZT = () => {
       setLastTxId(undefined);
       setIsLoading(true);
       const toAddress = data.get('toAddress');
-      const amount = data.get('amountInDoge');
+      const amount = data.get('amount');
 
       console.log('1');
       if (typeof toAddress === 'string' && typeof amount === 'string') {
@@ -37,11 +47,10 @@ export const useSendAZT = () => {
           wallet,
         );
         console.log('token: ', token);
-        console.log('3');
 
         const sentTx: SentTx = await token.methods
           .transfer_public(
-            AztecAddress.fromString(SANDBOX_ADDRESS1),
+            AztecAddress.fromString(from),
             AztecAddress.fromString(toAddress),
             Number(amount), // Fr.fromString() doesn't work
             0,
@@ -54,6 +63,9 @@ export const useSendAZT = () => {
         const txHash = await sentTx.getTxHash();
         console.log('txhash.: ', txHash.toString());
         setLastTxId(txHash.toString());
+
+        const balance = await getBalance(toAddress);
+        setRecipientBalance(balance);
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -68,5 +80,5 @@ export const useSendAZT = () => {
     }
   };
 
-  return { lastTxId, isLoading, error, sendAZT };
+  return { lastTxId, recipientBalance, isLoading, error, sendAZT };
 };

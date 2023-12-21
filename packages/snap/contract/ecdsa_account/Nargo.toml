@@ -1,0 +1,9 @@
+[package]
+name = "ecdsa_account"
+authors = [""]
+compiler_version = ">=0.18.0"
+type = "contract"
+
+[dependencies]
+aztec = { git = 'https://github.com/AztecProtocol/aztec-packages/', tag = 'aztec-packages-v0.16.9', directory = 'yarn-project/aztec-nr/aztec' }
+authwit = { git = 'https://github.com/AztecProtocol/aztec-packages/', tag = 'aztec-packages-v0.16.9', directory = 'yarn-project/aztec-nr/authwit' }

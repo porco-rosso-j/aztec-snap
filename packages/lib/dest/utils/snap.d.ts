@@ -21,5 +21,6 @@ export declare const sendTxSnap: ({ txRequest }: SendTxParams) => Promise<string
 /**
  * Invoke the "doge_getAddress" RPC method from the snap.
  */
-export declare const getPxeAddress: () => Promise<string>;
+export declare const getAddressSnap: () => Promise<string | undefined>;
+export declare const createAccountSnap: () => Promise<string | undefined>;
 //# sourceMappingURL=snap.d.ts.map

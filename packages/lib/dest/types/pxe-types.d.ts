@@ -1,11 +1,15 @@
+import { SendTxParams } from './snap.js';
 export declare const getAddress: () => Promise<string>;
+export declare const createAccount: () => Promise<string>;
 export declare const getTx: () => Promise<any[]>;
 export declare const sendTx: ({ txRequest }: SendTxParams) => Promise<string>;
 export type GetAddressFunction = () => Promise<string>;
+export type createAccountFunction = () => Promise<string>;
 export type GetTxFunction = () => Promise<any[]>;
 export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
 export type RpcMethods = {
     getAddress: GetAddressFunction;
+    createAccount: createAccountFunction;
     getTx: GetTxFunction;
     sendTx: SendTxFunction;
 };
@@ -15,9 +19,6 @@ export type RpcMethodTypes = {
         input: InferArgs<Method>;
         output: ReturnType<RpcMethods[Method]>;
     };
-};
-export type SendTxParams = {
-    txRequest: string;
 };
 export {};
 //# sourceMappingURL=pxe-types.d.ts.map
