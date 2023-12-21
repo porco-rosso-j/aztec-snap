@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib';
 import {
@@ -6,7 +6,7 @@ import {
   MetaMaskContext,
   useAddress,
   useBalance,
-  useSendAZT,
+  useSendETH,
 } from '../hooks';
 import { Card } from '../components';
 import {
@@ -92,10 +92,17 @@ const Index = () => {
   };
 
   const handleCreateAccountClick = async () => {
-    try {
-      await createAccount();
-    } catch (e) {
-      console.error(e);
+    if (isSnapInstalled) {
+      try {
+        await createAccount();
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      dispatch({
+        type: MetamaskActions.SetError,
+        payload: 'Connect to Metamask',
+      });
     }
   };
 
@@ -116,8 +123,8 @@ const Index = () => {
     recipientBalance,
     isLoading: isTxLoading,
     lastTxId,
-    sendAZT,
-  } = useSendAZT();
+    sendETH,
+  } = useSendETH();
 
   const handleSendTx: React.FormEventHandler<HTMLFormElement> = async (
     event,
@@ -126,18 +133,16 @@ const Index = () => {
       event.preventDefault();
       const form = event.currentTarget;
       const formData = new FormData(form);
-      sendAZT(formData, address);
+      sendETH(formData, address);
     } else {
       console.log('no addr detected');
     }
-
-    // sendDoge(formData);
   };
 
   return (
     <Container>
       <Heading>
-        Welcome to <Span>aztec-snap</Span>
+        Welcome to <Span>Aztec Snap</Span>
       </Heading>
       <CardContainer>
         {state.error && (
@@ -156,22 +161,6 @@ const Index = () => {
             fullWidth
           />
         )}
-        {!state.installedSnap && (
-          <Card
-            content={{
-              title: 'Connect',
-              description:
-                'Get started by connecting to and installing the example snap.',
-              button: (
-                <ConnectButton
-                  onClick={handleConnectClick}
-                  disabled={!state.isFlask}
-                />
-              ),
-            }}
-            disabled={!state.isFlask}
-          />
-        )}
         {address ? (
           <Card
             fullWidth
@@ -185,7 +174,7 @@ const Index = () => {
             fullWidth
             content={{
               title: 'Create Account',
-              description: '',
+              description: 'Set up a new Aztec wallet using Metamask',
               button: (
                 <CreateAccountButton
                   onClick={handleCreateAccountClick}
@@ -199,8 +188,8 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Your AZT Balance',
-              description: `${balance} AZT`,
+              title: 'Your ETH Balance',
+              description: `${balance} ETH`,
               button: (
                 <GetFaucetButton
                   onClick={handleFaucet}
@@ -214,7 +203,7 @@ const Index = () => {
           <Card
             fullWidth
             content={{
-              title: 'Send AZT',
+              title: 'Send ETH',
               description: (
                 <>
                   <form onSubmit={handleSendTx}>
@@ -229,13 +218,13 @@ const Index = () => {
                       <input type="number" name="amount" placeholder="100" />
                     </p>
                     <button disabled={isTxLoading} type="submit">
-                      Send AZT Token
+                      Execute
                     </button>
                   </form>
                   {lastTxId && <p>Latest transaction: {`0x${lastTxId}`}</p>}
                   {txError && <ErrorMessage>{txError}</ErrorMessage>}
                   {recipientBalance && (
-                    <p>Recipient's balanace: {recipientBalance} AZT</p>
+                    <p>Recipient's balanace: {recipientBalance} ETH</p>
                   )}
                 </>
               ),

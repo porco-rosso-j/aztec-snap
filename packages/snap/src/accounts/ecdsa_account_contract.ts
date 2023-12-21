@@ -1,15 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { Ecdsa } from '@aztec/circuits.js/barretenberg';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Fr } from '@aztec/foundation/fields';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { ContractArtifact } from '@aztec/foundation/abi';
-import { AuthWitnessProvider, BaseAccountContract } from '@aztec/aztec.js';
+import {
+  Fr,
+  AuthWitnessProvider,
+  BaseAccountContract,
+  ContractArtifact,
+} from '@aztec/aztec.js';
 import { AuthWitness, CompleteAddress } from '@aztec/types';
-
 import EcdsaAccountContractArtifact from '../contracts/artifacts/EcdsaAccount.json' assert { type: 'json' };
 
 /**

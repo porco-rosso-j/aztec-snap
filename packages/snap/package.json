@@ -2,7 +2,7 @@
   "name": "@abstract-crypto/aztec-snap",
   "version": "0.1.0",
   "private": true,
-  "description": "A MetaMask snap for managing Dogecoin assets",
+  "description": "A MetaMask snap for Aztec Sandbox",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
@@ -31,11 +31,7 @@
     "@metamask/key-tree": "^7.0.0",
     "@metamask/snaps-types": "^3.0.1",
     "@metamask/snaps-ui": "^3.0.1",
-    "bitcoinjs-lib": "^5.2.0",
-    "buffer": "^6.0.3",
-    "coininfo": "^5.2.1",
-    "envify": "^4.1.0",
-    "ethers": "^5.7.2"
+    "buffer": "^6.0.3"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",

@@ -10,10 +10,8 @@ export const useAddress = (isSnapInstalled: boolean) => {
   useEffect(() => {
     if (isSnapInstalled) {
       (async () => {
-        console.log('fetchAddress');
         try {
           const addressResponse = await getAddressSnap();
-          console.log('addressResponse');
           if (addressResponse) {
             setAddress(addressResponse);
           }
@@ -25,10 +23,8 @@ export const useAddress = (isSnapInstalled: boolean) => {
   }, [isSnapInstalled]);
 
   const createAccount = async () => {
-    console.log('createAccount');
     try {
       const addressResponse = await createAccountSnap();
-      console.log('addressResponse');
       if (addressResponse) {
         setAddress(addressResponse);
       }

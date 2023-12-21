@@ -4,10 +4,8 @@ import {
   ApiRequestParams,
   SnapState,
 } from '@abstract-crypto/aztec-snap-lib';
-// import { assertIsSendTxParams } from './types';
 import { createAccount, getAddress, getTx, sendTx } from './pxe';
-import { getAddressKeyDeriver } from './account';
-// declare const snap;
+import { getAddressKeyDeriver } from './utils/key-utils';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
   const requestParams = request?.params as unknown as ApiRequestParams;
@@ -32,8 +30,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       },
     });
   }
-
-  console.log('request: ', request);
 
   const apiParams: ApiParams = {
     state,

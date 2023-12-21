@@ -1,19 +1,13 @@
-import {
-  init,
-  AztecAddress,
-  createPXEClient,
-  SentTx,
-  ContractFunctionInteraction,
-} from '@aztec/aztec.js';
+import { init, AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { useState } from 'react';
 import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
-import { PXE_URL, TOKEN_ADDRESS, SANDBOX_ADDRESS1 } from '../utils/constants';
+import { PXE_URL, TOKEN_ADDRESS } from '../utils/constants';
 import { getBalance } from './useBalance';
 
-export const useSendAZT = () => {
+export const useSendETH = () => {
   const [lastTxId, setLastTxId] = useState<string | undefined>();
   const [recipientBalance, setRecipientBalance] = useState<
     number | undefined
@@ -21,7 +15,7 @@ export const useSendAZT = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
-  const sendAZT = async (data: FormData, from: string) => {
+  const sendETH = async (data: FormData, from: string) => {
     if (isLoading) {
       return;
     }
@@ -33,11 +27,8 @@ export const useSendAZT = () => {
       const toAddress = data.get('toAddress');
       const amount = data.get('amount');
 
-      console.log('1');
       if (typeof toAddress === 'string' && typeof amount === 'string') {
         const pxe = createPXEClient(PXE_URL);
-        console.log('pxe: ', pxe);
-        console.log('2');
 
         await init();
 
@@ -46,7 +37,6 @@ export const useSendAZT = () => {
           AztecAddress.fromString(TOKEN_ADDRESS),
           wallet,
         );
-        console.log('token: ', token);
 
         const sentTx: SentTx = await token.methods
           .transfer_public(
@@ -56,12 +46,9 @@ export const useSendAZT = () => {
             0,
           )
           .send();
-        console.log('sentTx: ', sentTx);
-        const res = await sentTx.wait();
-        console.log('res: ', res);
 
+        await sentTx.wait();
         const txHash = await sentTx.getTxHash();
-        console.log('txhash.: ', txHash.toString());
         setLastTxId(txHash.toString());
 
         const balance = await getBalance(toAddress);
@@ -80,5 +67,5 @@ export const useSendAZT = () => {
     }
   };
 
-  return { lastTxId, recipientBalance, isLoading, error, sendAZT };
+  return { lastTxId, recipientBalance, isLoading, error, sendETH };
 };

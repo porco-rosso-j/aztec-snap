@@ -32,10 +32,6 @@ const PoweredByContainer = styled.div`
 
 export const Footer = () => {
   const theme: DefaultTheme = useTheme();
-  console.log('theme: ', theme);
-  console.log('theme.colors: ', theme.colors);
-  console.log('theme.colors.text: ', theme.colors.text);
-  console.log('theme.colors.text.muted: ', theme.colors.text.muted);
 
   return (
     <FooterWrapper>

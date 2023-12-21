@@ -89,7 +89,7 @@ export const CreateAccountButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
       {/* <FlaskFox /> */}
-      <ButtonText>Create Account</ButtonText>
+      <ButtonText>Create</ButtonText>
     </Button>
   );
 };
@@ -98,7 +98,7 @@ export const GetFaucetButton = (props: ComponentProps<typeof Button>) => {
   return (
     <Button {...props}>
       {/* <FlaskFox /> */}
-      <ButtonText>Get Faucet: 100 AZT</ButtonText>
+      <ButtonText>Get Faucet: 100 ETH</ButtonText>
     </Button>
   );
 };

@@ -19,10 +19,8 @@ export const useBalance = (
   const [balance, setBalance] = useState<number | undefined>();
 
   useEffect(() => {
-    console.log('getBalance?: ', address);
     if (isSnapInstalled && address) {
       (async () => {
-        console.log('getBalance: ', address);
         const balanceResponse = await getBalance(address);
         if (balanceResponse !== undefined) {
           setBalance(balanceResponse);
@@ -32,7 +30,6 @@ export const useBalance = (
   }, [isSnapInstalled, address]);
 
   const getFacuet = async (address: string) => {
-    console.log('faucet?: ', address);
     const pxe = createPXEClient(PXE_URL);
     await init();
     const accountWallets = await getSandboxAccountsWallets(pxe);
@@ -71,13 +68,10 @@ export const getBalance = async (address: string): Promise<number> => {
     wallet,
   );
 
-  console.log('l2tokenContract: ', l2tokenContract);
   const aztecAddress = AztecAddress.fromString(address);
-  console.log('aztecAddress: ', aztecAddress);
   const balance = await l2tokenContract.methods
     .balance_of_public(aztecAddress)
     .view({ from: aztecAddress });
-  console.log('balance: ', balance);
 
   return Number(balance);
 };

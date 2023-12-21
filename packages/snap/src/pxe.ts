@@ -1,57 +1,31 @@
 import {
   init,
   createPXEClient,
-  PXE,
-  getSandboxAccountsWallets,
-  GrumpkinPrivateKey,
   FunctionCall,
   TxExecutionRequest,
   AccountWalletWithPrivateKey,
   AccountManager,
-  Fq,
-  Point,
-  AccountWallet,
   AztecAddress,
-  SignerlessWallet,
-  // getEcdsaAccount,
-  getSchnorrAccount,
 } from '@aztec/aztec.js';
-import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
 import {
   ApiParams,
   SnapState,
   Accounts,
+  SendTxParams,
 } from '@abstract-crypto/aztec-snap-lib';
 import { getEcdsaAccount } from './accounts/get_ecdsa';
-
-import { SendTxParams } from './types';
-import { PXE_URL } from './constants';
-import { getECDSAKey } from './account';
+import { PXE_URL } from './utils/constants';
+import { confirmCreateAccount, confirmSendTx } from './utils/snap-confirm';
+import { getPrivateKeys } from './utils/key-utils';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
-  const confirmationResponse = await snap.request({
-    method: 'snap_dialog',
-    params: {
-      type: 'confirmation',
-      content: panel([
-        heading('Create a new Aztec Account'),
-        divider(),
-        text('Account Type: ECDSA'),
-        divider(),
-        text(
-          'Private key controlling your new account will be generated from the seed phrase stored in this Metamask Flask.',
-        ),
-      ]),
-    },
-  });
-
-  if (confirmationResponse !== true) {
+  if (!(await confirmCreateAccount())) {
     throw new Error('Deployment tx must be approved by user');
   }
 
   await init();
 
-  const { encryptionPrivateKey, signingPrivateKey } = await getECDSAKey(
+  const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
     apiParams.keyDeriver,
   );
   const pxe = createPXEClient(PXE_URL);
@@ -63,26 +37,15 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
     signingPrivateKey,
   );
 
-  console.log('account: ', account);
-  console.log(
-    'address: ',
-    (await (await account.getWallet()).getAddress()).toString(),
-  );
-
   const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
-  console.log('ecdsaWallet: ', ecdsaWallet);
   const compAddr = ecdsaWallet.getCompleteAddress();
-  console.log('address: ', compAddr.address.toString());
-  const pubkey: Point = compAddr.publicKey;
-  console.log('publicKey: ', pubkey.toString());
-  console.log('partialAddress: ', compAddr.partialAddress.toString());
 
   const state: SnapState = {
     accounts: [
       {
         addressIndex: 0,
         address: compAddr.address.toString(),
-        publicKey: pubkey.toString(),
+        publicKey: compAddr.publicKey.toString(),
       } as Accounts,
     ],
   };
@@ -123,15 +86,12 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     functionData: _txRequest.functionData,
     args: _txRequest.packedArguments[0].args,
   };
-  console.log('to: ', functionCall.to.toString());
-  console.log('args: ', functionCall.args);
 
   await init();
-  const { encryptionPrivateKey, signingPrivateKey } = await getECDSAKey(
+  const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
     apiParams.keyDeriver,
   );
 
-  console.log('privateKey: ', encryptionPrivateKey.toString());
   const pxe = createPXEClient(PXE_URL);
   const senderCompAddr = await pxe.getRegisteredAccount(
     AztecAddress.fromString(apiParams.state.accounts[0].address),
@@ -143,37 +103,20 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     pxe,
     encryptionPrivateKey,
     signingPrivateKey,
-    // privateKey.toBuffer(),
     senderCompAddr,
   ).getWallet();
 
-  const confirmationResponse = await snap.request({
-    method: 'snap_dialog',
-    params: {
-      type: 'confirmation',
-      content: panel([
-        heading('Confirm transaction'),
-        divider(),
-        text('Send tx from:'),
-        copyable(accountWallet.getAddress().toString()),
-        text('Send tx to :'),
-        copyable(functionCall.to.toString()),
-      ]),
-    },
-  });
-
-  if (confirmationResponse !== true) {
+  if (
+    !(await confirmSendTx(
+      accountWallet.getAddress().toString(),
+      functionCall.to.toString(),
+    ))
+  ) {
     throw new Error('Transaction must be approved by user');
   }
 
   const signedTxRequest: TxExecutionRequest =
     await accountWallet.createTxExecutionRequest([functionCall]);
-  console.log('signedTxRequest: ', signedTxRequest);
-  console.log('signedTxRequest: ', signedTxRequest.toString());
-
-  // const simulatedTx = await accountWallet.simulateTx(signedTxRequest, true);
-  // console.log('simulatedTx: ', simulatedTx.getStats());
-
   return signedTxRequest.toString();
 };
 
@@ -188,7 +131,7 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
 //   console.log('publicKey: ', compAddr?.publicKey.toString());
 //   console.log('partialAddress: ', compAddr?.partialAddress.toString());
 
-//   const privateKey = await getECDSAKey();
+//   const privateKey = await getPrivateKeys();
 //   console.log('2');
 //   const wallet: AccountWallet = await getEcdsaAccount(
 //     pxe,

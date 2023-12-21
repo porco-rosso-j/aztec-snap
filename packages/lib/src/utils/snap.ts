@@ -69,7 +69,6 @@ const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
       },
     },
   });
-  console.log('result', result);
   return result as unknown as RpcMethodTypes[M]['output'];
 };
 
