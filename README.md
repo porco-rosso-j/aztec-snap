@@ -6,11 +6,9 @@ Aztec Snap is the first MetaMask Snap on Aztec that enables private function cal
 
 AztecSnap deterministically derives private keys from the existing seed phrase managed by Metamask via Snap's api call `snap_getBip44Entropy` to offer great security and UX for ethereum users.
 
-More specifically, it currently uses the derived private key from Metamask as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private key to a new valid grumpking scalar value.
+More specifically, it currently uses the derived private key as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private key to a new valid grumpking scalar value.
 
 ## Develop with AztecSnap
-
-You can build frontend app by modifying ./packages/site.
 
 1. clone this project
 
@@ -54,6 +52,8 @@ Contract partial address 0x1d02416....
 
 copy the first address and paste it to `TOKEN_ADDRESS` in ./pacakges/site/src/utils/constants.ts.
 
+Now, you can build frontend app by modifying ./packages/site.
+
 ### Packages
 
 #### snap-dapp (./packages/site)
@@ -68,11 +68,13 @@ This directory contains snap source code. `yarn start` should build and start se
 
 aztec-snap-lib (./packages/lib) is a useful library to build frontend app that integrates AztecSnap.
 
-It contains `SnapWallet` class that extends aztecjs's `SignerlessWallet` in a way that asks user to approve transaction on Metamask Flask pop-up and adds transaction signature to `txRequest` via Snap by asking.
+It contains `SnapWallet` class that extends aztecjs's `SignerlessWallet` in a way that asks user to approve transaction on Metamask Flask pop-up and adds transaction signature to `txRequest` via Snap.
 
 example:
 
 ```javascript
+import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
+
 const wallet = new SnapWallet(pxe);
 const token = await TokenContract.at(
   AztecAddress.fromString(TOKEN_ADDRESS),
@@ -81,7 +83,7 @@ const token = await TokenContract.at(
 
 const sentTx: SentTx = await token.methods
   .transfer_public(
-    AztecAddress.fromString(SANDBOX_ADDRESS1),
+    AztecAddress.fromString(fromAddress),
     AztecAddress.fromString(toAddress),
     Number(amount),
     0,
