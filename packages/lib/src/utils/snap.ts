@@ -86,7 +86,7 @@ export const sendTxSnap = async ({ txRequest }: SendTxParams) => {
 };
 
 /**
- * Invoke the "doge_getAddress" RPC method from the snap.
+ * Invoke the "azt_getAddress" RPC method from the snap.
  */
 
 export const getAddressSnap = async (): Promise<string | undefined> => {
