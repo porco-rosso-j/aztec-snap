@@ -35,14 +35,14 @@ yarn
 yarn start
 ```
 
-4. run script to deploy token
+4. deploy token
 
+head to contract directory in packages/snap
 ```shell
 cd packages/snap/contract/token_contract
 ```
 
-deploy token contract.
-
+run the following aztec-cli command to deploy token contract.
 ```shell
 aztec-cli deploy ./target/Token.json --args 0x06357cc85cb8fc561adbf741f63cd75efa26ffba1c80d431ec77d036d8edf022
 ```
