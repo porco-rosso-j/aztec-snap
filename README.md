@@ -1,5 +1,8 @@
 # Metamask Snap on Aztec Sandbox
 
+https://github.com/porco-rosso-j/aztec-snap/assets/88586592/257bdbdb-a587-48cf-a554-dd1a91b153b4
+
+
 Built at ETHGlobal Istanbul: [project page](https://ethglobal.com/showcase/aztecsnap-prn4s).
 
 Aztec Snap is the first MetaMask Snap on Aztec that enables private function calls to any Aztec contract.
