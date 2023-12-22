@@ -6,7 +6,7 @@ Aztec Snap is the first MetaMask Snap on Aztec that enables private function cal
 
 AztecSnap deterministically derives private keys from the existing seed phrase managed by Metamask via Snap's api call `snap_getBip44Entropy` to offer great security and UX for ethereum users.
 
-More specifically, it currently uses the derived private key from Metamask as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private kye to a new value which is a valid grumpking scalar.
+More specifically, it currently uses the derived private key from Metamask as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private key to a new valid grumpking scalar value.
 
 ## Develop with AztecSnap
 
@@ -36,8 +36,23 @@ yarn start
 4. run script to deploy token
 
 ```shell
-aztec-cli...
+cd pacakges/snap/contract/token_contract
 ```
+
+deploy token contract.
+
+```shell
+aztec-cli deploy ./target/Token.json --args 0x06357cc85cb8fc561adbf741f63cd75efa26ffba1c80d431ec77d036d8edf022
+```
+
+output would look like:
+
+```shell
+Contract deployed at 0x2f6bf35....
+Contract partial address 0x1d02416....
+```
+
+copy the first address and paste it to `TOKEN_ADDRESS` in ./pacakges/site/src/utils/constants.ts.
 
 ### Packages
 
