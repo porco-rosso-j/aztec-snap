@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["esnext", "dom", "DOM.Iterable"],
-    // "composite": true,
     "noEmit": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -11,30 +10,5 @@
     "jsx": "react-jsx"
   },
   "include": ["src", "src/**/*.json"],
+  "exclude": ["node_modules"]
 }
-
-
-/*
-  "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dest",
-    "tsBuildInfoFile": ".tsbuildinfo",
-    "target": "esnext",
-    "lib": ["esnext", "dom", "DOM.Iterable"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "downlevelIteration": true,
-    "declarationMap": true,
-    "importHelpers": true,
-    "composite": true,
-    "skipLibCheck": true,
-    "jsx": "react"
-  },
-*/

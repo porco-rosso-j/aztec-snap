@@ -14,9 +14,12 @@ import {
   SendTxParams,
 } from '@abstract-crypto/aztec-snap-lib';
 import { getEcdsaAccount } from './accounts/get_ecdsa';
-import { PXE_URL } from './utils/constants';
-import { confirmCreateAccount, confirmSendTx } from './utils/snap-confirm';
-import { getPrivateKeys } from './utils/key-utils';
+import {
+  PXE_URL,
+  getPrivateKeys,
+  confirmCreateAccount,
+  confirmSendTx,
+} from './utils';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
   if (!(await confirmCreateAccount())) {

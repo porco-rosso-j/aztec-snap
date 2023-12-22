@@ -50,6 +50,7 @@ module.exports = {
         {
           test: /\.(cjs|js|mjs|jsx|ts|tsx)$/u,
           loader: 'esbuild-loader',
+          exclude: /node_modules/u,
           options: {
             target: 'esnext',
             tsconfig: './tsconfig.json',

@@ -49,7 +49,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
       return getTx();
 
     case 'azt_sendTx':
-      // assertIsSendTxParams(request.params);
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return sendTx(apiParams);
 

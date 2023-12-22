@@ -1,5 +1,4 @@
 import { BIP44AddressKeyDeriver } from '@metamask/key-tree';
-// import { SendTxParams } from './pxe-types.js';
 
 export type GetSnapsResponse = Record<string, Snap>;
 

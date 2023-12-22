@@ -14,7 +14,8 @@
   "license": "(MIT-0 OR Apache-2.0)",
   "author": "Ziad Saab <ziad.saab@gmail.com>",
   "workspaces": [
-    "packages/*"
+    "packages/snap",
+    "packages/site"
   ],
   "scripts": {
     "build": "yarn workspaces foreach --parallel --topological --verbose run build",
