@@ -31,6 +31,7 @@ For more information for running Sandbox, [see](https://docs.aztec.network/dev_d
 3. install packages
 
 ```shell
+yarn
 yarn start
 ```
 
