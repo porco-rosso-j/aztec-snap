@@ -9,7 +9,7 @@ Aztec Snap is the first MetaMask Snap on Aztec that enables private function cal
 
 AztecSnap deterministically derives private keys from the existing seed phrase managed by Metamask via Snap's api call `snap_getBip44Entropy` to offer great security and UX for ethereum users.
 
-More specifically, it currently uses the derived private key as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private key to a new valid grumpking scalar value.
+More specifically, it currently uses the derived private key as a signing key for [`ECDSAAccountContract`](https://github.com/AztecProtocol/aztec-packages/tree/aztec-packages-v0.16.7/yarn-project/noir-contracts/src/contracts/ecdsa_account_contract/src), while the encryption key is the one reduced from the same private key to a new valid grumpkin scalar value.
 
 ## Develop with AztecSnap
 
@@ -37,7 +37,7 @@ yarn start
 4. run script to deploy token
 
 ```shell
-cd pacakges/snap/contract/token_contract
+cd packages/snap/contract/token_contract
 ```
 
 deploy token contract.
@@ -61,7 +61,7 @@ Now, you can build frontend app by modifying ./packages/site.
 
 #### snap-dapp (./packages/site)
 
-The current implementation is a app for managing snap wallet. But you can build any frontend dapp modifying this directory.
+The current implementation is an app for managing snap wallet. But you can build any frontend dapp modifying this directory.
 
 #### aztec-snap (./packages/snap)
 
