@@ -28,7 +28,7 @@ cd ~/.aztec && docker-compose up
 
 For more information for running Sandbox, [see](https://docs.aztec.network/dev_docs/cli/sandbox-reference).
 
-3. install packages
+3. install packages and start
 
 ```shell
 yarn
