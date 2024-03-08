@@ -6,7 +6,7 @@ export type Snap = {
     version: string;
     initialPermissions: Record<string, unknown>;
 };
-export type SnapState = {
+export type ManageStateResult = {
     accounts: Accounts[];
 };
 export type Accounts = {
@@ -15,7 +15,7 @@ export type Accounts = {
     publicKey: string;
 };
 export type ApiParams = {
-    state: SnapState;
+    state: ManageStateResult;
     requestParams: ApiRequestParams;
     keyDeriver?: BIP44AddressKeyDeriver;
 };

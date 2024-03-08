@@ -55,6 +55,7 @@ module.exports = {
               tsconfig: './tsconfig.json',
               sourcemap: true,
             },
+            exclude: /node_modules/,
           },
         ],
       },
@@ -65,13 +66,13 @@ module.exports = {
       resolve: {
         plugins: [new ResolveTypeScriptPlugin()],
         extensions: ['.ts', '.js', '.cjs', '.mjs', '.wasm'],
-        alias: {
-          './node/index.js': false,
-          '@aztec/aztec.js': path.resolve(
-            __dirname,
-            '../../node_modules/@aztec/aztec.js/dest/index.js',
-          ),
-        },
+        // alias: {
+        //   './node/index.js': false,
+        //   '@aztec/aztec.js': path.resolve(
+        //     __dirname,
+        //     '../../node_modules/@aztec/aztec.js/dest/index.js',
+        //   ),
+        // },
         fallback: {
           crypto: false,
           os: false,

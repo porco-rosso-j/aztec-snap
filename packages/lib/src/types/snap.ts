@@ -1,3 +1,4 @@
+//@ts-ignore
 import { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 
 export type GetSnapsResponse = Record<string, Snap>;
@@ -9,7 +10,7 @@ export type Snap = {
   initialPermissions: Record<string, unknown>;
 };
 
-export type SnapState = {
+export type ManageStateResult = {
   accounts: Accounts[];
 };
 
@@ -20,7 +21,7 @@ export type Accounts = {
 };
 
 export type ApiParams = {
-  state: SnapState;
+  state: ManageStateResult;
   requestParams: ApiRequestParams;
   keyDeriver?: BIP44AddressKeyDeriver;
 };

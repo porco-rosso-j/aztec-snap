@@ -1,5 +1,6 @@
 /* eslint-disable jsdoc/require-jsdoc */
-import { copyable, divider, heading, panel, text } from '@metamask/snaps-ui';
+//@ts-ignore
+import { copyable, divider, heading, panel, text } from '@metamask/snaps-sdk';
 
 export async function confirmCreateAccount(): Promise<boolean> {
   return (await snap.request({

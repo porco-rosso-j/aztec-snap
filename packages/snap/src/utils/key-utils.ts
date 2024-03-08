@@ -1,10 +1,12 @@
-/* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable jsdoc/require-param-description */
 import {
   getBIP44AddressKeyDeriver,
   BIP44AddressKeyDeriver,
+  //@ts-ignore
 } from '@metamask/key-tree';
-import { EcdsaAccountContract, GrumpkinPrivateKey, Fq } from '@aztec/aztec.js';
+import { GrumpkinPrivateKey, Fq } from '@aztec/aztec.js';
+//@ts-ignore
+//import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
+import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
 
 export const getAddressKeyDeriver = async (snap: any) => {
   // https://trezor.io/learn/a/what-is-bip44
@@ -49,15 +51,16 @@ export const getPrivateKeys = async (
 // not used atm
 // fetch signing public key coordinates
 export const getPublicKeys = async (privateKey: Buffer): Promise<string[]> => {
-  const ecdsaAcc = new EcdsaAccountContract(privateKey);
-  const pubkeys: Buffer[] = ecdsaAcc.getDeploymentArgs();
+  // const ecdsaAcc = new EcdsaAccountContract(privateKey);
+  // const pubkeys: Buffer[] = ecdsaAcc.getDeploymentArgs();
 
-  const hexPubkeyX = bufferToHex(pubkeys[0]);
-  const hexPubkeyY = bufferToHex(pubkeys[1]);
-  console.log('pubkeys x: ', hexPubkeyX);
-  console.log('pubkeys y: ', hexPubkeyY);
+  // const hexPubkeyX = bufferToHex(pubkeys[0]);
+  // const hexPubkeyY = bufferToHex(pubkeys[1]);
+  // console.log('pubkeys x: ', hexPubkeyX);
+  // console.log('pubkeys y: ', hexPubkeyY);
 
-  return [`0x${hexPubkeyX}`, `0x${hexPubkeyY}`];
+  // return [`0x${hexPubkeyX}`, `0x${hexPubkeyY}`];
+  return [''];
 };
 
 function bufferToHex(buffer: Buffer) {

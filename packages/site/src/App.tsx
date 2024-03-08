@@ -1,35 +1,48 @@
-import { FunctionComponent, ReactNode, useContext } from 'react';
-import styled from 'styled-components';
-import { Footer, Header } from './components';
-import { GlobalStyle } from './styled/theme';
-import Root, { ToggleThemeContext } from './Root';
-import Main from './pages/Main';
+import '@mantine/core/styles.css';
+import { Header } from './components';
+import { useTheme } from './contexts/theme';
+import { AppContextProviderComponent } from './contexts/useAppContext';
+import { MetaMaskProvider } from './contexts/MetamaskContext';
+import { AppShell, Box, Button, Group, MantineProvider } from '@mantine/core';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import Wallet from './components/Wallet';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
-  max-width: 100vw;
-`;
-
-type AppProps = {
-  children?: ReactNode;
-};
-
-const App: FunctionComponent<AppProps> = ({ children }) => {
-  // const App: FunctionComponent = () => {
-  const toggleTheme = useContext(ToggleThemeContext);
+const App = () => {
+  const { isDarkTheme, toggleTheme } = useTheme();
+  console.log('isDarkTheme: ', isDarkTheme);
 
   return (
     <>
-      <GlobalStyle />
-      <Wrapper>
-        <Header handleToggleClick={toggleTheme} />
-        <Main />
-        {children}
-        <Footer />
-      </Wrapper>
+      <MantineProvider>
+        <AppContextProviderComponent>
+          <AppShell
+            style={{ backgroundColor: isDarkTheme ? '#35194D' : '#E8E0F0' }}
+          >
+            <AppShell.Main>
+              <MetaMaskProvider>
+                <HashRouter>
+                  <Header isDarkTheme={isDarkTheme} toggleTheme={toggleTheme} />
+                  <Routes>
+                    <Route
+                      path="/"
+                      element={
+                        <>
+                          <Wallet isDarkTheme={isDarkTheme} />
+                        </>
+                      }
+                    />
+                    <Route path="/token" element={<Box>Tokens</Box>} />
+                    <Route
+                      path="/transaction"
+                      element={<Box>Transaction</Box>}
+                    />
+                  </Routes>
+                </HashRouter>
+              </MetaMaskProvider>
+            </AppShell.Main>
+          </AppShell>
+        </AppContextProviderComponent>
+      </MantineProvider>
     </>
   );
 };

@@ -4,13 +4,14 @@
   "proposedName": "Aztec Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/porco-rosso-j/aztec-snap.git"
   },
   "source": {
-    "shasum": "KQKSQRkVLfCtr4jdjEpNTTkgFg2dhLWQ1+Nt9T1HmUw=",
+    "shasum": "0OXcPODgfzoLjGBPKvmQZNf+B4jdO6XyCV/sfvNTbjw=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
+        "iconPath": "images/icon.svg",
         "packageName": "@abstract-crypto/aztec-snap",
         "registry": "https://registry.npmjs.org/"
       }

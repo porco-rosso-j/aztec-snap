@@ -5,7 +5,7 @@
   "description": "A MetaMask snap libary for Aztec Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/porco-rosso-j/aztec-snap.git"
   },
   "license": "(MIT-0 OR Apache-2.0)",
   "type": "module",
@@ -20,8 +20,9 @@
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore"
   },
   "dependencies": {
-    "@aztec/aztec.js": "0.16.7",
-    "@aztec/noir-contracts": "0.16.7",
+    "@aztec/aztec.js": "0.24.0",
+    "@aztec/noir-contracts.js": "0.24.0",
+    "@aztec/types": "0.24.0",
     "buffer": "^6.0.3"
   },
   "devDependencies": {
@@ -41,7 +42,7 @@
   },
   "packageManager": "yarn@3.2.1",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "browserslist": {
     "production": [

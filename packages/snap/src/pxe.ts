@@ -1,32 +1,50 @@
 import {
-  init,
   createPXEClient,
   FunctionCall,
   TxExecutionRequest,
   AccountWalletWithPrivateKey,
   AccountManager,
   AztecAddress,
+  initAztecJs,
+  PXE,
+  Fr,
 } from '@aztec/aztec.js';
 import {
   ApiParams,
-  SnapState,
+  ManageStateResult,
   Accounts,
   SendTxParams,
 } from '@abstract-crypto/aztec-snap-lib';
-import { getEcdsaAccount } from './accounts/get_ecdsa';
+// import { getEcdsaAccount } from './accounts/get_ecdsa';
 import {
   PXE_URL,
   getPrivateKeys,
   confirmCreateAccount,
   confirmSendTx,
 } from './utils';
+import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
+
+export type Salt = Fr | number | bigint;
+const getEcdsaAccount = (
+  pxe: PXE,
+  encryptionPrivateKey: Buffer,
+  signingPrivateKey: Buffer,
+  salt?: Salt,
+) => {
+  return new AccountManager(
+    pxe,
+    encryptionPrivateKey,
+    new EcdsaAccountContract(signingPrivateKey),
+    salt,
+  );
+};
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
   if (!(await confirmCreateAccount())) {
     throw new Error('Deployment tx must be approved by user');
   }
 
-  await init();
+  await initAztecJs();
 
   const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
     apiParams.keyDeriver,
@@ -43,7 +61,7 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
   const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
   const compAddr = ecdsaWallet.getCompleteAddress();
 
-  const state: SnapState = {
+  const state: ManageStateResult = {
     accounts: [
       {
         addressIndex: 0,
@@ -90,7 +108,7 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     args: _txRequest.packedArguments[0].args,
   };
 
-  await init();
+  await initAztecJs();
   const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
     apiParams.keyDeriver,
   );

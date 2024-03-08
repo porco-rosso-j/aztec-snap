@@ -1,79 +1,99 @@
-import { useContext } from 'react';
-import styled, { useTheme } from 'styled-components';
-import { connectSnap, getSnap } from '@abstract-crypto/aztec-snap-lib';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { getThemePreference } from '../utils';
-import { HeaderButtons } from './Buttons';
-import { SnapLogo } from './SnapLogo';
-import { Toggle } from './Toggle';
+import { Group, Text, Button } from '@mantine/core';
+import { useAppContext } from '../contexts/useAppContext';
+import { IconSun, IconMoonFilled } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-// border
-const HeaderWrapper = styled.header`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2.4rem;
-  border-bottom: 1px solid ${(props) => props.theme.colors.border.default};
-`;
-
-const Title = styled.p`
-  font-size: ${(props) => props.theme.fontSizes.title};
-  font-weight: bold;
-  margin: 0;
-  margin-left: 1.2rem;
-  ${({ theme }) => theme.mediaQueries.small} {
-    display: none;
-  }
-`;
-
-const LogoWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-export const Header = ({
-  handleToggleClick,
-}: {
-  handleToggleClick(): void;
-}) => {
-  const theme = useTheme();
-  const [state, dispatch] = useContext(MetaMaskContext);
-
-  const handleConnectClick = async () => {
-    try {
-      await connectSnap();
-      const installedSnap = await getSnap();
-
-      dispatch({
-        type: MetamaskActions.SetInstalled,
-        payload: installedSnap,
-      });
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
-  return (
-    <HeaderWrapper>
-      <LogoWrapper>
-        {/* <SnapLogo color={theme.colors.icon.default} size={36} /> */}
-        <Title>aztec-snap</Title>
-      </LogoWrapper>
-      <RightContainer>
-        <Toggle
-          onToggle={handleToggleClick}
-          defaultChecked={getThemePreference()}
-        />
-        <HeaderButtons state={state} onConnectClick={handleConnectClick} />
-      </RightContainer>
-    </HeaderWrapper>
-  );
+type HeaderProps = {
+  isDarkTheme: boolean;
+  toggleTheme: () => void;
 };
+export function Header(props: HeaderProps) {
+  const { logout } = useAppContext();
+  const navigate = useNavigate();
+  const [memuId, setMenuId] = useState(0);
+
+  const menuTextStyle = (_menuId: number) => {
+    return {
+      color: props.isDarkTheme ? 'white' : 'black',
+      opacity: memuId == _menuId ? '100%' : '50%',
+      fontSize: '18px',
+      cursor: 'pointer',
+    };
+  };
+
+  const handleNavigate = (menu_id: number) => {
+    setMenuId(menu_id);
+    navigate(
+      menu_id == 0
+        ? '/'
+        : menu_id == 1
+        ? '/token'
+        : menu_id == 2
+        ? '/transaction'
+        : '/',
+    );
+  };
+
+  return (
+    <Group py={20} justify="space-between">
+      <Text
+        size="25px"
+        ml={35}
+        c={props.isDarkTheme ? 'white' : 'black'}
+        style={{ fontFamily: 'Verdana, sans-serif' }}
+      >
+        AztecSnap
+      </Text>
+      <Group gap={30} mt={5}>
+        <Text style={menuTextStyle(0)} onClick={() => handleNavigate(0)}>
+          Home
+        </Text>
+        <Text style={menuTextStyle(1)} onClick={() => handleNavigate(1)}>
+          Tokens
+        </Text>
+        <Text style={menuTextStyle(2)} onClick={() => handleNavigate(2)}>
+          Transactions
+        </Text>
+      </Group>
+
+      <Group gap={30}>
+        {props.isDarkTheme ? (
+          <IconSun
+            style={{ color: 'white' }}
+            onClick={() => {
+              props.toggleTheme();
+            }}
+          />
+        ) : (
+          <IconMoonFilled
+            style={{ color: 'black' }}
+            onClick={() => {
+              props.toggleTheme();
+            }}
+          />
+        )}
+        {/* 
+        <Anchor
+          href="https://github.com/porco-rosso-j/aztec-numer0n"
+          target="_blank"
+          rel="noreferrer"
+          mt={5}
+          //   mr={10}
+        >
+          <img src={imgGithub} alt="github" style={{ width: 25, height: 25 }} />
+        </Anchor> */}
+        <Button
+          onClick={logout}
+          mr={35}
+          style={{
+            color: props.isDarkTheme ? 'black' : 'white',
+            backgroundColor: props.isDarkTheme ? '#D5C8F1' : '#35194D',
+          }}
+        >
+          Disconnect
+        </Button>
+      </Group>
+    </Group>
+  );
+}

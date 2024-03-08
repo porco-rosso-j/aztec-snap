@@ -1,16 +1,17 @@
-import { OnRpcRequestHandler } from '@metamask/snaps-types';
+//@ts-ignore
+import { OnRpcRequestHandler } from '@metamask/snaps-sdk';
 import {
   ApiParams,
   ApiRequestParams,
-  SnapState,
+  ManageStateResult,
 } from '@abstract-crypto/aztec-snap-lib';
 import { createAccount, getAddress, getTx, sendTx } from './pxe';
 import { getAddressKeyDeriver } from './utils/key-utils';
 
-export const onRpcRequest: OnRpcRequestHandler = async ({ request }) => {
+export const onRpcRequest: OnRpcRequestHandler = async ({ request }: any) => {
   const requestParams = request?.params as unknown as ApiRequestParams;
 
-  let state: SnapState = await snap.request({
+  let state: ManageStateResult = await snap.request({
     method: 'snap_manageState',
     params: {
       operation: 'get',

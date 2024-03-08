@@ -1,5 +1,4 @@
-import { AuthWitness, FunctionCall, TxExecutionRequest } from '@aztec/types';
-import { SignerlessWallet, CompleteAddress, Fr } from '@aztec/aztec.js';
+import { AuthWitness, FunctionCall, TxExecutionRequest, SignerlessWallet, CompleteAddress, Fr } from '@aztec/aztec.js';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
  */

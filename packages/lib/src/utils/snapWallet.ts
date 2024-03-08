@@ -3,8 +3,10 @@ import {
   FunctionCall,
   PackedArguments,
   TxExecutionRequest,
-} from '@aztec/types';
-import { SignerlessWallet, CompleteAddress, Fr } from '@aztec/aztec.js';
+  SignerlessWallet,
+  CompleteAddress,
+  Fr,
+} from '@aztec/aztec.js';
 import { TxContext } from '@aztec/circuits.js';
 import { sendTxSnap } from './snap.js';
 /**
