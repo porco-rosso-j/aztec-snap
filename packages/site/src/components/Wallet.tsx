@@ -14,6 +14,8 @@ import {
 import { useAppContext } from '../contexts/useAppContext';
 import { shortenAddress, shortenTxHash } from '../utils/shortenAddr';
 import { IconCopy, IconCopyCheck } from '@tabler/icons-react';
+import useFaucet from '../hooks/useFaucet';
+import useBalance from '../hooks/useBalance';
 // import { provider, wallet } from '../utils/constants';
 
 type WalletProps = {
@@ -22,13 +24,15 @@ type WalletProps = {
 
 export default function Wallet(props: WalletProps) {
   const { accountAddress, saveAccountAddress } = useAppContext();
+  const { getFaucet } = useFaucet();
+  const { getBalance } = useBalance();
   const [isModalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     saveAccountAddress(
-      '0xccad40fc7eaaaa81f2495f30cd0388dbaa5601cb135d689d977a11f56ea8f214',
+      '0x2fd4503a9b855a852272945df53d7173297c1469cceda31048b85118364b09a3',
     );
   });
 
@@ -46,7 +50,7 @@ export default function Wallet(props: WalletProps) {
   //     sendTX,
   //   } = useSendETH();
 
-  const [etherBalance, setEtherBalance] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(0);
   const [sendAmount, setSendAmount] = useState<number>(0);
   const [recepient, setRecepient] = useState<string>('');
 
@@ -65,27 +69,26 @@ export default function Wallet(props: WalletProps) {
   //     setEtherBalance(balance);
   //   };
 
-  //   useEffect(() => {
-  //     const timeOutId = setTimeout(async () => {
-  //       await getETHBalance();
-  //     });
-  //     return () => clearTimeout(timeOutId);
-  //   }, []);
-
-  //   async function handleFaucet() {
-  //     setFacuetClicked(true);
+  // useEffect(() => {
+  //   const timeOutId = setTimeout(async () => {
   //     if (accountAddress) {
-  //       const tx = await wallet.sendTransaction({
-  //         to: accountAddress,
-  //         value: ethers.parseEther('0.01'),
-  //       });
-  //       await tx.wait();
-  //       await getETHBalance();
-  //     } else {
-  //       console.log('address not found');
+  //       await getBalance(accountAddress);
   //     }
-  //     setFacuetClicked(false);
-  //   }
+  //   });
+  //   return () => clearTimeout(timeOutId);
+  // }, [accountAddress]);
+
+  async function handleFaucet() {
+    setFacuetClicked(true);
+    if (accountAddress) {
+      const token = await getFaucet(accountAddress);
+      const balance = await getBalance(token, accountAddress);
+      setBalance(balance);
+    } else {
+      console.log('address not found');
+    }
+    setFacuetClicked(false);
+  }
 
   //   async function genAadhaarProof() {
   //     setLoading(true);
@@ -202,14 +205,24 @@ export default function Wallet(props: WalletProps) {
           </Stack>
           <Stack align="center" mt={30} gap={3}>
             <Text style={textTextStyle} size="xl">
-              Current Balance
+              Current Public Balance
             </Text>
             <Text style={{ ...textTextStyle, fontSize: '40px' }} size="xl">
-              {etherBalance.toFixed(2)} GAS
+              {balance.toFixed(2)} GAS
             </Text>
           </Stack>
           <Stack mt={20} align="center" style={{ boxShadow: '1rm' }}>
-            <Text style={textTextStyle} size="lg"></Text>
+            {/* <Text style={textTextStyle} size="lg"></Text> */}
+            <Text
+              mr={220}
+              mb={-10}
+              style={{
+                fontSize: '12px',
+                color: props.isDarkTheme ? 'white' : 'gray',
+              }}
+            >
+              recipient address
+            </Text>
             <TextInput
               style={{
                 width: '350px',
@@ -217,21 +230,20 @@ export default function Wallet(props: WalletProps) {
               }}
               variant="filled"
               radius="md"
-              description={
-                <div
-                  style={{
-                    textAlign: 'left',
-                    marginLeft: '10px',
-                    color: props.isDarkTheme ? 'white' : 'gray',
-                  }}
-                >
-                  recipient address
-                </div>
-              }
               placeholder="0x123.."
               size="sm"
               onChange={(event) => setRecepient(event.currentTarget.value)}
             />
+            <Text
+              mr={280}
+              mb={-10}
+              style={{
+                fontSize: '12px',
+                color: props.isDarkTheme ? 'white' : 'gray',
+              }}
+            >
+              amount
+            </Text>
             <TextInput
               style={{
                 width: '350px',
@@ -239,17 +251,6 @@ export default function Wallet(props: WalletProps) {
               }}
               variant="filled"
               radius="md"
-              description={
-                <div
-                  style={{
-                    textAlign: 'left',
-                    marginLeft: '10px',
-                    color: props.isDarkTheme ? 'white' : 'gray',
-                  }}
-                >
-                  amount
-                </div>
-              }
               placeholder="0.01"
               size="sm"
               onChange={(event) =>
@@ -320,23 +321,19 @@ export default function Wallet(props: WalletProps) {
           </Stack>
         </Stack>
       </Box>
-      <Center>
-        <Group>
-          <Text
-            mt={10}
-            size="md"
-            style={{
-              color: faucetClicked ? 'green' : 'grey',
-              textDecoration: 'underline',
-              cursor: 'pointer',
-            }}
-            //onClick={handleFaucet}
-          >
-            Get faucet ETH
-          </Text>
-          {faucetClicked ? <Loader mt={11} color="green" size={'xs'} /> : null}
-        </Group>
-      </Center>
+      <Text
+        mt={10}
+        size="md"
+        style={{
+          color: faucetClicked ? 'white' : 'grey',
+          textDecoration: 'underline',
+          cursor: 'pointer',
+          textAlign: 'center',
+        }}
+        onClick={handleFaucet}
+      >
+        Get Faucet
+      </Text>
 
       {/* {isModalOpen ? <OTPModal sendETH={sendETH} /> : null} */}
     </>

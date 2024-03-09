@@ -39,6 +39,7 @@
     "@aztec/noir-contracts.js": "0.24.0",
     "@mantine/core": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
+    "@mantine/notifications": "^7.3.2",
     "@metamask/providers": "^14.0.2",
     "@tabler/icons-react": "^2.47.0",
     "buffer": "^6.0.3",
