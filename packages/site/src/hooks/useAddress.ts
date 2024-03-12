@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInvokeSnap, useMetaMask } from './snap';
+import { getAddressSnap } from '@abstract-crypto/aztec-snap-lib/dest/index';
 
 export const useAddress = () => {
   const { installedSnap } = useMetaMask();
@@ -24,6 +25,7 @@ export const useAddress = () => {
       method: 'aztec_getAddress',
       params: [],
     });
+    // const addressResponse = await getAddressSnap();
     if (addressResponse) {
       setAddress(addressResponse);
       return addressResponse;

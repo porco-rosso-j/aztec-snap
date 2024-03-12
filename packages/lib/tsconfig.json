@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
-  "target": "es2020",
-  "lib": ["dom", "esnext", "es2017.object"],
-  "module": "NodeNext",
-  "moduleResolution": "NodeNext",
-  "strict": true,
-  "declaration": true,
-  "allowSyntheticDefaultImports": true,
-  "esModuleInterop": true,
-  "downlevelIteration": true,
-  "inlineSourceMap": true,
-  "declarationMap": true,
-  "importHelpers": true,
-  "resolveJsonModule": true,
-  "composite": true,
-  "skipLibCheck": true,
-  "baseUrl": "./",
-  "rootDir": "src",
-  "outDir": "./dest",
+    "target": "es2020",
+    "lib": ["dom", "esnext", "es2017.object"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "inlineSourceMap": true,
+    "declarationMap": true,
+    "importHelpers": true,
+    "resolveJsonModule": true,
+    "composite": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "rootDir": "src",
+    "outDir": "./dest",
+    "paths": {
+      "@abstract-crypto/aztec-snap": ["../snap/dest/index.d.ts"]
+    }
   },
-  "include": [
-      "src",
-  ],
-  "exclude": [
-      "node_modules"
-  ]
+
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

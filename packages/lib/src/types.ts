@@ -1,9 +1,5 @@
-import { SendTxParams } from './snap.js';
-// not sure if this would be compatible w/ real funcs in service/pxe
-// export declare const getAddress: () => Promise<string>;
-// export declare const createAccount: () => Promise<string>;
-// export declare const getTx: () => Promise<any[]>;
-// export declare const sendTx: ({ txRequest }: SendTxParams) => Promise<string>;
+export type * from '@abstract-crypto/aztec-snap';
+import type { SendTxParams } from '@abstract-crypto/aztec-snap/dest/index';
 
 // Type for getAddress function
 export type GetAddressFunction = () => Promise<string>;
@@ -30,3 +26,8 @@ export type RpcMethodTypes = {
     output: ReturnType<RpcMethods[Method]>;
   };
 };
+
+export type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
+  RpcMethodTypes[M]['input'] extends undefined
+    ? { snapRpcMethod: M }
+    : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };

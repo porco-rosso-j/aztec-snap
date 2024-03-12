@@ -1,4 +1,5 @@
-import { BIP44AddressKeyDeriver } from '@metamask/key-tree';
+import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
+import type { ManageStateResult } from '@metamask/snaps-sdk';
 export type GetSnapsResponse = Record<string, Snap>;
 export type Snap = {
     permissionName: string;
@@ -6,10 +7,7 @@ export type Snap = {
     version: string;
     initialPermissions: Record<string, unknown>;
 };
-export type ManageStateResult = {
-    accounts: Accounts[];
-};
-export type Accounts = {
+export type Account = {
     addressIndex: number;
     address: string;
     publicKey: string;
@@ -18,6 +16,7 @@ export type ApiParams = {
     state: ManageStateResult;
     requestParams: ApiRequestParams;
     keyDeriver?: BIP44AddressKeyDeriver;
+    aztec: any;
 };
 export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams;
 export type GetAddressParams = {};
@@ -26,4 +25,3 @@ export type CreateAccountParams = {};
 export type SendTxParams = {
     txRequest: string;
 };
-//# sourceMappingURL=snap.d.ts.map

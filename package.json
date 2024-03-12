@@ -43,13 +43,15 @@
     "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.2.1",
     "prettier-plugin-packagejson": "^2.2.18",
     "typescript": "5.0.4"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "resolutions": {
+    "@aztec/foundation@0.24.0": "patch:@aztec/foundation@npm:0.24.0#.yarn/patches/@aztec-foundation-npm-0.24.0-e461fae23e.patch",
+    "@aztec/bb.js@0.24.0": "patch:@aztec/bb.js@npm:0.24.0#.yarn/patches/@aztec-bb.js-npm-0.24.0-7baf20778f.patch"
   }
 }

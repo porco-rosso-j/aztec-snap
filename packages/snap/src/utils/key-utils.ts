@@ -1,13 +1,7 @@
-import {
-  getBIP44AddressKeyDeriver,
-  BIP44AddressKeyDeriver,
-} from '@metamask/key-tree';
+import { getBIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { GrumpkinPrivateKey } from '@aztec/aztec.js';
-// //@ts-ignore
-// //import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
-// import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
 import { SnapsProvider } from '@metamask/snaps-sdk';
-import { ApiParams } from './types';
+import { ApiParams } from '../types';
 
 export const getAddressKeyDeriver = async (snap: SnapsProvider) => {
   // https://trezor.io/learn/a/what-is-bip44

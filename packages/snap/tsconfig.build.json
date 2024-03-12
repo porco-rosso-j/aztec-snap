@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+
+    "target": "esnext",
+    "resolveJsonModule": true,
+    "outDir": "./dest",
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "moduleResolution": "node",
+    "strict": true
+  },
+  "include": ["./src/types/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

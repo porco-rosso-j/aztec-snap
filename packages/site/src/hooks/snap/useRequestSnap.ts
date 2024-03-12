@@ -1,5 +1,6 @@
 import { defaultSnapOrigin } from '../../utils/constants';
-import type { Snap } from '../../types';
+// import type { Snap } from '../../types';
+import type { Snap } from '@abstract-crypto/aztec-snap-lib';
 import { useMetaMaskContext } from '../../contexts/MetamaskContext';
 import { useRequest } from './useRequest';
 

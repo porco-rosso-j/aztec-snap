@@ -9,7 +9,9 @@
   },
   "license": "(MIT-0 OR Apache-2.0)",
   "type": "module",
+  "types": "./dest/index.d.ts",
   "files": [
+    "dest/",
     "dist/",
     "images/",
     "snap.manifest.json"
@@ -22,7 +24,8 @@
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "serve": "mm-snap serve",
     "start": "mm-snap watch",
-    "build": "mm-snap build"
+    "build": "mm-snap build",
+    "build:types": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
     "@aztec/accounts": "0.24.0",

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useAddress, useCreateAccount } from '../hooks';
+import { useCreateAccount } from '../hooks';
 import { useMetaMask } from '../hooks/snap';
 import CreateAccountModal from './Modals/CreateAccountModal';
+import { delay } from '../utils/delay';
 
 type OnboardProps = {
   address: string;
@@ -11,13 +12,12 @@ type OnboardProps = {
 export default function Onboard(props: OnboardProps) {
   const { installedSnap } = useMetaMask();
   const { createAccount } = useCreateAccount();
-  // const { address, getAddress } = useAddress();
   const [hasAddress, setHasAddress] = useState<boolean>(false);
 
   useEffect(() => {
     if (!props.address && installedSnap) {
       const getSnapAddress = async () => {
-        const address = props.getAddress();
+        const address = await props.getAddress();
         console.log('address in getAddress: ', address);
 
         setHasAddress(!props.address);
@@ -29,16 +29,18 @@ export default function Onboard(props: OnboardProps) {
 
   const handleCreateAccount = async () => {
     await createAccount();
-    props.getAddress();
+    await props.getAddress();
   };
 
   return (
     <>
-      <>
-        {hasAddress && (
-          <CreateAccountModal handleCreateAccount={handleCreateAccount} />
-        )}
-      </>
+      {hasAddress && (
+        <CreateAccountModal
+          address={props.address}
+          setHasAddress={setHasAddress}
+          handleCreateAccount={handleCreateAccount}
+        />
+      )}
     </>
   );
 }

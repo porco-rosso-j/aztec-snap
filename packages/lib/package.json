@@ -10,6 +10,7 @@
   "license": "(MIT-0 OR Apache-2.0)",
   "type": "module",
   "main": "./dest/index.js",
+  "types": "./dest/types.d.ts",
   "scripts": {
     "build": "tsc -b",
     "build:clean": "yarn clean && rm tsconfig.tsbuildinfo && rm -r dest && yarn build",
@@ -20,6 +21,7 @@
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore"
   },
   "dependencies": {
+    "@abstract-crypto/aztec-snap": "workspace:^",
     "@aztec/aztec.js": "0.24.0",
     "@aztec/noir-contracts.js": "0.24.0",
     "@aztec/types": "0.24.0",

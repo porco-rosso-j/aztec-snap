@@ -1,0 +1,44 @@
+diff --git a/dest/timer/timer.js b/dest/timer/timer.js
+index 253ca990bad5db3b0e69a792b616b32b0d75f80f..8a9d32adc3f10b21b65679a6cdda9fdd92256847 100644
+--- a/dest/timer/timer.js
++++ b/dest/timer/timer.js
+@@ -12,7 +12,7 @@
+  */
+ export class Timer {
+     constructor() {
+-        this.start = performance.now();
++        this.start = Date.now;
+     }
+     /**
+      * Return microseconds.
+@@ -28,7 +28,7 @@ export class Timer {
+      * @returns The elapsed time in milliseconds.
+      */
+     ms() {
+-        return performance.now() - this.start;
++        return Date.now - this.start;
+     }
+     /**
+      * Returns the time elapsed since the Timer instance was created, in seconds.
+diff --git a/src/timer/timer.ts b/src/timer/timer.ts
+index ee96cbc94a7b4d56e9836f540310ff3fe12b0a9e..1215b5f1cc666d14bc4419ac1cc31c5867243728 100644
+--- a/src/timer/timer.ts
++++ b/src/timer/timer.ts
+@@ -14,7 +14,7 @@ export class Timer {
+   private start: number;
+ 
+   constructor() {
+-    this.start = performance.now();
++    this.start = Date.now;
+   }
+ 
+   /**
+@@ -32,7 +32,7 @@ export class Timer {
+    * @returns The elapsed time in milliseconds.
+    */
+   public ms() {
+-    return performance.now() - this.start;
++    return Date.now - this.start;
+   }
+ 
+   /**

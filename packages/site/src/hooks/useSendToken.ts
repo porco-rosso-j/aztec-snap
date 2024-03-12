@@ -3,7 +3,7 @@ import { AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
-import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
+import { SnapWallet } from '@abstract-crypto/aztec-snap-lib/dest/index';
 import { PXE_URL, TOKEN_ADDRESS } from '../utils/constants';
 import useBalance from './useBalance';
 

@@ -13,7 +13,7 @@ import {
   confirmCreateAccount,
   confirmSendTx,
 } from './utils';
-import { Account, ApiParams, SendTxParams } from './utils/types';
+import { Account, ApiParams, SendTxParams } from './types';
 import { getECDSAWallet, getEcdsaAccountManager } from './utils/accounts';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
@@ -133,6 +133,8 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   const signedTxRequest: TxExecutionRequest =
     await account.createTxExecutionRequest([functionCall]);
   console.log('signedTxRequest: ', signedTxRequest);
+  console.log('signedTxRequest: ', signedTxRequest.toString());
+  // should save this tx hash in the state
   return signedTxRequest.toString();
 };
 

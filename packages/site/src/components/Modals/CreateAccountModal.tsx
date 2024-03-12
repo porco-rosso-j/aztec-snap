@@ -7,9 +7,11 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type CreateAccountModalType = {
+  address: string;
+  setHasAddress: (bool: boolean) => void;
   handleCreateAccount: () => void;
 };
 
@@ -20,6 +22,13 @@ const CreateAccountModal = (props: CreateAccountModalType) => {
     props.handleCreateAccount();
     setOpened(false);
   }
+
+  useEffect(() => {
+    if (opened && props.address) {
+      setOpened(false);
+      props.setHasAddress(false);
+    }
+  }, [opened, props.address]);
 
   return (
     <>

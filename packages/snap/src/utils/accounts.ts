@@ -5,7 +5,7 @@ import type {
   Fr,
   PXE,
 } from '@aztec/aztec.js';
-import { ApiParams } from './types';
+import { ApiParams } from '../types';
 
 export type Salt = Fr | number | bigint;
 export const getEcdsaAccountManager = async (

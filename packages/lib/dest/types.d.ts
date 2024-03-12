@@ -1,4 +1,5 @@
-import { SendTxParams } from './snap.js';
+export type * from '@abstract-crypto/aztec-snap';
+import type { SendTxParams } from '@abstract-crypto/aztec-snap/dest/index';
 export type GetAddressFunction = () => Promise<string>;
 export type createAccountFunction = () => Promise<string>;
 export type GetTxFunction = () => Promise<any[]>;
@@ -16,5 +17,10 @@ export type RpcMethodTypes = {
         output: ReturnType<RpcMethods[Method]>;
     };
 };
-export {};
-//# sourceMappingURL=pxe-types.d.ts.map
+export type SnapRpcRequestParams<M extends keyof RpcMethodTypes> = RpcMethodTypes[M]['input'] extends undefined ? {
+    snapRpcMethod: M;
+} : {
+    snapRpcMethod: M;
+    params: RpcMethodTypes[M]['input'];
+};
+//# sourceMappingURL=types.d.ts.map

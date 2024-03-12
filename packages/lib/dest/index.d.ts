@@ -1,3 +1,3 @@
-export * from './utils/index.js';
-export * from './types/index.js';
+export * from './snapWallet.js';
+export * from './snap.js';
 //# sourceMappingURL=index.d.ts.map

@@ -1,10 +1,5 @@
 # Metamask Snap on Aztec Sandbox
 
-https://github.com/porco-rosso-j/aztec-snap/assets/88586592/257bdbdb-a587-48cf-a554-dd1a91b153b4
-
-
-Built at ETHGlobal Istanbul: [project page](https://ethglobal.com/showcase/aztecsnap-prn4s).
-
 Aztec Snap is the first MetaMask Snap on Aztec that enables private function calls to any Aztec contract.
 
 AztecSnap deterministically derives private keys from the existing seed phrase managed by Metamask via Snap's api call `snap_getBip44Entropy` to offer great security and UX for ethereum users.
@@ -13,66 +8,51 @@ More specifically, it currently uses the derived private key as a signing key fo
 
 ## Develop with AztecSnap
 
-1. clone this project
+### clone this project
 
 ```shell
 git clone git@github.com:porco-rosso-j/aztec-snap.git
 ```
 
-2. set up AztecSandbox
+### install packages and start
 
-```shell
-/bin/bash -c "$(curl -fsSL 'https://sandbox.aztec.network')"
-cd ~/.aztec && docker-compose up
-```
-
-For more information for running Sandbox, [see](https://docs.aztec.network/dev_docs/cli/sandbox-reference).
-
-3. install packages and start
+install dependencies:
 
 ```shell
 yarn
+```
+
+start snap server:
+
+```shell
+cd packages/snap
 yarn start
 ```
 
-4. deploy token
-
-head to contract directory in packages/snap
-```shell
-cd packages/snap/contract/token_contract
-```
-
-run the following aztec-cli command to deploy token contract.
-```shell
-aztec-cli deploy ./target/Token.json --args 0x06357cc85cb8fc561adbf741f63cd75efa26ffba1c80d431ec77d036d8edf022
-```
-
-output would look like:
+start frontend:
 
 ```shell
-Contract deployed at 0x2f6bf35....
-Contract partial address 0x1d02416....
+cd packages/site
+yarn dev
 ```
 
-copy the first address and paste it to `TOKEN_ADDRESS` in ./pacakges/site/src/utils/constants.ts.
-
-Now, you can build frontend app by modifying ./packages/site.
+````
 
 ### Packages
 
 #### snap-dapp (./packages/site)
 
-The current implementation is an app for managing snap wallet. But you can build any frontend dapp modifying this directory.
+The current implementation is an app for managing AztecSnap Wallet. But you can build any frontend dapp modifying this directory.
 
 #### aztec-snap (./packages/snap)
 
-This directory contains snap source code. `yarn start` should build and start serving snap at port 8081.
+This directory contains snap's backend source code.
 
 #### aztec-snap-lib (,/packages/lib)
 
-aztec-snap-lib (./packages/lib) is a useful library to build frontend app that integrates AztecSnap.
+aztec-snap-lib is a library that exports `SnapWallet` instance.
 
-It contains `SnapWallet` class that extends aztecjs's `SignerlessWallet` in a way that asks user to approve transaction on Metamask Flask pop-up and adds transaction signature to `txRequest` via Snap.
+SnapWallet can be thought of as ethers's Signer intance that can be instantiated and used like following.
 
 example:
 
@@ -95,11 +75,11 @@ const sentTx: SentTx = await token.methods
   .send();
 
 await sentTx.wait();
-```
+````
 
 In the future, snap (./pakcages/snap) will be hosted externally and lib (./packages/lib) will be provided as a npm package.
 
 ### Reference
 
-- [Aztec Developer Documentation](https://docs.aztec.network/dev_docs/getting_started/main)
+- [Aztec Developer Documentation](https://docs.aztec.network/)
 - [Metamask Snap Doc](https://docs.metamask.io/snaps/)

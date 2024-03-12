@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { defaultSnapOrigin } from '../../utils/constants';
-import type { GetSnapsResponse } from '../../types';
+// import type { GetSnapsResponse } from '../../types';
+import type { GetSnapsResponse } from '@abstract-crypto/aztec-snap-lib';
 import { useMetaMaskContext } from '../../contexts/MetamaskContext';
 import { useRequest } from './useRequest';
 
