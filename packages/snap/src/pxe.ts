@@ -106,25 +106,15 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   console.log('functionCall: ', functionCall);
 
   const { signingPrivateKey } = await getPrivateKeys(apiParams);
-
-  console.log('signingPrivateKey: ', signingPrivateKey.toString());
-
   const pxe: PXE = apiParams.aztec.createPXEClient(PXE_URL);
   console.log('pxe: ', pxe);
 
   const addr = await getStateAccount(apiParams, 0);
   console.log('addr: ', addr);
 
-  const senderCompAddr: CompleteAddress | undefined =
-    await pxe.getRegisteredAccount(
-      apiParams.aztec.AztecAddress.fromString(addr),
-    );
-  console.log('senderCompAddr: ', senderCompAddr);
-  console.log('senderCompAddr addr: ', senderCompAddr?.address.toString());
-
   const account = await getECDSAWallet(
     pxe,
-    senderCompAddr!.address,
+    apiParams.aztec.AztecAddress.fromString(addr),
     signingPrivateKey,
   );
   console.log('account: ', account);
@@ -134,6 +124,7 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     !(await confirmSendTx(
       account.getAddress().toString(),
       functionCall.to.toString(),
+      functionCall.functionData.hash().toString(),
     ))
   ) {
     throw new Error('Transaction must be approved by user');

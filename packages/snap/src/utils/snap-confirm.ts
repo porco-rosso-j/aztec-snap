@@ -23,6 +23,7 @@ export async function confirmCreateAccount(): Promise<boolean> {
 export async function confirmSendTx(
   from: string,
   to: string,
+  data: string,
 ): Promise<boolean> {
   return (await snap.request({
     method: 'snap_dialog',
@@ -31,10 +32,12 @@ export async function confirmSendTx(
       content: panel([
         heading('Confirm transaction'),
         divider(),
-        text('Send tx from:'),
+        text('Sender Address:'),
         copyable(from),
-        text('Send tx to :'),
+        text('Contract Address:'),
         copyable(to),
+        text('Function Data:'),
+        copyable(data),
       ]),
     },
   })) as boolean;

@@ -21,9 +21,6 @@ export const useRequest = () => {
    * @returns The result of the request.
    */
   const request: Request = async ({ method, params }) => {
-    console.log('provider: ', provider);
-    console.log('method: ', method);
-    console.log('params: ', params);
     try {
       const data =
         (await provider?.request({

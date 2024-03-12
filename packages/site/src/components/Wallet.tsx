@@ -23,12 +23,13 @@ type WalletProps = {
 
 export default function Wallet(props: WalletProps) {
   const { gasToken } = useAppContext();
-  const { address } = useAddress();
+  const { address, getAddress } = useAddress();
   const { getFaucet } = useFaucet();
   const { balance, setBalance, getBalance } = useBalance();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   console.log('gasToken: ', gasToken);
+  console.log('address: ', address);
 
   const { txHash, sendToken } = useSendToken();
 
@@ -86,7 +87,7 @@ export default function Wallet(props: WalletProps) {
           backgroundColor: props.isDarkTheme ? '#402F51' : 'white',
         }}
       >
-        <Onboard />
+        <Onboard address={address} getAddress={getAddress} />
         <Stack align="center" gap="md">
           <Stack gap={1}>
             <Group>

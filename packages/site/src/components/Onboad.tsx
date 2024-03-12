@@ -3,32 +3,40 @@ import { useAddress, useCreateAccount } from '../hooks';
 import { useMetaMask } from '../hooks/snap';
 import CreateAccountModal from './Modals/CreateAccountModal';
 
-type OnboardProps = {};
+type OnboardProps = {
+  address: string;
+  getAddress: () => void;
+};
 
 export default function Onboard(props: OnboardProps) {
   const { installedSnap } = useMetaMask();
   const { createAccount } = useCreateAccount();
-  const { address, getAddress } = useAddress();
+  // const { address, getAddress } = useAddress();
   const [hasAddress, setHasAddress] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!address && installedSnap) {
+    if (!props.address && installedSnap) {
       const getSnapAddress = async () => {
-        const address = await getAddress();
+        const address = props.getAddress();
         console.log('address in getAddress: ', address);
 
-        setHasAddress(!address);
+        setHasAddress(!props.address);
       };
 
       getSnapAddress();
     }
-  }, [address, installedSnap, getAddress]);
+  }, [props.address, installedSnap, props.getAddress]);
+
+  const handleCreateAccount = async () => {
+    await createAccount();
+    props.getAddress();
+  };
 
   return (
     <>
       <>
         {hasAddress && (
-          <CreateAccountModal handleCreateAccount={createAccount} />
+          <CreateAccountModal handleCreateAccount={handleCreateAccount} />
         )}
       </>
     </>

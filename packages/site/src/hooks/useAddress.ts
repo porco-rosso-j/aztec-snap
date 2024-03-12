@@ -4,26 +4,20 @@ import { useInvokeSnap, useMetaMask } from './snap';
 export const useAddress = () => {
   const { installedSnap } = useMetaMask();
   const { invokeSnap } = useInvokeSnap();
-  const [address, setAddress] = useState<string | undefined>();
+  const [address, setAddress] = useState<string>('');
   console.log('address: ', address);
 
   useEffect(() => {
-    if (installedSnap) {
+    if (installedSnap && !address) {
       (async () => {
         try {
-          const addressResponse = await invokeSnap({
-            method: 'aztec_getAddress',
-            params: [],
-          });
-          if (addressResponse) {
-            setAddress(addressResponse);
-          }
+          await getAddress();
         } catch (e) {
           console.log('e: ', e);
         }
       })();
     }
-  }, [installedSnap]);
+  }, [installedSnap, address]);
 
   const getAddress = async () => {
     const addressResponse = await invokeSnap({

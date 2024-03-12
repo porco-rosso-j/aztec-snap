@@ -13,10 +13,6 @@ export type Snap = {
   initialPermissions: Record<string, unknown>;
 };
 
-// export type ManageStateResult = {
-//   accounts: Accounts[];
-// };
-
 export type Account = {
   addressIndex: number;
   address: string; // in hex
