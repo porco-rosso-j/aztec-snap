@@ -1,65 +1,29 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  Reducer,
-  useEffect,
-  useReducer,
-} from 'react';
-import { type Snap, isFlask, getSnap } from '@abstract-crypto/aztec-snap-lib';
+import type { MetaMaskInpageProvider } from '@metamask/providers';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-export type MetamaskState = {
-  isFlask: boolean;
-  installedSnap?: Snap;
-  error?: Error;
+import type { Snap } from '../types';
+import { getSnapsProvider } from '../utils/metamask';
+
+type MetaMaskContextType = {
+  provider: MetaMaskInpageProvider | null;
+  installedSnap: Snap | null;
+  error: Error | null;
+  setInstalledSnap: (snap: Snap | null) => void;
+  setError: (error: Error) => void;
 };
 
-const initialState: MetamaskState = {
-  isFlask: false,
-  error: undefined,
-};
-
-type MetamaskDispatch = { type: MetamaskActions; payload: any };
-
-export const MetaMaskContext = createContext<
-  [MetamaskState, Dispatch<MetamaskDispatch>]
->([
-  initialState,
-  () => {
-    /* no op */
+export const MetaMaskContext = createContext<MetaMaskContextType>({
+  provider: null,
+  installedSnap: null,
+  error: null,
+  setInstalledSnap: () => {
+    /* no-op */
   },
-]);
-
-export enum MetamaskActions {
-  SetInstalled = 'SetInstalled',
-  SetFlaskDetected = 'SetFlaskDetected',
-  SetError = 'SetError',
-}
-
-const reducer: Reducer<MetamaskState, MetamaskDispatch> = (state, action) => {
-  switch (action.type) {
-    case MetamaskActions.SetInstalled:
-      return {
-        ...state,
-        installedSnap: action.payload,
-      };
-
-    case MetamaskActions.SetFlaskDetected:
-      return {
-        ...state,
-        isFlask: action.payload,
-      };
-
-    case MetamaskActions.SetError:
-      return {
-        ...state,
-        error: action.payload,
-      };
-
-    default:
-      return state;
-  }
-};
+  setError: () => {
+    /* no-op */
+  },
+});
 
 /**
  * MetaMask context provider to handle MetaMask and snap status.
@@ -69,59 +33,44 @@ const reducer: Reducer<MetamaskState, MetamaskDispatch> = (state, action) => {
  * @returns JSX.
  */
 export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
-  if (typeof window === 'undefined') {
-    return <>{children}</>;
-  }
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  useEffect(() => {
-    async function detectFlask() {
-      const isFlaskDetected = await isFlask();
-
-      dispatch({
-        type: MetamaskActions.SetFlaskDetected,
-        payload: isFlaskDetected,
-      });
-    }
-
-    async function detectSnapInstalled() {
-      const installedSnap = await getSnap();
-      dispatch({
-        type: MetamaskActions.SetInstalled,
-        payload: installedSnap,
-      });
-    }
-
-    detectFlask();
-
-    if (state.isFlask) {
-      detectSnapInstalled();
-    }
-  }, [state.isFlask, window.ethereum]);
+  const [provider, setProvider] = useState<MetaMaskInpageProvider | null>(null);
+  const [installedSnap, setInstalledSnap] = useState<Snap | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  console.log('provider in MetaMaskProvider: ', provider);
+  console.log('installedSnap in MetaMaskProvider: ', installedSnap);
 
   useEffect(() => {
-    let timeoutId: number;
+    getSnapsProvider().then(setProvider).catch(console.error);
+  }, []);
 
-    if (state.error) {
-      timeoutId = window.setTimeout(() => {
-        dispatch({
-          type: MetamaskActions.SetError,
-          payload: undefined,
-        });
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(null);
       }, 10000);
+
+      return () => {
+        clearTimeout(timeout);
+      };
     }
 
-    return () => {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-      }
-    };
-  }, [state.error]);
+    return undefined;
+  }, [error]);
 
   return (
-    <MetaMaskContext.Provider value={[state, dispatch]}>
+    <MetaMaskContext.Provider
+      value={{ provider, error, setError, installedSnap, setInstalledSnap }}
+    >
       {children}
     </MetaMaskContext.Provider>
   );
 };
+
+/**
+ * Utility hook to consume the MetaMask context.
+ *
+ * @returns The MetaMask context.
+ */
+export function useMetaMaskContext() {
+  return useContext(MetaMaskContext);
+}

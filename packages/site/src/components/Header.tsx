@@ -1,17 +1,29 @@
-import { Group, Text, Button } from '@mantine/core';
+import { Group, Text, Button, Anchor } from '@mantine/core';
 import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useInvokeSnap, useMetaMask, useRequestSnap } from '../hooks/snap';
+import { defaultSnapOrigin, isLocalSnap } from '../utils';
 
 type HeaderProps = {
   isDarkTheme: boolean;
   toggleTheme: () => void;
 };
 export function Header(props: HeaderProps) {
+  const { isFlask, snapsDetected, installedSnap } = useMetaMask();
+  const { requestSnap } = useRequestSnap(defaultSnapOrigin, '0.1.0');
+  const { invokeSnap } = useInvokeSnap();
+
+  console.log('installedSnap: ', installedSnap);
+
   const { logout } = useAppContext();
   const navigate = useNavigate();
   const [memuId, setMenuId] = useState(0);
+
+  const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
+    ? isFlask
+    : snapsDetected;
 
   const menuTextStyle = (_menuId: number) => {
     return {
@@ -33,6 +45,12 @@ export function Header(props: HeaderProps) {
         ? '/transaction'
         : '/',
     );
+  };
+
+  const BottunStyle = {
+    marginRight: '35px',
+    color: props.isDarkTheme ? 'black' : 'white',
+    backgroundColor: props.isDarkTheme ? '#D5C8F1' : '#35194D',
   };
 
   return (
@@ -73,26 +91,36 @@ export function Header(props: HeaderProps) {
             }}
           />
         )}
-        {/* 
-        <Anchor
-          href="https://github.com/porco-rosso-j/aztec-numer0n"
-          target="_blank"
-          rel="noreferrer"
-          mt={5}
-          //   mr={10}
-        >
-          <img src={imgGithub} alt="github" style={{ width: 25, height: 25 }} />
-        </Anchor> */}
-        <Button
-          onClick={logout}
-          mr={35}
-          style={{
-            color: props.isDarkTheme ? 'black' : 'white',
-            backgroundColor: props.isDarkTheme ? '#D5C8F1' : '#35194D',
-          }}
-        >
-          Disconnect
-        </Button>
+        {!isMetaMaskReady ? (
+          <Button style={BottunStyle}>
+            <Anchor
+              style={{ color: props.isDarkTheme ? 'black' : 'white' }}
+              href="https://metamask.io/flask/"
+              target="_blank"
+            >
+              Install Flask
+            </Anchor>
+          </Button>
+        ) : !installedSnap ? (
+          <Button style={BottunStyle} onClick={requestSnap}>
+            Connect
+          </Button>
+        ) : (
+          <Button
+            style={BottunStyle}
+            onClick={requestSnap}
+            disabled={!installedSnap}
+          >
+            Reconnect
+          </Button>
+          //   <Button
+          //   style={BottunStyle}
+          //   onClick={logout}
+          //   disabled={!installedSnap}
+          // >
+          //   Disconnect
+          // </Button>
+        )}
       </Group>
     </Group>
   );

@@ -40,7 +40,7 @@
     "@mantine/core": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
     "@mantine/notifications": "^7.3.2",
-    "@metamask/providers": "^14.0.2",
+    "@metamask/providers": "^15.0.0",
     "@tabler/icons-react": "^2.47.0",
     "buffer": "^6.0.3",
     "react-router-dom": "^6.22.3"

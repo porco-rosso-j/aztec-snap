@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import {
-  getAddressSnap,
-  createAccountSnap,
-} from '@abstract-crypto/aztec-snap-lib';
+import { useInvokeSnap, useMetaMask } from './snap';
 
-export const useAddress = (isSnapInstalled: boolean) => {
+export const useAddress = () => {
+  const { installedSnap } = useMetaMask();
+  const { invokeSnap } = useInvokeSnap();
   const [address, setAddress] = useState<string | undefined>();
+  console.log('address: ', address);
 
   useEffect(() => {
-    if (isSnapInstalled) {
+    if (installedSnap) {
       (async () => {
         try {
-          const addressResponse = await getAddressSnap();
+          const addressResponse = await invokeSnap({
+            method: 'aztec_getAddress',
+            params: [],
+          });
           if (addressResponse) {
             setAddress(addressResponse);
           }
@@ -20,18 +23,18 @@ export const useAddress = (isSnapInstalled: boolean) => {
         }
       })();
     }
-  }, [isSnapInstalled]);
+  }, [installedSnap]);
 
-  const createAccount = async () => {
-    try {
-      const addressResponse = await createAccountSnap();
-      if (addressResponse) {
-        setAddress(addressResponse);
-      }
-    } catch (e) {
-      console.log('e: ', e);
+  const getAddress = async () => {
+    const addressResponse = await invokeSnap({
+      method: 'aztec_getAddress',
+      params: [],
+    });
+    if (addressResponse) {
+      setAddress(addressResponse);
+      return addressResponse;
     }
   };
 
-  return { address, createAccount };
+  return { address, getAddress };
 };

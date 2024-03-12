@@ -23,6 +23,7 @@
     "@aztec/aztec.js": "0.24.0",
     "@aztec/noir-contracts.js": "0.24.0",
     "@aztec/types": "0.24.0",
+    "@metamask/providers": "^15.0.0",
     "buffer": "^6.0.3"
   },
   "devDependencies": {

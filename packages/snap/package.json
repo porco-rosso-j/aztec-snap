@@ -8,6 +8,7 @@
     "url": "https://github.com/porco-rosso-j/aztec-snap.git"
   },
   "license": "(MIT-0 OR Apache-2.0)",
+  "type": "module",
   "files": [
     "dist/",
     "images/",
@@ -20,16 +21,17 @@
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "serve": "mm-snap serve",
-    "start": "mm-snap watch"
+    "start": "mm-snap watch",
+    "build": "mm-snap build"
   },
   "dependencies": {
-    "@abstract-crypto/aztec-snap-lib": "workspace:^",
     "@aztec/accounts": "0.24.0",
     "@aztec/aztec.js": "0.24.0",
     "@aztec/noir-contracts.js": "0.24.0",
     "@metamask/key-tree": "^9.0.0",
     "@metamask/snaps-sdk": "^3.0.1",
-    "buffer": "^6.0.3"
+    "buffer": "^6.0.3",
+    "webpack": "^5.90.3"
   },
   "devDependencies": {
     "@lavamoat/allow-scripts": "^2.0.3",
@@ -51,11 +53,9 @@
     "resolve-typescript-plugin": "^2.0.1",
     "rimraf": "^3.0.2",
     "stream-browserify": "^3.0.0",
-    "ts-loader": "^9.5.1",
+    "ts-loader": "^9.4.4",
     "tty-browserify": "^0.0.1",
-    "typescript": "5.0.4",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "typescript": "5.0.4"
   },
   "packageManager": "yarn@3.2.1",
   "engines": {

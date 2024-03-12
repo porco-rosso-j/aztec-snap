@@ -1,14 +1,15 @@
 import {
   getBIP44AddressKeyDeriver,
   BIP44AddressKeyDeriver,
-  //@ts-ignore
 } from '@metamask/key-tree';
-import { GrumpkinPrivateKey, Fq } from '@aztec/aztec.js';
-//@ts-ignore
-//import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
-import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
+import type { GrumpkinPrivateKey } from '@aztec/aztec.js';
+// //@ts-ignore
+// //import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
+// import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
+import { SnapsProvider } from '@metamask/snaps-sdk';
+import { ApiParams } from './types';
 
-export const getAddressKeyDeriver = async (snap: any) => {
+export const getAddressKeyDeriver = async (snap: SnapsProvider) => {
   // https://trezor.io/learn/a/what-is-bip44
   const bip44Node = await snap.request({
     method: 'snap_getBip44Entropy',
@@ -16,6 +17,7 @@ export const getAddressKeyDeriver = async (snap: any) => {
       coinType: 9008,
     },
   });
+  console.log('bip44Node: ', bip44Node);
 
   // `m / purpose' / coin_type' / account' / change / address_index`
   // `m / 44' / 9004' / 0' / 0 / {index}`
@@ -34,12 +36,13 @@ type PrivateKeys = {
  * @param keyDeriver
  */
 export const getPrivateKeys = async (
-  keyDeriver: BIP44AddressKeyDeriver,
+  apiParams: ApiParams,
 ): Promise<PrivateKeys> => {
-  const { privateKey } = await keyDeriver(0);
+  const { privateKey } = await apiParams.keyDeriver!(0);
   // console.log('privateKey: ', privateKey);
-
-  const reducedPK = new Fq(BigInt(privateKey as string) % Fq.MODULUS);
+  const reducedPK = new apiParams.aztec.Fq(
+    BigInt(privateKey as string) % apiParams.aztec.Fq.MODULUS,
+  );
   // console.log('reducedPK: ', reducedPK.toString());
 
   return {

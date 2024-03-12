@@ -1,92 +1,85 @@
-import {
-  createPXEClient,
-  FunctionCall,
-  TxExecutionRequest,
-  AccountWalletWithPrivateKey,
+import type {
   AccountManager,
+  FunctionCall,
   AztecAddress,
-  initAztecJs,
+  TxExecutionRequest,
   PXE,
-  Fr,
+  CompleteAddress,
+  AccountWalletWithPrivateKey,
 } from '@aztec/aztec.js';
-import {
-  ApiParams,
-  ManageStateResult,
-  Accounts,
-  SendTxParams,
-} from '@abstract-crypto/aztec-snap-lib';
-// import { getEcdsaAccount } from './accounts/get_ecdsa';
 import {
   PXE_URL,
   getPrivateKeys,
   confirmCreateAccount,
   confirmSendTx,
 } from './utils';
-import { EcdsaAccountContract } from '@aztec/accounts/ecdsa';
-
-export type Salt = Fr | number | bigint;
-const getEcdsaAccount = (
-  pxe: PXE,
-  encryptionPrivateKey: Buffer,
-  signingPrivateKey: Buffer,
-  salt?: Salt,
-) => {
-  return new AccountManager(
-    pxe,
-    encryptionPrivateKey,
-    new EcdsaAccountContract(signingPrivateKey),
-    salt,
-  );
-};
+import { Account, ApiParams, SendTxParams } from './utils/types';
+import { getECDSAWallet, getEcdsaAccountManager } from './utils/accounts';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
   if (!(await confirmCreateAccount())) {
     throw new Error('Deployment tx must be approved by user');
   }
 
-  await initAztecJs();
+  if (apiParams.keyDeriver) {
+    const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
+      apiParams,
+    );
 
-  const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
-    apiParams.keyDeriver,
-  );
-  const pxe = createPXEClient(PXE_URL);
+    const pxe = apiParams.aztec.createPXEClient(PXE_URL);
 
-  // github.com/AztecProtocol/aztec-packages/pull/1429
-  const account: AccountManager = getEcdsaAccount(
-    pxe,
-    encryptionPrivateKey,
-    signingPrivateKey,
-  );
+    // github.com/AztecProtocol/aztec-packages/pull/1429
+    const account: AccountManager = await getEcdsaAccountManager(
+      apiParams,
+      pxe,
+      encryptionPrivateKey,
+      signingPrivateKey,
+    );
 
-  const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
-  const compAddr = ecdsaWallet.getCompleteAddress();
+    const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
 
-  const state: ManageStateResult = {
-    accounts: [
-      {
-        addressIndex: 0,
-        address: compAddr.address.toString(),
-        publicKey: compAddr.publicKey.toString(),
-      } as Accounts,
-    ],
-  };
+    const accounts: Account[] = apiParams.state?.accounts as Account[];
+    const newAccount: Account = {
+      addressIndex: accounts.length,
+      address: ecdsaWallet.getCompleteAddress().address.toString(),
+      publicKey: ecdsaWallet.getCompleteAddress().publicKey.toString(),
+    };
 
-  await snap.request({
-    method: 'snap_manageState',
-    params: {
-      operation: 'update',
-      newState: state,
-    },
-  });
+    if (Array.isArray(accounts)) {
+      accounts[newAccount.addressIndex] = newAccount;
+      if (apiParams.state) {
+        apiParams.state.accounts = accounts;
+        await snap.request({
+          method: 'snap_manageState',
+          params: {
+            operation: 'update',
+            newState: apiParams.state,
+          },
+        });
+      }
+    }
 
-  return compAddr.address.toString();
+    return ecdsaWallet.getCompleteAddress().address.toString();
+  } else {
+    return '';
+  }
+};
+
+export const getStateAccount = async (apiParams: ApiParams, index: number) => {
+  const accounts: Account[] = apiParams.state?.accounts as Account[];
+  return accounts[index].address;
 };
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 export const getAddress = async (apiParams: ApiParams): Promise<string> => {
-  const { address } = apiParams.state.accounts[0];
-  console.log('address: ', address);
-  return address;
+  const accounts: Account[] = apiParams.state?.accounts as Account[];
+  if (accounts.length != 0) {
+    const address = accounts[0].address.toString();
+    console.log('address: ');
+    return address;
+  } else {
+    return '';
+  }
 };
 
 export const getTx = async (): Promise<any[]> => {
@@ -100,7 +93,9 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   const requestParams = apiParams.requestParams as SendTxParams;
   console.log('txRequest: ', requestParams.txRequest);
 
-  const _txRequest = TxExecutionRequest.fromString(requestParams.txRequest);
+  const _txRequest = apiParams.aztec.TxExecutionRequest.fromString(
+    requestParams.txRequest,
+  );
 
   const functionCall: FunctionCall = {
     to: _txRequest.origin,
@@ -108,28 +103,36 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     args: _txRequest.packedArguments[0].args,
   };
 
-  await initAztecJs();
-  const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
-    apiParams.keyDeriver,
-  );
+  console.log('functionCall: ', functionCall);
 
-  const pxe = createPXEClient(PXE_URL);
-  const senderCompAddr = await pxe.getRegisteredAccount(
-    AztecAddress.fromString(apiParams.state.accounts[0].address),
-  );
-  console.log('senderCompAddr: ', senderCompAddr?.address.toString());
+  const { signingPrivateKey } = await getPrivateKeys(apiParams);
 
-  // github.com/AztecProtocol/aztec-packages/pull/1429
-  const accountWallet: AccountWalletWithPrivateKey = await getEcdsaAccount(
+  console.log('signingPrivateKey: ', signingPrivateKey.toString());
+
+  const pxe: PXE = apiParams.aztec.createPXEClient(PXE_URL);
+  console.log('pxe: ', pxe);
+
+  const addr = await getStateAccount(apiParams, 0);
+  console.log('addr: ', addr);
+
+  const senderCompAddr: CompleteAddress | undefined =
+    await pxe.getRegisteredAccount(
+      apiParams.aztec.AztecAddress.fromString(addr),
+    );
+  console.log('senderCompAddr: ', senderCompAddr);
+  console.log('senderCompAddr addr: ', senderCompAddr?.address.toString());
+
+  const account = await getECDSAWallet(
     pxe,
-    encryptionPrivateKey,
+    senderCompAddr!.address,
     signingPrivateKey,
-    senderCompAddr,
-  ).getWallet();
+  );
+  console.log('account: ', account);
+  console.log('address: ', account.getAddress().toString());
 
   if (
     !(await confirmSendTx(
-      accountWallet.getAddress().toString(),
+      account.getAddress().toString(),
       functionCall.to.toString(),
     ))
   ) {
@@ -137,7 +140,8 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   }
 
   const signedTxRequest: TxExecutionRequest =
-    await accountWallet.createTxExecutionRequest([functionCall]);
+    await account.createTxExecutionRequest([functionCall]);
+  console.log('signedTxRequest: ', signedTxRequest);
   return signedTxRequest.toString();
 };
 

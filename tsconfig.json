@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    "declaration": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "useUnknownInCatchVariables": false,
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "target": "esnext"
   },

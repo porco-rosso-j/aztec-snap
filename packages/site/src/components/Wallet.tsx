@@ -5,84 +5,42 @@ import {
   TextInput,
   Text,
   Group,
-  Center,
   Stack,
-  CopyButton,
+  Center,
   Anchor,
-  Loader,
 } from '@mantine/core';
-import { useAppContext } from '../contexts/useAppContext';
 import { shortenAddress, shortenTxHash } from '../utils/shortenAddr';
 import { IconCopy, IconCopyCheck } from '@tabler/icons-react';
 import useFaucet from '../hooks/useFaucet';
 import useBalance from '../hooks/useBalance';
-// import { provider, wallet } from '../utils/constants';
+import Onboard from './Onboad';
+import { useAddress, useSendToken } from '../hooks';
+import { useAppContext } from '../contexts/useAppContext';
 
 type WalletProps = {
   isDarkTheme: boolean;
 };
 
 export default function Wallet(props: WalletProps) {
-  const { accountAddress, saveAccountAddress } = useAppContext();
+  const { gasToken } = useAppContext();
+  const { address } = useAddress();
   const { getFaucet } = useFaucet();
-  const { getBalance } = useBalance();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { balance, setBalance, getBalance } = useBalance();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  console.log('gasToken: ', gasToken);
 
-  useEffect(() => {
-    saveAccountAddress(
-      '0x2fd4503a9b855a852272945df53d7173297c1469cceda31048b85118364b09a3',
-    );
-  });
+  const { txHash, sendToken } = useSendToken();
 
-  //   const {
-  //     anonAadhaarCore,
-  //     userOpHash,
-  //     txHash,
-  //     sendStatus,
-  //     sendStatusMsg,
-  //     setSendStatus,
-  //     setTxHash,
-  //     setUserOpHash,
-  //     generateNoirOTPProof,
-  //     generateAnonAadahaarProof,
-  //     sendTX,
-  //   } = useSendETH();
-
-  const [balance, setBalance] = useState<number>(0);
   const [sendAmount, setSendAmount] = useState<number>(0);
   const [recepient, setRecepient] = useState<string>('');
-
   const [faucetClicked, setFacuetClicked] = useState(false);
-
-  //   useEffect(() => {
-  //     if (!qrData) {
-  //       const data = localStorage.getItem('qr_data');
-  //       saveQrData(data ? JSON.parse(data) : '');
-  //     }
-  //   }, [qrData]);
-
-  //   const getETHBalance = async () => {
-  //     let rawBalance = await provider.getBalance(accountAddress);
-  //     let balance = Number(rawBalance) / 10 ** 18;
-  //     setEtherBalance(balance);
-  //   };
-
-  // useEffect(() => {
-  //   const timeOutId = setTimeout(async () => {
-  //     if (accountAddress) {
-  //       await getBalance(accountAddress);
-  //     }
-  //   });
-  //   return () => clearTimeout(timeOutId);
-  // }, [accountAddress]);
 
   async function handleFaucet() {
     setFacuetClicked(true);
-    if (accountAddress) {
-      const token = await getFaucet(accountAddress);
-      const balance = await getBalance(token, accountAddress);
+    if (address) {
+      const token = await getFaucet(address);
+      const balance = await getBalance(token, address);
       setBalance(balance);
     } else {
       console.log('address not found');
@@ -90,72 +48,17 @@ export default function Wallet(props: WalletProps) {
     setFacuetClicked(false);
   }
 
-  //   async function genAadhaarProof() {
-  //     setLoading(true);
-  //     setSendStatus(0);
-  //     setTxHash('');
-  //     setUserOpHash('');
-
-  //     try {
-  //       setSendStatus(1);
-  //       await generateAnonAadahaarProof(sendAmount, recepient);
-  //     } catch (e) {
-  //       console.log('e: ', e);
-  //       setErrorMessage('Something went wrong');
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   console.log('sendStatus: ', sendStatus);
-  //   console.log('isModalOpen: ', isModalOpen);
-
-  //   useEffect(() => {
-  //     if (anonAadhaarCore && sendStatus === 1 && !isModalOpen) {
-  //       setModalOpen(true);
-  //     }
-  //   }, [anonAadhaarCore, sendStatus, isModalOpen]);
-
-  //   async function sendETH(otp: string) {
-  //     console.log('otp: ', otp);
-
-  //     let genProofResult;
-  //     try {
-  //       setSendStatus(2);
-  //       setModalOpen(false);
-  //       genProofResult = await generateNoirOTPProof(otp);
-  //     } catch (e) {
-  //       console.log('e: ', e);
-  //       setErrorMessage('Something went wrong');
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     if (genProofResult) {
-  //       try {
-  //         const witnessArray: string[] = Array.from(
-  //           genProofResult.proofData.publicInputs.values(),
-  //         );
-  //         await sendTX(
-  //           genProofResult.proofData.proof,
-  //           witnessArray[1],
-  //           genProofResult.timestep,
-  //           sendAmount,
-  //           recepient,
-  //         );
-
-  //         await getETHBalance();
-  //       } catch (e) {
-  //         console.log('e: ', e);
-  //         setErrorMessage('Something went wrong');
-  //         setLoading(false);
-  //       }
-  //     } else {
-  //       setErrorMessage('poof not found');
-  //       setLoading(false);
-  //     }
-
-  //     setLoading(false);
-  //   }
+  async function handleSendToken() {
+    setLoading(true);
+    if (address) {
+      await sendToken(gasToken, address, recepient, sendAmount);
+      const balance = await getBalance(gasToken, address);
+      setBalance(balance);
+    } else {
+      console.log('address not set');
+    }
+    setLoading(false);
+  }
 
   const textTextStyle = {
     color: props.isDarkTheme ? 'white' : 'black',
@@ -183,11 +86,12 @@ export default function Wallet(props: WalletProps) {
           backgroundColor: props.isDarkTheme ? '#402F51' : 'white',
         }}
       >
+        <Onboard />
         <Stack align="center" gap="md">
           <Stack gap={1}>
             <Group>
               <Text style={textTextStyle} size="lg">
-                {shortenAddress(accountAddress)}
+                {address ? shortenAddress(address) : 'No Address Found'}
               </Text>
               {!copied ? (
                 <IconCopy
@@ -208,11 +112,10 @@ export default function Wallet(props: WalletProps) {
               Current Public Balance
             </Text>
             <Text style={{ ...textTextStyle, fontSize: '40px' }} size="xl">
-              {balance.toFixed(2)} GAS
+              {balance.toFixed(0)} GAS
             </Text>
           </Stack>
           <Stack mt={20} align="center" style={{ boxShadow: '1rm' }}>
-            {/* <Text style={textTextStyle} size="lg"></Text> */}
             <Text
               mr={220}
               mb={-10}
@@ -266,9 +169,8 @@ export default function Wallet(props: WalletProps) {
               disabled={loading}
               onClick={() => {
                 setErrorMessage('');
-                if (recepient && sendAmount) {
-                  // setModalOpen(true);
-                  //genAadhaarProof();
+                if (address && gasToken && recepient && sendAmount) {
+                  handleSendToken();
                 } else {
                   setErrorMessage('Inputs not defined');
                 }
@@ -280,49 +182,37 @@ export default function Wallet(props: WalletProps) {
               <Text style={{ textAlign: 'center', color: 'red' }}>
                 {errorMessage}
               </Text>
-              {/* {loading && sendStatus !== 0 ? (
-                <Text mb={5} style={{ fontSize: '14px' }}>
-                  {sendStatusMsg[sendStatus - 1]}
-                </Text>
-              ) : null}
-              {sendStatus === 5 && userOpHash !== '' ? (
+
+              {txHash && (
                 <Center>
-                  <Text style={{ fontSize: '14px' }}>
-                    UserOperation Hash:{' '}
+                  <Text
+                    style={{
+                      fontSize: '14px',
+                      color: props.isDarkTheme ? 'white' : 'black',
+                    }}
+                  >
+                    Tx Hash:{' '}
                     <Anchor
                       ml={2}
-                      href={'https://app.jiffyscan.xyz/'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontSize: '14px', textDecoration: 'underline' }}
-                    >
-                      {shortenTxHash(userOpHash)}
-                    </Anchor>
-                  </Text>
-                </Center>
-              ) : null}
-              {sendStatus === 5 && txHash !== '' ? (
-                <Center>
-                  <Text style={{ fontSize: '14px' }}>
-                    Transaction Hash:{' '}
-                    <Anchor
-                      ml={2}
-                      href={'https://sepolia.scrollscan.com/tx/' + txHash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontSize: '14px', textDecoration: 'underline' }}
+                      // target="_blank"
+                      // rel="noopener noreferrer"
+                      // this link will be redirected to transaciton page
+                      style={{
+                        fontSize: '14px',
+                        color: props.isDarkTheme ? 'white' : 'black',
+                      }}
                     >
                       {shortenTxHash(txHash)}
                     </Anchor>
                   </Text>
                 </Center>
-              ) : null} */}
+              )}
             </Stack>
           </Stack>
         </Stack>
       </Box>
       <Text
-        mt={10}
+        mt={50}
         size="md"
         style={{
           color: faucetClicked ? 'white' : 'grey',
@@ -334,8 +224,6 @@ export default function Wallet(props: WalletProps) {
       >
         Get Faucet
       </Text>
-
-      {/* {isModalOpen ? <OTPModal sendETH={sendETH} /> : null} */}
     </>
   );
 }

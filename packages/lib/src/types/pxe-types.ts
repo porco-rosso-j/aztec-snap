@@ -1,9 +1,9 @@
 import { SendTxParams } from './snap.js';
 // not sure if this would be compatible w/ real funcs in service/pxe
-export declare const getAddress: () => Promise<string>;
-export declare const createAccount: () => Promise<string>;
-export declare const getTx: () => Promise<any[]>;
-export declare const sendTx: ({ txRequest }: SendTxParams) => Promise<string>;
+// export declare const getAddress: () => Promise<string>;
+// export declare const createAccount: () => Promise<string>;
+// export declare const getTx: () => Promise<any[]>;
+// export declare const sendTx: ({ txRequest }: SendTxParams) => Promise<string>;
 
 // Type for getAddress function
 export type GetAddressFunction = () => Promise<string>;

@@ -3,31 +3,44 @@ import { PXE_URL } from '../utils';
 import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { notifications } from '@mantine/notifications';
+import { useAppContext } from '../contexts/useAppContext';
 
 export default function useFaucet() {
+  const { gasToken, saveGasToken } = useAppContext();
+
   async function getFaucet(recipient: string): Promise<string> {
     notifications.show({
       title: 'Requesting Faucet',
-      message: 'deploying & minting a new token...',
+      message: 'it may take more than 20 seconds...',
     });
     const pxe = createPXEClient(PXE_URL);
     const wallet = (await getInitialTestAccountsWallets(pxe))[0];
 
+    let tokenContract;
     try {
-      const tokenContract = await TokenContract.deploy(
-        wallet,
-        wallet.getAddress(),
-        'GAS Token',
-        'GAS',
-        18,
-      )
-        .send()
-        .deployed();
+      if (gasToken) {
+        tokenContract = await TokenContract.at(
+          AztecAddress.fromString(gasToken),
+          wallet,
+        );
+      } else {
+        notifications.show({
+          title: 'Deploying Token',
+          message: 'gas token being deployed...',
+        });
+        tokenContract = await TokenContract.deploy(
+          wallet,
+          wallet.getAddress(),
+          'GAS Token',
+          'GAS',
+          18,
+        )
+          .send()
+          .deployed();
 
-      notifications.show({
-        title: 'Deploying Token',
-        message: 'gas token being deployed...',
-      });
+        saveGasToken(tokenContract.address.toString());
+      }
+
       console.log('tokenContract: ', tokenContract);
       console.log('tokenContract address: ', tokenContract.address.toString());
 
