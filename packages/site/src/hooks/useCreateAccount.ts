@@ -1,16 +1,8 @@
-import { useInvokeSnap } from './snap';
-import { createAccountSnap } from '@abstract-crypto/aztec-snap-lib/dest/index';
+import { createAccountSnap } from '@abstract-crypto/aztec-snap-lib';
 
 export const useCreateAccount = () => {
-  const { invokeSnap } = useInvokeSnap();
-
   const createAccount = async () => {
-    const response = await invokeSnap({
-      method: 'aztec_createAccount',
-      params: [],
-    });
-    console.log('response: ', response);
-    // await createAccountSnap();
+    await createAccountSnap('1');
   };
 
   return { createAccount };

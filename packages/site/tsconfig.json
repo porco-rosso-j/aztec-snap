@@ -19,8 +19,16 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      // "@abstract-crypto/aztec-snap-lib": [
+      //   "@abstract-crypto/aztec-snap-lib/dest/index.js"
+      // ],
+      "@abstract-crypto/aztec-snap-lib": ["../lib/dest/index.js"]
+    }
   },
+
   "include": ["src", "src/**/*.json"],
   "exclude": ["node_modules"]
 }

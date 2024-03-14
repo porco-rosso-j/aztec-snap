@@ -1,0 +1,1 @@
+{"version":3,"file":"flask.d.ts","sourceRoot":"","sources":["../../src/snap-utils/flask.ts"],"names":[],"mappings":"AAAA,OAAO,EAAoB,IAAI,EAAE,MAAM,6BAA6B,CAAC;AAIrE,eAAO,MAAM,aAAa,eAEzB,CAAC;AAEF;;GAEG;AACH,eAAO,MAAM,WAAW,wBAMvB,CAAC;AAEF;;GAEG;AACH,eAAO,MAAM,OAAO,qBAMnB,CAAC;AAEF,eAAO,MAAM,WAAW,WAAY,MAAM,YAAgC,CAAC;AAE3E,eAAO,MAAM,oBAAoB,kBAAmB,IAAI,GAAG,IAAI,mBACd,CAAC"}

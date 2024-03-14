@@ -3,7 +3,7 @@ import { AztecAddress, createPXEClient, SentTx } from '@aztec/aztec.js';
 // @ts-ignore
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
-import { SnapWallet } from '@abstract-crypto/aztec-snap-lib/dest/index';
+import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
 import { PXE_URL, TOKEN_ADDRESS } from '../utils/constants';
 import useBalance from './useBalance';
 
@@ -33,28 +33,28 @@ export const useSendToken = () => {
 
       const pxe = createPXEClient(PXE_URL);
 
-      const wallet = new SnapWallet(pxe);
-      const tokenContract = await TokenContract.at(
-        AztecAddress.fromString(token),
-        wallet,
-      );
+      // const wallet = new SnapWallet(pxe);
+      // const tokenContract = await TokenContract.at(
+      //   AztecAddress.fromString(token),
+      //   wallet,
+      // );
 
-      console.log('sending: ');
-      const sentTx: SentTx = tokenContract.methods
-        .transfer_public(
-          AztecAddress.fromString(from),
-          AztecAddress.fromString(to),
-          BigInt(amount), // Fr.fromString() doesn't work
-          0,
-        )
-        .send();
+      // console.log('sending: ');
+      // const sentTx: SentTx = tokenContract.methods
+      //   .transfer_public(
+      //     AztecAddress.fromString(from),
+      //     AztecAddress.fromString(to),
+      //     BigInt(amount), // Fr.fromString() doesn't work
+      //     0,
+      //   )
+      //   .send();
 
-      console.log('sentTx: ', sentTx);
+      // console.log('sentTx: ', sentTx);
 
-      await sentTx.wait();
-      console.log('sent?: ');
-      const txHash = await sentTx.getTxHash();
-      setTxHash(txHash.toString());
+      // await sentTx.wait();
+      // console.log('sent?: ');
+      // const txHash = await sentTx.getTxHash();
+      // setTxHash(txHash.toString());
 
       // const balance = await getBalance(token, from);
       // console.log('balance: ', balance);

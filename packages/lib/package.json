@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@abstract-crypto/aztec-snap": "workspace:^",
+    "@aztec/accounts": "0.24.0",
     "@aztec/aztec.js": "0.24.0",
     "@aztec/noir-contracts.js": "0.24.0",
     "@aztec/types": "0.24.0",

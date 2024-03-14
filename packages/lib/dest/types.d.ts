@@ -1,14 +1,10 @@
 export type * from '@abstract-crypto/aztec-snap';
-import type { SendTxParams } from '@abstract-crypto/aztec-snap/dest/index';
-export type GetAddressFunction = () => Promise<string>;
-export type createAccountFunction = () => Promise<string>;
-export type GetTxFunction = () => Promise<any[]>;
-export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
+import type { CreateAuthWitnessParam, SendTxParams } from '@abstract-crypto/aztec-snap/dest/index';
 export type RpcMethods = {
-    getAddress: GetAddressFunction;
-    createAccount: createAccountFunction;
-    getTx: GetTxFunction;
-    sendTx: SendTxFunction;
+    sendTx: (sendTxParams: SendTxParams) => Promise<string>;
+    createAuthWitness: (createAuthWitnessParam: CreateAuthWitnessParam) => Promise<string>;
+    accounts: () => Promise<string[]>;
+    createAccount: () => Promise<string>;
 };
 type InferArgs<M extends keyof RpcMethods> = RpcMethods[M] extends (...args: infer A) => unknown ? A[0] : never;
 export type RpcMethodTypes = {
@@ -19,8 +15,10 @@ export type RpcMethodTypes = {
 };
 export type SnapRpcRequestParams<M extends keyof RpcMethodTypes> = RpcMethodTypes[M]['input'] extends undefined ? {
     snapRpcMethod: M;
+    snapId: string;
 } : {
     snapRpcMethod: M;
     params: RpcMethodTypes[M]['input'];
+    snapId: string;
 };
 //# sourceMappingURL=types.d.ts.map

@@ -19,9 +19,20 @@ export type ApiParams = {
     aztec: any;
 };
 export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams;
+export type SerializedFunctionCall = {
+    to: string;
+    functionData: string;
+    args: string[];
+};
 export type GetAddressParams = {};
 export type GetTxParams = {};
 export type CreateAccountParams = {};
 export type SendTxParams = {
-    txRequest: string;
+    from: string;
+    calls: SerializedFunctionCall[];
+    simulatePublic: boolean;
+};
+export type CreateAuthWitnessParam = {
+    from: string;
+    message: string;
 };

@@ -1,17 +1,23 @@
 export type * from '@abstract-crypto/aztec-snap';
-import type { SendTxParams } from '@abstract-crypto/aztec-snap/dest/index';
+import type {
+  CreateAuthWitnessParam,
+  SendTxParams,
+} from '@abstract-crypto/aztec-snap/dest/index';
 
 // Type for getAddress function
-export type GetAddressFunction = () => Promise<string>;
-export type createAccountFunction = () => Promise<string>;
-export type GetTxFunction = () => Promise<any[]>; // Replace 'any' with a more specific type if possible
-export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
+// export type GetAddressFunction = () => Promise<string>;
+// export type createAccountFunction = () => Promise<string>;
+// // export type GetTxFunction = () => Promise<any[]>; // Replace 'any' with a more specific type if possible
+// export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
 
 export type RpcMethods = {
-  getAddress: GetAddressFunction;
-  createAccount: createAccountFunction;
-  getTx: GetTxFunction;
-  sendTx: SendTxFunction;
+  sendTx: (sendTxParams: SendTxParams) => Promise<string>;
+  createAuthWitness: (
+    createAuthWitnessParam: CreateAuthWitnessParam,
+  ) => Promise<string>;
+  accounts: () => Promise<string[]>;
+  // should be restricted non snap wallet apps
+  createAccount: () => Promise<string>;
 };
 
 type InferArgs<M extends keyof RpcMethods> = RpcMethods[M] extends (
@@ -29,5 +35,7 @@ export type RpcMethodTypes = {
 
 export type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
   RpcMethodTypes[M]['input'] extends undefined
-    ? { snapRpcMethod: M }
-    : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };
+    ? { snapRpcMethod: M; snapId: string } // Include snapId here
+    : { snapRpcMethod: M; params: RpcMethodTypes[M]['input']; snapId: string };
+// ? { snapRpcMethod: M }
+// : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };

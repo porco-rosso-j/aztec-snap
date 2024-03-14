@@ -3,27 +3,30 @@ import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useInvokeSnap, useMetaMask, useRequestSnap } from '../hooks/snap';
-import { defaultSnapOrigin, isLocalSnap } from '../utils';
+// import { useInvokeSnap, useMetaMask, useRequestSnap } from '../hooks/snap';
+import { PXE_URL, defaultSnapOrigin, isLocalSnap } from '../utils';
+import { useMetaMaskContext } from '../contexts/MetamaskContext';
+import { AztecSnap, requestSnap } from '@abstract-crypto/aztec-snap-lib';
+import { createPXEClient } from '@aztec/aztec.js';
 
 type HeaderProps = {
   isDarkTheme: boolean;
   toggleTheme: () => void;
 };
 export function Header(props: HeaderProps) {
-  const { isFlask, snapsDetected, installedSnap } = useMetaMask();
-  const { requestSnap } = useRequestSnap(defaultSnapOrigin, '0.1.0');
-  const { invokeSnap } = useInvokeSnap();
+  const { isFlask, snapsDetected, installedSnap } = useMetaMaskContext();
+  // const { requestSnap } = useRequestSnap(defaultSnapOrigin, '0.1.0');
 
   console.log('installedSnap: ', installedSnap);
 
-  const { logout } = useAppContext();
   const navigate = useNavigate();
   const [memuId, setMenuId] = useState(0);
 
   const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
     ? isFlask
     : snapsDetected;
+
+  console.log('isMetaMaskReady: ', isMetaMaskReady);
 
   const menuTextStyle = (_menuId: number) => {
     return {
@@ -45,6 +48,12 @@ export function Header(props: HeaderProps) {
         ? '/transaction'
         : '/',
     );
+  };
+
+  const handleRequest = async () => {
+    const aztecSnap = new AztecSnap(PXE_URL);
+    const snapWallet = await aztecSnap.connect();
+    console.log('snapWallet: ', snapWallet);
   };
 
   const BottunStyle = {
@@ -102,13 +111,13 @@ export function Header(props: HeaderProps) {
             </Anchor>
           </Button>
         ) : !installedSnap ? (
-          <Button style={BottunStyle} onClick={requestSnap}>
+          <Button style={BottunStyle} onClick={() => handleRequest()}>
             Connect
           </Button>
         ) : (
           <Button
             style={BottunStyle}
-            onClick={requestSnap}
+            onClick={() => handleRequest()}
             disabled={!installedSnap}
           >
             Reconnect

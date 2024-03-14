@@ -1,29 +1,45 @@
-import { PackedArguments, TxExecutionRequest, SignerlessWallet, } from '@aztec/aztec.js';
-import { TxContext } from '@aztec/circuits.js';
-import { sendTxSnap } from './snap.js';
+import { AccountWallet, CompleteAddress, createPXEClient, } from '@aztec/aztec.js';
+import { SnapAccountInterface } from './snapWalletInterface.js';
+import { requestSnap } from './snap-utils/request.js';
+import { defaultSnapOrigin } from './constants.js';
+import { createAccountSnap, getAddressSnap } from './snapRpcMethods.js';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
  */
-export class SnapWallet extends SignerlessWallet {
-    async createTxExecutionRequest(executions) {
-        if (executions.length !== 1) {
-            throw new Error(`Unexpected number of executions. Expected 1 but received ${executions.length}).`);
-        }
-        const [execution] = executions;
-        const packedArguments = PackedArguments.fromArgs(execution.args);
-        const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
-        const txContext = TxContext.empty(chainId, protocolVersion);
-        const txRequest = new TxExecutionRequest(execution.to, execution.functionData, packedArguments.hash, txContext, [packedArguments], []);
-        const signedTxRequestStr = await sendTxSnap({
-            txRequest: txRequest.toString(),
-        });
-        return TxExecutionRequest.fromString(signedTxRequestStr);
-    }
-    getCompleteAddress() {
-        throw new Error('Method not implemented.');
-    }
-    createAuthWitness(_message) {
-        throw new Error('Method not implemented.');
+export class SnapWallet extends AccountWallet {
+    constructor(_pxe, _address, _snapRpc) {
+        const account = new SnapAccountInterface(_pxe, _address, _snapRpc);
+        super(_pxe, account);
     }
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic25hcFdhbGxldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9zbmFwV2FsbGV0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFHTCxlQUFlLEVBQ2Ysa0JBQWtCLEVBQ2xCLGdCQUFnQixHQUdqQixNQUFNLGlCQUFpQixDQUFDO0FBQ3pCLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxvQkFBb0IsQ0FBQztBQUMvQyxPQUFPLEVBQUUsVUFBVSxFQUFFLE1BQU0sV0FBVyxDQUFDO0FBQ3ZDOztHQUVHO0FBQ0gsTUFBTSxPQUFPLFVBQVcsU0FBUSxnQkFBZ0I7SUFDOUMsS0FBSyxDQUFDLHdCQUF3QixDQUM1QixVQUEwQjtRQUUxQixJQUFJLFVBQVUsQ0FBQyxNQUFNLEtBQUssQ0FBQyxFQUFFO1lBQzNCLE1BQU0sSUFBSSxLQUFLLENBQ2IsNERBQTRELFVBQVUsQ0FBQyxNQUFNLElBQUksQ0FDbEYsQ0FBQztTQUNIO1FBQ0QsTUFBTSxDQUFDLFNBQVMsQ0FBQyxHQUFHLFVBQVUsQ0FBQztRQUMvQixNQUFNLGVBQWUsR0FBRyxlQUFlLENBQUMsUUFBUSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUNqRSxNQUFNLEVBQUUsT0FBTyxFQUFFLGVBQWUsRUFBRSxHQUFHLE1BQU0sSUFBSSxDQUFDLEdBQUcsQ0FBQyxXQUFXLEVBQUUsQ0FBQztRQUNsRSxNQUFNLFNBQVMsR0FBRyxTQUFTLENBQUMsS0FBSyxDQUFDLE9BQU8sRUFBRSxlQUFlLENBQUMsQ0FBQztRQUM1RCxNQUFNLFNBQVMsR0FBRyxJQUFJLGtCQUFrQixDQUN0QyxTQUFTLENBQUMsRUFBRSxFQUNaLFNBQVMsQ0FBQyxZQUFZLEVBQ3RCLGVBQWUsQ0FBQyxJQUFJLEVBQ3BCLFNBQVMsRUFDVCxDQUFDLGVBQWUsQ0FBQyxFQUNqQixFQUFFLENBQ0gsQ0FBQztRQUVGLE1BQU0sa0JBQWtCLEdBQUcsTUFBTSxVQUFVLENBQUM7WUFDMUMsU0FBUyxFQUFFLFNBQVMsQ0FBQyxRQUFRLEVBQUU7U0FDaEMsQ0FBQyxDQUFDO1FBRUgsT0FBTyxrQkFBa0IsQ0FBQyxVQUFVLENBQUMsa0JBQWtCLENBQUMsQ0FBQztJQUMzRCxDQUFDO0lBRUQsa0JBQWtCO1FBQ2hCLE1BQU0sSUFBSSxLQUFLLENBQUMseUJBQXlCLENBQUMsQ0FBQztJQUM3QyxDQUFDO0lBRUQsaUJBQWlCLENBQUMsUUFBWTtRQUM1QixNQUFNLElBQUksS0FBSyxDQUFDLHlCQUF5QixDQUFDLENBQUM7SUFDN0MsQ0FBQztDQUNGIn0=
+export class AztecSnap {
+    constructor(_PXE_URL, _snapRpc) {
+        this.address = null;
+        this.pxe = createPXEClient(_PXE_URL);
+        this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
+    }
+    async connect() {
+        // some asserts here
+        // e.g. flask is not installed
+        await requestSnap(this.snapRpc, '0.1.0');
+        let address;
+        if (!this.address) {
+            address = await getAddressSnap(this.snapRpc);
+            if (!address) {
+                address = await createAccountSnap(this.snapRpc);
+            }
+            this.address = CompleteAddress.fromString(address);
+        }
+        // await selectAccount() -> trigger pop-up
+        return this.getSnapWallet();
+    }
+    reconnect() { }
+    disconnect() { }
+    create() { }
+    getSnapWallet() {
+        if (!this.address)
+            throw 'No connection with accounts';
+        return new SnapWallet(this.pxe, this.address, this.snapRpc);
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic25hcFdhbGxldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9zbmFwV2FsbGV0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFFTCxhQUFhLEVBQ2IsZUFBZSxFQUNmLGVBQWUsR0FDaEIsTUFBTSxpQkFBaUIsQ0FBQztBQUN6QixPQUFPLEVBQUUsb0JBQW9CLEVBQUUsTUFBTSwwQkFBMEIsQ0FBQztBQUNoRSxPQUFPLEVBQUUsV0FBVyxFQUFFLE1BQU0seUJBQXlCLENBQUM7QUFDdEQsT0FBTyxFQUFFLGlCQUFpQixFQUFFLE1BQU0sZ0JBQWdCLENBQUM7QUFDbkQsT0FBTyxFQUFFLGlCQUFpQixFQUFFLGNBQWMsRUFBRSxNQUFNLHFCQUFxQixDQUFDO0FBQ3hFOztHQUVHO0FBQ0gsTUFBTSxPQUFPLFVBQVcsU0FBUSxhQUFhO0lBQzNDLFlBQVksSUFBUyxFQUFFLFFBQXlCLEVBQUUsUUFBaUI7UUFDakUsTUFBTSxPQUFPLEdBQUcsSUFBSSxvQkFBb0IsQ0FBQyxJQUFJLEVBQUUsUUFBUSxFQUFFLFFBQVEsQ0FBQyxDQUFDO1FBQ25FLEtBQUssQ0FBQyxJQUFJLEVBQUUsT0FBTyxDQUFDLENBQUM7SUFDdkIsQ0FBQztDQUNGO0FBRUQsTUFBTSxPQUFPLFNBQVM7SUFLcEIsWUFBWSxRQUFnQixFQUFFLFFBQWlCO1FBQzdDLElBQUksQ0FBQyxPQUFPLEdBQUcsSUFBSSxDQUFDO1FBQ3BCLElBQUksQ0FBQyxHQUFHLEdBQUcsZUFBZSxDQUFDLFFBQVEsQ0FBQyxDQUFDO1FBQ3JDLElBQUksQ0FBQyxPQUFPLEdBQUcsUUFBUSxDQUFDLENBQUMsQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLGlCQUFpQixDQUFDO0lBQ3pELENBQUM7SUFDRCxLQUFLLENBQUMsT0FBTztRQUNYLG9CQUFvQjtRQUNwQiw4QkFBOEI7UUFFOUIsTUFBTSxXQUFXLENBQUMsSUFBSSxDQUFDLE9BQU8sRUFBRSxPQUFPLENBQUMsQ0FBQztRQUN6QyxJQUFJLE9BQU8sQ0FBQztRQUNaLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFFO1lBQ2pCLE9BQU8sR0FBRyxNQUFNLGNBQWMsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUM7WUFDN0MsSUFBSSxDQUFDLE9BQU8sRUFBRTtnQkFDWixPQUFPLEdBQUcsTUFBTSxpQkFBaUIsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUM7YUFDakQ7WUFDRCxJQUFJLENBQUMsT0FBTyxHQUFHLGVBQWUsQ0FBQyxVQUFVLENBQUMsT0FBTyxDQUFDLENBQUM7U0FDcEQ7UUFFRCwwQ0FBMEM7UUFFMUMsT0FBTyxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUM7SUFDOUIsQ0FBQztJQUVELFNBQVMsS0FBSSxDQUFDO0lBRWQsVUFBVSxLQUFJLENBQUM7SUFFZixNQUFNLEtBQUksQ0FBQztJQUVYLGFBQWE7UUFDWCxJQUFJLENBQUMsSUFBSSxDQUFDLE9BQU87WUFBRSxNQUFNLDZCQUE2QixDQUFDO1FBQ3ZELE9BQU8sSUFBSSxVQUFVLENBQUMsSUFBSSxDQUFDLEdBQUcsRUFBRSxJQUFJLENBQUMsT0FBTyxFQUFFLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQztJQUM5RCxDQUFDO0NBQ0YifQ==

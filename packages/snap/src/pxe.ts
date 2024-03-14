@@ -90,52 +90,53 @@ export const getTx = async (): Promise<any[]> => {
 };
 
 export const sendTx = async (apiParams: ApiParams): Promise<string> => {
-  const requestParams = apiParams.requestParams as SendTxParams;
-  console.log('txRequest: ', requestParams.txRequest);
+  // const requestParams = apiParams.requestParams as SendTxParams;
+  // console.log('txRequest: ', requestParams.txRequest);
 
-  const _txRequest = apiParams.aztec.TxExecutionRequest.fromString(
-    requestParams.txRequest,
-  );
+  // const _txRequest = apiParams.aztec.TxExecutionRequest.fromString(
+  //   requestParams.txRequest,
+  // );
 
-  const functionCall: FunctionCall = {
-    to: _txRequest.origin,
-    functionData: _txRequest.functionData,
-    args: _txRequest.packedArguments[0].args,
-  };
+  // const functionCall: FunctionCall = {
+  //   to: _txRequest.origin,
+  //   functionData: _txRequest.functionData,
+  //   args: _txRequest.packedArguments[0].args,
+  // };
 
-  console.log('functionCall: ', functionCall);
+  // console.log('functionCall: ', functionCall);
 
-  const { signingPrivateKey } = await getPrivateKeys(apiParams);
-  const pxe: PXE = apiParams.aztec.createPXEClient(PXE_URL);
-  console.log('pxe: ', pxe);
+  // const { signingPrivateKey } = await getPrivateKeys(apiParams);
+  // const pxe: PXE = apiParams.aztec.createPXEClient(PXE_URL);
+  // console.log('pxe: ', pxe);
 
-  const addr = await getStateAccount(apiParams, 0);
-  console.log('addr: ', addr);
+  // const addr = await getStateAccount(apiParams, 0);
+  // console.log('addr: ', addr);
 
-  const account = await getECDSAWallet(
-    pxe,
-    apiParams.aztec.AztecAddress.fromString(addr),
-    signingPrivateKey,
-  );
-  console.log('account: ', account);
-  console.log('address: ', account.getAddress().toString());
+  // const account = await getECDSAWallet(
+  //   pxe,
+  //   apiParams.aztec.AztecAddress.fromString(addr),
+  //   signingPrivateKey,
+  // );
+  // console.log('account: ', account);
+  // console.log('address: ', account.getAddress().toString());
 
-  if (
-    !(await confirmSendTx(
-      account.getAddress().toString(),
-      functionCall.to.toString(),
-      functionCall.functionData.hash().toString(),
-    ))
-  ) {
-    throw new Error('Transaction must be approved by user');
-  }
+  // if (
+  //   !(await confirmSendTx(
+  //     account.getAddress().toString(),
+  //     functionCall.to.toString(),
+  //     functionCall.functionData.hash().toString(),
+  //   ))
+  // ) {
+  //   throw new Error('Transaction must be approved by user');
+  // }
 
-  const signedTxRequest: TxExecutionRequest =
-    await account.createTxExecutionRequest([functionCall]);
-  console.log('signedTxRequest: ', signedTxRequest);
-  console.log('signedTxRequest: ', signedTxRequest.toString());
-  // should save this tx hash in the state
-  return signedTxRequest.toString();
+  // const signedTxRequest: TxExecutionRequest =
+  //   await account.createTxExecutionRequest([functionCall]);
+  // console.log('signedTxRequest: ', signedTxRequest);
+  // console.log('signedTxRequest: ', signedTxRequest.toString());
+  // // should save this tx hash in the state
+  // return signedTxRequest.toString();
+  return '0x';
 };
 
 // const recoverAccount = async (aztecAddr: AztecAddress): Promise<string> => {

@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useInvokeSnap, useMetaMask } from './snap';
-import { getAddressSnap } from '@abstract-crypto/aztec-snap-lib/dest/index';
+import { SnapWallet, getAddressSnap } from '@abstract-crypto/aztec-snap-lib';
+import { useMetaMaskContext } from '../contexts/MetamaskContext';
 
 export const useAddress = () => {
-  const { installedSnap } = useMetaMask();
-  const { invokeSnap } = useInvokeSnap();
+  const { installedSnap } = useMetaMaskContext();
   const [address, setAddress] = useState<string>('');
   console.log('address: ', address);
 
@@ -21,11 +20,12 @@ export const useAddress = () => {
   }, [installedSnap, address]);
 
   const getAddress = async () => {
-    const addressResponse = await invokeSnap({
-      method: 'aztec_getAddress',
-      params: [],
-    });
+    // const addressResponse = await invokeSnap({
+    //   method: 'aztec_getAddress',
+    //   params: [],
+    // });
     // const addressResponse = await getAddressSnap();
+    const addressResponse = await getAddressSnap('1');
     if (addressResponse) {
       setAddress(addressResponse);
       return addressResponse;

@@ -32,7 +32,6 @@ const App = () => {
                       element={
                         <>
                           <Wallet isDarkTheme={isDarkTheme} />
-                          {/* <Index /> */}
                         </>
                       }
                     />
