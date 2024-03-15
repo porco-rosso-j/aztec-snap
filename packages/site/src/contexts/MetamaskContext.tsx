@@ -1,8 +1,8 @@
 import type { MetaMaskInpageProvider } from '@metamask/providers';
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Snap } from '@abstract-crypto/aztec-snap-lib';
 import {
+  Snap,
   getSnapsProvider,
   detectFlask,
   getSnap,
@@ -16,6 +16,7 @@ type MetaMaskContextType = {
   snapsDetected: boolean | null;
   setInstalledSnap: (snap: Snap | null) => void;
   setError: (error: Error) => void;
+  detect: () => void;
 };
 
 export const MetaMaskContext = createContext<MetaMaskContextType>({
@@ -24,12 +25,9 @@ export const MetaMaskContext = createContext<MetaMaskContextType>({
   error: null,
   isFlask: null,
   snapsDetected: null,
-  setInstalledSnap: () => {
-    /* no-op */
-  },
-  setError: () => {
-    /* no-op */
-  },
+  setInstalledSnap: () => {},
+  setError: () => {},
+  detect: () => {},
 });
 
 /**
@@ -53,19 +51,19 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
     getSnapsProvider().then(setProvider).catch(console.error);
   }, []);
 
+  const detect = async () => {
+    if (provider) {
+      const isFlask = await detectFlask();
+      console.log('isFlask: ', isFlask);
+      setIsFlask(isFlask);
+
+      const installedSnap = await getSnap();
+      console.log('installedSnap here: ', installedSnap);
+      setInstalledSnap(installedSnap);
+    }
+  };
+
   useEffect(() => {
-    const detect = async () => {
-      if (provider) {
-        const isFlask = await detectFlask();
-        console.log('isFlask: ', isFlask);
-        setIsFlask(isFlask);
-
-        const installedSnap = await getSnap();
-        console.log('installedSnap here: ', installedSnap);
-        setInstalledSnap(installedSnap);
-      }
-    };
-
     detect().catch(console.error);
   }, [provider]);
 
@@ -93,6 +91,7 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
         snapsDetected,
         setError,
         setInstalledSnap,
+        detect,
       }}
     >
       {children}

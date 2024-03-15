@@ -42,3 +42,23 @@ export async function confirmSendTx(
     },
   })) as boolean;
 }
+
+export async function confirmCreateAuthWitness(
+  from: string,
+  message: string,
+): Promise<boolean> {
+  return (await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel([
+        heading('Create AuthWitness'),
+        divider(),
+        text('Sender Address:'),
+        copyable(from),
+        text('Message:'),
+        copyable(message),
+      ]),
+    },
+  })) as boolean;
+}

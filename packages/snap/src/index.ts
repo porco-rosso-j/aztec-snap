@@ -47,7 +47,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'aztec_createAccount':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return createAccount(apiParams);
-    case 'aztec_getAddress':
+    case 'aztec_accounts':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return getAddress(apiParams);
 

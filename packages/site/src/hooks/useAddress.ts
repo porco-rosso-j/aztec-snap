@@ -1,34 +1,54 @@
 import { useEffect, useState } from 'react';
-import { SnapWallet, getAddressSnap } from '@abstract-crypto/aztec-snap-lib';
+import {
+  AztecSnap,
+  SnapWallet,
+  getAddressSnap,
+} from '@abstract-crypto/aztec-snap-lib';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
+import { useAppContext } from '../contexts/useAppContext';
+import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
+import { PXE_URL } from '../utils';
+// import { CompleteAddress } from '@aztec/aztec.js';
 
 export const useAddress = () => {
   const { installedSnap } = useMetaMaskContext();
+  const { snapWallet, saveSnapWallet } = useAppContext();
   const [address, setAddress] = useState<string>('');
   console.log('address: ', address);
+  console.log('snapWallet in use add: ', snapWallet);
 
   useEffect(() => {
     if (installedSnap && !address) {
       (async () => {
-        try {
+        if (!snapWallet) {
+          await getSnapSelectedAddress();
+        } else {
           await getAddress();
-        } catch (e) {
-          console.log('e: ', e);
         }
       })();
     }
-  }, [installedSnap, address]);
+  }, [installedSnap, address, snapWallet]);
 
+  // 1: get selected complete address
+  // 2: instantiate SnapWallet
+  const getSnapSelectedAddress = async () => {
+    const aztecSnap = new AztecSnap(PXE_URL);
+    const address = await aztecSnap.getSelectedAddress();
+    console.log('selected addr: ', address);
+    if (address) {
+      const snapWallet = await aztecSnap.getSnapWallet(
+        CompleteAddress.fromString(address),
+      );
+      saveSnapWallet(snapWallet);
+    }
+  };
+
+  // 1: get aztec address in SnapWallet
   const getAddress = async () => {
-    // const addressResponse = await invokeSnap({
-    //   method: 'aztec_getAddress',
-    //   params: [],
-    // });
-    // const addressResponse = await getAddressSnap();
-    const addressResponse = await getAddressSnap('1');
+    const addressResponse = snapWallet?.getAddress();
+    console.log('addressResponse: ', addressResponse);
     if (addressResponse) {
-      setAddress(addressResponse);
-      return addressResponse;
+      setAddress(addressResponse.toString());
     }
   };
 

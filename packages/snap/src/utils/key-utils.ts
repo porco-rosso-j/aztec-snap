@@ -1,7 +1,6 @@
 import { getBIP44AddressKeyDeriver } from '@metamask/key-tree';
-import type { GrumpkinPrivateKey } from '@aztec/aztec.js';
 import { SnapsProvider } from '@metamask/snaps-sdk';
-import { ApiParams } from '../types';
+import { ApiParams, PrivateKeys } from '../types';
 
 export const getAddressKeyDeriver = async (snap: SnapsProvider) => {
   // https://trezor.io/learn/a/what-is-bip44
@@ -11,16 +10,10 @@ export const getAddressKeyDeriver = async (snap: SnapsProvider) => {
       coinType: 9008,
     },
   });
-  console.log('bip44Node: ', bip44Node);
 
   // `m / purpose' / coin_type' / account' / change / address_index`
   // `m / 44' / 9004' / 0' / 0 / {index}`
   return getBIP44AddressKeyDeriver(bip44Node);
-};
-
-type PrivateKeys = {
-  encryptionPrivateKey: GrumpkinPrivateKey;
-  signingPrivateKey: Buffer;
 };
 
 /**

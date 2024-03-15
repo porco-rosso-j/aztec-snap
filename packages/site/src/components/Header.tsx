@@ -3,18 +3,18 @@ import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-// import { useInvokeSnap, useMetaMask, useRequestSnap } from '../hooks/snap';
 import { PXE_URL, defaultSnapOrigin, isLocalSnap } from '../utils';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
-import { AztecSnap, requestSnap } from '@abstract-crypto/aztec-snap-lib';
-import { createPXEClient } from '@aztec/aztec.js';
+import { AztecSnap } from '@abstract-crypto/aztec-snap-lib';
 
 type HeaderProps = {
   isDarkTheme: boolean;
   toggleTheme: () => void;
 };
 export function Header(props: HeaderProps) {
-  const { isFlask, snapsDetected, installedSnap } = useMetaMaskContext();
+  const { saveSnapWallet } = useAppContext();
+  const { isFlask, snapsDetected, installedSnap, detect } =
+    useMetaMaskContext();
   // const { requestSnap } = useRequestSnap(defaultSnapOrigin, '0.1.0');
 
   console.log('installedSnap: ', installedSnap);
@@ -53,7 +53,11 @@ export function Header(props: HeaderProps) {
   const handleRequest = async () => {
     const aztecSnap = new AztecSnap(PXE_URL);
     const snapWallet = await aztecSnap.connect();
-    console.log('snapWallet: ', snapWallet);
+    console.log('snapWallet.getAddress: ', snapWallet.getAddress());
+    if (snapWallet) {
+      detect();
+      saveSnapWallet(snapWallet);
+    }
   };
 
   const BottunStyle = {

@@ -1,3 +1,4 @@
+import { GrumpkinPrivateKey } from '@aztec/aztec.js';
 import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { ManageStateResult } from '@metamask/snaps-sdk';
 
@@ -14,6 +15,7 @@ export type Account = {
   addressIndex: number;
   address: string; // in hex
   publicKey: string; // in hex
+  partialAddress: string;
 };
 
 export type ApiParams = {
@@ -47,4 +49,9 @@ export type SendTxParams = {
 export type CreateAuthWitnessParam = {
   from: string;
   message: string;
+};
+
+export type PrivateKeys = {
+  encryptionPrivateKey: GrumpkinPrivateKey;
+  signingPrivateKey: Buffer;
 };

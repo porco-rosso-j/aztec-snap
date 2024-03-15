@@ -15,6 +15,7 @@ interface AppContextState {
   snapWallet: SnapWallet | null;
   gasToken: string;
   saveGasToken: (address: string) => void;
+  saveSnapWallet: (snapWallet: SnapWallet) => void;
   logout: () => void;
 }
 
@@ -51,6 +52,10 @@ export const AppContextProviderComponent: React.FC<AppContextProps> = ({
     localStorage.setItem(`gas_token_address`, JSON.stringify(_gasToken));
   };
 
+  const saveSnapWallet = (_snapWallet: SnapWallet) => {
+    setSnapWallet(_snapWallet);
+  };
+
   const removeAddresses = () => {
     setGasToken('');
     localStorage.removeItem(`gas_token_address`);
@@ -58,20 +63,13 @@ export const AppContextProviderComponent: React.FC<AppContextProps> = ({
 
   const logout = () => {
     removeAddresses();
-
-    // setPlayersReady(false);
-    // setPlayerId(0);
-    // removePlayerId();
-    // setSecretNumber(0);
-    // saveGameId('');
-    // removeGameId();
-    // removeSecretNumber();
   };
 
   const contextValue: AppContextState = {
     snapWallet,
     gasToken,
     saveGasToken,
+    saveSnapWallet,
     logout,
   };
   return (

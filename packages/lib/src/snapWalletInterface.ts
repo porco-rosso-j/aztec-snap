@@ -47,19 +47,17 @@ export class SnapAccountInterface implements AccountInterface {
 
     const serializedFunctionCall: SerializedFunctionCall = {
       to: execution.to.toString(),
-      functionData: txRequest.functionData.toString(),
-      args: [txRequest.packedArguments[0].args.toString()],
+      functionData: txRequest.functionData.toBuffer().toString('hex'),
+      args: txRequest.packedArguments[0].args.map((argFr) => argFr.toString()),
     };
 
-    const signedTxRequestStr = await sendTxSnap(
-      {
-        from: this.completeAddress.toString(),
-        calls: [serializedFunctionCall],
-        simulatePublic: true,
-      },
-      this.snapRpc,
-    );
+    const sendTxParams = {
+      from: this.completeAddress.toString(),
+      calls: [serializedFunctionCall],
+      simulatePublic: true,
+    };
 
+    const signedTxRequestStr = await sendTxSnap(sendTxParams, this.snapRpc);
     return TxExecutionRequest.fromString(signedTxRequestStr);
   }
 

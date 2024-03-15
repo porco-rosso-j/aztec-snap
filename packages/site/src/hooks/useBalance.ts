@@ -10,23 +10,24 @@ import { useAddress } from '.';
 import { useAppContext } from '../contexts/useAppContext';
 
 export default function useBalance() {
-  const { gasToken } = useAppContext();
+  const { gasToken, snapWallet } = useAppContext();
   const { address } = useAddress();
   const [balance, setBalance] = useState(0);
+  const [privateBalance, setPrivateBalance] = useState(0);
 
   useEffect(() => {
-    const checkBalance = async () => {
+    const checkBalances = async () => {
       if (address && gasToken) {
-        console.log('getBalance: ', address, ' & ', gasToken);
         const balance = await getBalance(gasToken, address);
-        setBalance(balance);
+        setBalance(balance[0]);
+        setPrivateBalance(balance[1]);
       }
     };
 
-    checkBalance();
+    checkBalances();
   }, [address, gasToken]);
 
-  async function getBalance(token: string, address: string): Promise<number> {
+  async function getBalance(token: string, address: string): Promise<number[]> {
     const pxe = createPXEClient(PXE_URL);
 
     // https://github.com/porco-rosso-j/aztec_lend/blob/34e70cbc335222413c2edba1bae0a424a33288f1/src/scripts/cross-chain.ts#L436
@@ -39,12 +40,26 @@ export default function useBalance() {
       .balance_of_public(AztecAddress.fromString(address))
       .view();
 
-    return Number(balance);
+    if (!snapWallet) throw 'SnapWallet not found';
+    const l2tokenContractPrivate = await TokenContract.at(
+      AztecAddress.fromString(token),
+      snapWallet,
+    );
+
+    const aztAddr = AztecAddress.fromString(address);
+    const privateBalance = await l2tokenContractPrivate.methods
+      .balance_of_private(aztAddr)
+      .view({ from: aztAddr });
+
+    console.log('privateBalance: ', privateBalance);
+    return [Number(balance), Number(privateBalance)];
   }
 
   return {
     balance,
+    privateBalance,
     setBalance,
+    setPrivateBalance,
     getBalance,
   };
 }

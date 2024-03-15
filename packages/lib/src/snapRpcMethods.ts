@@ -1,3 +1,4 @@
+import { defaultSnapOrigin } from './constants';
 import {
   SendTxParams,
   CreateAuthWitnessParam,
@@ -27,13 +28,13 @@ export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
 
 export const sendTxSnap = async (
   sendTxParams: SendTxParams,
-  snapId: string,
+  snapId?: string,
 ): Promise<string> => {
   try {
     return await snapRpcRequest({
       snapRpcMethod: 'sendTx',
       params: sendTxParams,
-      snapId: snapId,
+      snapId: snapId ? snapId : defaultSnapOrigin,
     });
   } catch (e) {
     console.log('e: ', e);
@@ -45,28 +46,28 @@ export const sendTxSnap = async (
  * Invoke the "azt_getAddress" RPC method from the snap.
  */
 
-export const getAddressSnap = async (snapId: string): Promise<string> => {
+export const getAddressSnap = async (snapId?: string): Promise<string[]> => {
   try {
     const address = await snapRpcRequest({
       snapRpcMethod: 'accounts',
-      snapId: snapId,
+      snapId: snapId ? snapId : defaultSnapOrigin,
     });
-    return address[0];
+    return address;
   } catch (e) {
     console.log('e: ', e);
-    return '';
+    return [];
   }
 };
 
 export const createAuthWitnessSnap = async (
   createAuthWitnessParam: CreateAuthWitnessParam,
-  snapId: string,
+  snapId?: string,
 ): Promise<string> => {
   try {
     const wittness = await snapRpcRequest({
       snapRpcMethod: 'createAuthWitness',
       params: createAuthWitnessParam,
-      snapId: snapId,
+      snapId: snapId ? snapId : defaultSnapOrigin,
     });
     return wittness;
   } catch (e) {
@@ -75,11 +76,11 @@ export const createAuthWitnessSnap = async (
   }
 };
 
-export const createAccountSnap = async (snapId: string): Promise<string> => {
+export const createAccountSnap = async (snapId?: string): Promise<string> => {
   try {
     const address = await snapRpcRequest({
       snapRpcMethod: 'createAccount',
-      snapId: snapId,
+      snapId: snapId ? snapId : defaultSnapOrigin,
     });
     return address;
   } catch (e) {

@@ -19,42 +19,35 @@ export class SnapWallet extends AccountWallet {
 }
 
 export class AztecSnap {
-  private address: CompleteAddress | null;
   private pxe: PXE;
   protected readonly snapRpc: string;
 
   constructor(_PXE_URL: string, _snapRpc?: string) {
-    this.address = null;
     this.pxe = createPXEClient(_PXE_URL);
     this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
   }
   async connect() {
-    // some asserts here
-    // e.g. flask is not installed
-
     await requestSnap(this.snapRpc, '0.1.0');
-    let address;
-    if (!this.address) {
-      address = await getAddressSnap(this.snapRpc);
-      if (!address) {
-        address = await createAccountSnap(this.snapRpc);
-      }
-      this.address = CompleteAddress.fromString(address);
+
+    let address = await this.getSelectedAddress();
+    console.log('address: ', address);
+    if (!address) {
+      address = await createAccountSnap(this.snapRpc);
+      console.log('created address: ', address);
     }
-
-    // await selectAccount() -> trigger pop-up
-
-    return this.getSnapWallet();
+    return this.getSnapWallet(CompleteAddress.fromString(address));
   }
 
   reconnect() {}
 
   disconnect() {}
 
-  create() {}
+  async getSelectedAddress(): Promise<string> {
+    return (await getAddressSnap(this.snapRpc))[0];
+  }
 
-  getSnapWallet(): SnapWallet {
-    if (!this.address) throw 'No connection with accounts';
-    return new SnapWallet(this.pxe, this.address, this.snapRpc);
+  async getSnapWallet(address: CompleteAddress): Promise<SnapWallet> {
+    // if (!this.address) throw 'No connection with accounts';
+    return new SnapWallet(this.pxe, address, this.snapRpc);
   }
 }
