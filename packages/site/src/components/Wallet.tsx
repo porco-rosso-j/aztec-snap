@@ -246,34 +246,33 @@ export default function Wallet(props: WalletProps) {
                 </>
               )}
 
-              {activeTab == 'send' ||
-                (activeTab == 'shield' && (
-                  <>
-                    <Text
-                      mr={280}
-                      mb={-10}
-                      style={{
-                        fontSize: '12px',
-                        color: props.isDarkTheme ? 'white' : 'gray',
-                      }}
-                    >
-                      amount
-                    </Text>
-                    <TextInput
-                      style={{
-                        width: '350px',
-                        backgroundColor: 'transparent',
-                      }}
-                      variant="filled"
-                      radius="md"
-                      placeholder="0.01"
-                      size="sm"
-                      onChange={(event) =>
-                        setSendAmount(Number(event.currentTarget.value))
-                      }
-                    />
-                  </>
-                ))}
+              {activeTab == 'send' || activeTab == 'shield' ? (
+                <>
+                  <Text
+                    mr={280}
+                    mb={-10}
+                    style={{
+                      fontSize: '12px',
+                      color: props.isDarkTheme ? 'white' : 'gray',
+                    }}
+                  >
+                    amount
+                  </Text>
+                  <TextInput
+                    style={{
+                      width: '350px',
+                      backgroundColor: 'transparent',
+                    }}
+                    variant="filled"
+                    radius="md"
+                    placeholder="0.01"
+                    size="sm"
+                    onChange={(event) =>
+                      setSendAmount(Number(event.currentTarget.value))
+                    }
+                  />
+                </>
+              ) : null}
 
               {activeTab == 'redeem' && (
                 <>
