@@ -1,5 +1,4 @@
-import { AztecAddress } from '@aztec/aztec.js';
-import { ApiParams } from 'src/types';
+import { ApiParams, GetBalanceParams } from 'src/types';
 import {
   getECDSAWallet,
   getPrivateKeys,
@@ -7,12 +6,6 @@ import {
   getStateAccount,
   validateSender,
 } from 'src/utils';
-
-type GetBalanceParams = {
-  from: string;
-  address: string;
-  token: string;
-};
 
 export const getBalance = async (apiParams: ApiParams): Promise<number[]> => {
   const requestParams = apiParams.requestParams as GetBalanceParams;

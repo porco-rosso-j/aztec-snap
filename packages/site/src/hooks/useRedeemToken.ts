@@ -1,21 +1,21 @@
-import { AztecAddress, Fr } from '@aztec/aztec.js';
-import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
 import { useBalance } from './useBalance';
 import { useAppContext } from '../contexts/useAppContext';
-import {
-  getPendingShieldsSnap,
-  redeemShieldSnap,
-} from '@abstract-crypto/aztec-snap-lib';
 
 export const useRedeemToken = () => {
   const [redeemTxHash, setTxHash] = useState<string | undefined>();
   const { snapWallet } = useAppContext();
   const { getBalance } = useBalance();
   const [isRedeemLoading, setIsLoading] = useState(false);
+  const [redeemLoadingId, setRedeemLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
 
-  const redeemToken = async (token: string, from: string, amount: number) => {
+  const redeemToken = async (
+    token: string,
+    from: string,
+    amount: number,
+    index: number,
+  ) => {
     if (isRedeemLoading || !snapWallet) {
       return;
     }
@@ -24,12 +24,9 @@ export const useRedeemToken = () => {
       setError(undefined);
       setTxHash(undefined);
       setIsLoading(true);
+      setRedeemLoadingId(index);
 
-      const pendingShields = await snapWallet.getPendingShields(
-        from,
-        token,
-        amount,
-      );
+      const pendingShields = await snapWallet.getPendingShields(from, token);
       console.log('pendingShields: ', pendingShields);
 
       if (pendingShields) {
@@ -37,7 +34,7 @@ export const useRedeemToken = () => {
           from,
           token,
           amount,
-          pendingShields[1].secretIndex,
+          index,
         );
         console.log('txHash: ', txHash);
         setTxHash(txHash);
@@ -51,5 +48,11 @@ export const useRedeemToken = () => {
     setIsLoading(false);
   };
 
-  return { redeemTxHash, isRedeemLoading, error, redeemToken };
+  return {
+    redeemTxHash,
+    isRedeemLoading,
+    error,
+    redeemLoadingId,
+    redeemToken,
+  };
 };

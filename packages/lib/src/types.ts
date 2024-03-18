@@ -2,6 +2,7 @@ export type * from '@abstract-crypto/aztec-snap';
 import type {
   CreateAuthWitnessParam,
   CreateSecretParams,
+  GetBalanceParams,
   GetPendingShields,
   RedeemShieldParams,
   RedeemablePendingShield,
@@ -22,11 +23,12 @@ export type RpcMethods = {
   accounts: () => Promise<string[]>;
   // should be restricted non snap wallet apps
   createAccount: () => Promise<string>;
-  createSecret: (createSecretParams: CreateSecretParams) => Promise<string>;
+  createSecretHash: (createSecretParams: CreateSecretParams) => Promise<string>;
   getPendingShields: (
     getPendingShieldsParams: GetPendingShields,
   ) => Promise<RedeemablePendingShield[]>;
   redeemShield: (redeemShieldParams: RedeemShieldParams) => Promise<string>;
+  getBalance: (getBalanceParams: GetBalanceParams) => Promise<number[]>;
 };
 
 type InferArgs<M extends keyof RpcMethods> = RpcMethods[M] extends (

@@ -1,44 +1,24 @@
 import { ApiParams, CreateSecretParams } from 'src/types';
-import { getPrivateKeys, validateSender } from 'src/utils';
+import { getPrivateKeys, validateSender, computeSecret } from 'src/utils';
 
-// type CreateSecretParams = {
-//   from: string;
-// };
-
-type PendingShieldsSecret = {
-  owner: string;
-  secret: string;
-  txHash?: string;
-};
-
-export const createSecret = async (apiParams: ApiParams) => {
+export const createSecretHash = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as CreateSecretParams;
   if (!validateSender(apiParams, requestParams.from)) {
     throw 'selected account does not match "from"';
   }
 
-  // store secret
-  //   const secrets: PendingShieldsSecret[] = apiParams.state
-  //     ?.secrets as PendingShieldsSecret[];
   let secrets: string[] = apiParams.state?.secrets as string[];
   console.log('secrets: ', secrets);
-  console.log('secrets len: ', secrets.length);
 
   const { signingPrivateKey } = await getPrivateKeys(apiParams);
-  const message = await serializeMessage(
-    secrets.length.toString(),
-    '0', // salt ≒ chain id
+  const secret = await computeSecret(
+    requestParams.contract,
     signingPrivateKey,
+    secrets.length,
   );
 
-  // secret
-  const secret = apiParams.aztec.computeMessageSecretHash(message);
-  console.log('secret: ', secret);
+  console.log('secret: ', secret.toString());
 
-  //   secrets[secrets.length] = {
-  //     owner: requestParams.from,
-  //     secret: secret,
-  //   };
   secrets[secrets.length] = secret.toString();
 
   if (apiParams.state) {
@@ -58,20 +38,6 @@ export const createSecret = async (apiParams: ApiParams) => {
   console.log('secretHash: ', secretHash.toString());
 
   return secretHash.toString();
-};
-
-const serializeMessage = async (
-  index: string,
-  salt: string,
-  privateKey: Buffer,
-) => {
-  const indexBuffer = Buffer.from(index);
-  const saltBuffer = Buffer.from(salt);
-
-  const aztec = await import('@aztec/aztec.js');
-  return aztec.Fr.fromBuffer(
-    Buffer.concat([indexBuffer, privateKey, saltBuffer]),
-  );
 };
 
 // const secrets = [

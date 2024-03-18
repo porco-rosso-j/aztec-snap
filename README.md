@@ -81,7 +81,3 @@ await sentTx.wait();
 
 - [Aztec Developer Documentation](https://docs.aztec.network/)
 - [Metamask Snap Doc](https://docs.metamask.io/snaps/)
-
-```
-
-```

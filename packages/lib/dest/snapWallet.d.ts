@@ -5,7 +5,9 @@ import { RedeemablePendingShield } from '@abstract-crypto/aztec-snap';
  */
 export declare class SnapWallet extends AccountWallet {
     constructor(_pxe: PXE, _address: CompleteAddress, _snapRpc?: string);
-    getPendingShields(from: string, token: string, amount: number): Promise<RedeemablePendingShield[] | undefined>;
+    getBalance(from: string, address: string, token: string): Promise<number[]>;
+    createSecretHash(from: string, contract: string): Promise<string>;
+    getPendingShields(from: string, token: string): Promise<RedeemablePendingShield[] | undefined>;
     redeemShield(from: string, token: string, amount: number, secretIndex: number): Promise<string>;
 }
 export declare class AztecSnap {

@@ -32,7 +32,9 @@ export type ApiRequestParams =
   | CreateAccountParams
   | CreateAuthWitnessParam
   | CreateSecretParams
-  | RedeemShieldParams;
+  | RedeemShieldParams
+  | GetPendingShields
+  | GetBalanceParams;
 
 export type SerializedFunctionCall = {
   to: string;
@@ -56,6 +58,7 @@ export type CreateAuthWitnessParam = {
 
 export type CreateSecretParams = {
   from: string;
+  contract: string;
 };
 
 export type RedeemShieldParams = {
@@ -69,7 +72,6 @@ export type RedeemShieldParams = {
 export type GetPendingShields = {
   from: string;
   token: string;
-  amount: number;
 };
 
 export type RedeemablePendingShield = {
@@ -77,6 +79,12 @@ export type RedeemablePendingShield = {
   token: string;
   amount: number;
   secretIndex: number;
+};
+
+export type GetBalanceParams = {
+  from: string;
+  address: string;
+  token: string;
 };
 
 export type PrivateKeys = {

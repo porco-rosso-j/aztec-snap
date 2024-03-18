@@ -9,11 +9,15 @@ import { requestSnap } from './snap-utils/request.js';
 import { defaultSnapOrigin } from './constants.js';
 import {
   createAccountSnap,
+  createSecretSnap,
   getAddressSnap,
+  getBalanceSnap,
   getPendingShieldsSnap,
   redeemShieldSnap,
 } from './snapRpcMethods.js';
 import {
+  CreateSecretParams,
+  GetBalanceParams,
   GetPendingShields,
   RedeemShieldParams,
   RedeemablePendingShield,
@@ -27,15 +31,35 @@ export class SnapWallet extends AccountWallet {
     super(_pxe, account);
   }
 
+  public async getBalance(
+    from: string,
+    address: string,
+    token: string,
+  ): Promise<number[]> {
+    return await getBalanceSnap({
+      from,
+      address,
+      token,
+    } as GetBalanceParams);
+  }
+
+  public async createSecretHash(
+    from: string,
+    contract: string,
+  ): Promise<string> {
+    return await createSecretSnap({
+      from,
+      contract,
+    } as CreateSecretParams);
+  }
+
   public async getPendingShields(
     from: string,
     token: string,
-    amount: number,
   ): Promise<RedeemablePendingShield[] | undefined> {
     return await getPendingShieldsSnap({
       from,
       token,
-      amount,
     } as GetPendingShields);
   }
 

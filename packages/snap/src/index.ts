@@ -15,11 +15,12 @@ import {
   createAuthWitness,
   getAddress,
   sendTx,
-  createSecret,
+  createSecretHash,
   getRedeemablePendingShields,
   redeemShield,
+  getBalance,
 } from './rpc';
-import { getAddressKeyDeriver } from './utils/key-utils';
+import { getAddressKeyDeriver } from './utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({
@@ -66,6 +67,9 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'aztec_createAccount':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return createAccount(apiParams);
+    case 'aztec_getBalance':
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return getBalance(apiParams);
     case 'aztec_accounts':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return getAddress(apiParams);
@@ -75,9 +79,9 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'aztec_sendTx':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return sendTx(apiParams);
-    case 'aztec_createSecret':
+    case 'aztec_createSecretHash':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createSecret(apiParams);
+      return createSecretHash(apiParams);
     case 'aztec_getPendingShields':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return getRedeemablePendingShields(apiParams);

@@ -20,6 +20,7 @@ import {
   useSendToken,
   useShieldToken,
   useRedeemToken,
+  useGetPendingShields,
 } from '../hooks';
 
 type WalletProps = {
@@ -35,7 +36,9 @@ export default function Wallet(props: WalletProps) {
 
   const { sendTxHash, sendLoadingId, sendToken } = useSendToken();
   const { shieldTxHash, shieldLoadingId, shieldToken } = useShieldToken();
-  const { redeemTxHash, isRedeemLoading, redeemToken } = useRedeemToken();
+  const { redeemTxHash, isRedeemLoading, redeemLoadingId, redeemToken } =
+    useRedeemToken();
+  const { pendingShields, fetchPendingShields } = useGetPendingShields();
 
   const [activeTab, setActiveTab] = useState('send');
   const [sendAmount, setSendAmount] = useState<number>(0);
@@ -98,18 +101,20 @@ export default function Wallet(props: WalletProps) {
       const balance = await getBalance(gasToken, address);
       setBalance(balance[0]);
       setPrivateBalance(balance[1]);
+      await fetchPendingShields();
     } else {
       console.log('address not set');
     }
     setLoading(false);
   }
 
-  async function handleRedeemToken() {
+  async function handleRedeemToken(amount: number, index: number) {
     setLoading(true);
     if (address) {
-      await redeemToken(gasToken, address, sendAmount);
+      await redeemToken(gasToken, address, amount, index);
       const balance = await getBalance(gasToken, address);
       setPrivateBalance(balance[1]);
+      await fetchPendingShields();
     } else {
       console.log('address not set');
     }
@@ -133,7 +138,7 @@ export default function Wallet(props: WalletProps) {
       <Box
         style={{
           maxWidth: '650px',
-          minHeight: '610px',
+          height: '610px',
           padding: '50px',
           margin: 'auto',
           marginTop: '3.5rem',
@@ -184,7 +189,7 @@ export default function Wallet(props: WalletProps) {
               </Stack>
             </Group>
           </Stack>
-          <Tabs mt={10} value={activeTab}>
+          <Tabs mt={10} value={activeTab} style={{ minWidth: '350px' }}>
             <Tabs.List mb={30} style={{ justifyContent: 'center' }}>
               <Tabs.Tab
                 value="send"
@@ -241,29 +246,105 @@ export default function Wallet(props: WalletProps) {
                 </>
               )}
 
-              <Text
-                mr={280}
-                mb={-10}
-                style={{
-                  fontSize: '12px',
-                  color: props.isDarkTheme ? 'white' : 'gray',
-                }}
-              >
-                amount
-              </Text>
-              <TextInput
-                style={{
-                  width: '350px',
-                  backgroundColor: 'transparent',
-                }}
-                variant="filled"
-                radius="md"
-                placeholder="0.01"
-                size="sm"
-                onChange={(event) =>
-                  setSendAmount(Number(event.currentTarget.value))
-                }
-              />
+              {activeTab == 'send' ||
+                (activeTab == 'shield' && (
+                  <>
+                    <Text
+                      mr={280}
+                      mb={-10}
+                      style={{
+                        fontSize: '12px',
+                        color: props.isDarkTheme ? 'white' : 'gray',
+                      }}
+                    >
+                      amount
+                    </Text>
+                    <TextInput
+                      style={{
+                        width: '350px',
+                        backgroundColor: 'transparent',
+                      }}
+                      variant="filled"
+                      radius="md"
+                      placeholder="0.01"
+                      size="sm"
+                      onChange={(event) =>
+                        setSendAmount(Number(event.currentTarget.value))
+                      }
+                    />
+                  </>
+                ))}
+
+              {activeTab == 'redeem' && (
+                <>
+                  <Text style={textTextStyle} size="12px">
+                    Claimable Pending Shields
+                  </Text>
+                  <Box
+                    style={{
+                      maxHeight: '150px',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    {pendingShields
+                      ? pendingShields.map((shield, index) => (
+                          <Box
+                            key={index}
+                            my={10}
+                            px={5}
+                            py={7}
+                            style={{
+                              width: '300px',
+                              boxShadow: 'black',
+                              borderRadius: '5px',
+                              borderColor: 'gray',
+                              borderWidth: '1px',
+                              borderStyle: 'solid',
+                            }}
+                          >
+                            <Group
+                              px={15}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                              }}
+                            >
+                              <Text style={textTextStyle}>
+                                ID: {shield.secretIndex}
+                              </Text>
+                              <Text style={textTextStyle}>
+                                {shield.amount.toString()} GAS
+                              </Text>
+                              <Button
+                                color="#633BA0"
+                                size="xs"
+                                loading={
+                                  isRedeemLoading &&
+                                  shield.secretIndex == redeemLoadingId
+                                }
+                                disabled={isRedeemLoading}
+                                onClick={() => {
+                                  setErrorMessage('');
+                                  if (address && gasToken) {
+                                    handleRedeemToken(
+                                      shield.amount,
+                                      shield.secretIndex,
+                                    );
+                                  } else {
+                                    setErrorMessage('Something went wrong');
+                                  }
+                                }}
+                              >
+                                Redeem
+                              </Button>
+                            </Group>
+                          </Box>
+                        ))
+                      : null}
+                  </Box>
+                </>
+              )}
 
               <Tabs.Panel value="send">
                 <Group gap={30}>
@@ -343,25 +424,25 @@ export default function Wallet(props: WalletProps) {
               </Tabs.Panel>
               <Tabs.Panel value="redeem">
                 <Button
-                  mt={30}
                   color="#633BA0"
                   size="md"
-                  loading={isRedeemLoading}
+                  // loading={isRedeemLoading}
                   disabled={isRedeemLoading}
                   onClick={() => {
                     setErrorMessage('');
-                    if (address && gasToken && sendAmount) {
-                      handleRedeemToken();
+                    if (address && gasToken) {
+                      // handleRedeemToken();
+                      setErrorMessage('Batch redeem not supported yet');
                     } else {
                       setErrorMessage('Inputs not defined');
                     }
                   }}
                 >
-                  Redeem
+                  Redeem All
                 </Button>
               </Tabs.Panel>
 
-              <Stack gap={5} mt={10}>
+              <Stack gap={5} mt={5}>
                 <Text style={{ textAlign: 'center', color: 'red' }}>
                   {errorMessage}
                 </Text>

@@ -42,10 +42,7 @@ export const useShieldToken = () => {
 
       let sentTx;
       if (shield) {
-        // const secret = Fr.random();
-        // console.log('secret: ', secret.toString());
-        // const secretHash = computeMessageSecretHash(secret);
-        const secretHash = await createSecretSnap({ from: from });
+        const secretHash = await snapWallet.createSecretHash(from, token);
         console.log('secretHash: ', secretHash);
 
         console.log('sending: ');

@@ -8,6 +8,7 @@ import {
   RedeemablePendingShield,
   RedeemShieldParams,
   GetPendingShields,
+  GetBalanceParams,
 } from './types';
 
 export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
@@ -99,7 +100,7 @@ export const createSecretSnap = async (
 ): Promise<string> => {
   try {
     const secret = await snapRpcRequest({
-      snapRpcMethod: 'createSecret',
+      snapRpcMethod: 'createSecretHash',
       params: createSecretParams,
       snapId: snapId ? snapId : defaultSnapOrigin,
     });
@@ -139,5 +140,21 @@ export const redeemShieldSnap = async (
   } catch (e) {
     console.log('e: ', e);
     return '';
+  }
+};
+
+export const getBalanceSnap = async (
+  getBalanceParams: GetBalanceParams,
+  snapId?: string,
+): Promise<number[]> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'getBalance',
+      params: getBalanceParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+    return [];
   }
 };
