@@ -3,9 +3,9 @@ import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { PXE_URL, defaultSnapOrigin, isLocalSnap } from '../utils';
+import { PXE_URL, defaultSnapOrigin } from '../utils';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
-import { AztecSnap } from '@abstract-crypto/aztec-snap-lib';
+import { AztecSnap, isLocalSnap } from '@abstract-crypto/aztec-snap-lib';
 
 type HeaderProps = {
   isDarkTheme: boolean;
@@ -15,7 +15,6 @@ export function Header(props: HeaderProps) {
   const { saveSnapWallet } = useAppContext();
   const { isFlask, snapsDetected, installedSnap, detect } =
     useMetaMaskContext();
-  // const { requestSnap } = useRequestSnap(defaultSnapOrigin, '0.1.0');
 
   console.log('installedSnap: ', installedSnap);
 

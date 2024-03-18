@@ -29,7 +29,10 @@ export type ApiRequestParams =
   | GetAddressParams
   | GetTxParams
   | SendTxParams
-  | CreateAccountParams;
+  | CreateAccountParams
+  | CreateAuthWitnessParam
+  | CreateSecretParams
+  | RedeemShieldParams;
 
 export type SerializedFunctionCall = {
   to: string;
@@ -49,6 +52,31 @@ export type SendTxParams = {
 export type CreateAuthWitnessParam = {
   from: string;
   message: string;
+};
+
+export type CreateSecretParams = {
+  from: string;
+};
+
+export type RedeemShieldParams = {
+  from: string;
+  token: string;
+  amount: number;
+  secretIndex: number;
+  redeemAll: boolean;
+};
+
+export type GetPendingShields = {
+  from: string;
+  token: string;
+  amount: number;
+};
+
+export type RedeemablePendingShield = {
+  from: string;
+  token: string;
+  amount: number;
+  secretIndex: number;
 };
 
 export type PrivateKeys = {

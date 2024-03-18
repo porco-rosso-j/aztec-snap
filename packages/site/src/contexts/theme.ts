@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getLocalStorage, setLocalStorage } from '../utils/localStorage';
+import { getLocalStorage, setLocalStorage } from '../utils';
 
 // Custom hook to get and set the theme preference
 export const useTheme = () => {

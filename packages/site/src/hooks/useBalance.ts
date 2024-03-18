@@ -4,12 +4,12 @@ import {
   SignerlessWallet,
 } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts.js';
-import { PXE_URL } from '../utils/constants';
+import { PXE_URL } from '../utils';
 import { useEffect, useState } from 'react';
 import { useAddress } from '.';
 import { useAppContext } from '../contexts/useAppContext';
 
-export default function useBalance() {
+export function useBalance() {
   const { gasToken, snapWallet } = useAppContext();
   const { address } = useAddress();
   const [balance, setBalance] = useState(0);
@@ -41,6 +41,10 @@ export default function useBalance() {
       .view();
 
     if (!snapWallet) throw 'SnapWallet not found';
+
+    // l2tokenContract can also access to anyone's private state atm
+    // in the future, this shouldn't work
+    // but only l2tokenContractPrivate w/ SnapWallet should work
     const l2tokenContractPrivate = await TokenContract.at(
       AztecAddress.fromString(token),
       snapWallet,

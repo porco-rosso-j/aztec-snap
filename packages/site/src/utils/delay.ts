@@ -1,2 +1,2 @@
-export const delay = (ms: number) =>
+export const delay = async (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));

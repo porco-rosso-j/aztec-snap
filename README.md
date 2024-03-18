@@ -55,9 +55,11 @@ SnapWallet can be thought of as ethers's Signer intance that can be instantiated
 example:
 
 ```javascript
-import { SnapWallet } from '@abstract-crypto/aztec-snap-lib';
+import { AztecSnap, SnapWallet } from '@abstract-crypto/aztec-snap-lib';
 
-const wallet = new SnapWallet(pxe);
+const aztecSnap = new AztecSnap(pxe);
+const wallet: SnapWallet = aztecSnap.connect();
+
 const token = await TokenContract.at(
   AztecAddress.fromString(TOKEN_ADDRESS),
   wallet,
@@ -74,8 +76,6 @@ const sentTx: SentTx = await token.methods
 
 await sentTx.wait();
 ```
-
-In the future, snap (./pakcages/snap) will be hosted externally and lib (./packages/lib) will be provided as a npm package.
 
 ### Reference
 

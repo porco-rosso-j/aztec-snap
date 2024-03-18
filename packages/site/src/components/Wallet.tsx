@@ -10,13 +10,17 @@ import {
   Anchor,
   Tabs,
 } from '@mantine/core';
-import { shortenAddress, shortenTxHash } from '../utils/shortenAddr';
 import { IconCopy, IconCopyCheck } from '@tabler/icons-react';
-import useFaucet from '../hooks/useFaucet';
-import useBalance from '../hooks/useBalance';
-import { useAddress, useSendToken } from '../hooks';
 import { useAppContext } from '../contexts/useAppContext';
-import { useShieldToken } from '../hooks/useShieldToken';
+import { shortenAddress, shortenTxHash } from '../utils';
+import {
+  useFaucet,
+  useBalance,
+  useAddress,
+  useSendToken,
+  useShieldToken,
+  useRedeemToken,
+} from '../hooks';
 
 type WalletProps = {
   isDarkTheme: boolean;
@@ -28,14 +32,18 @@ export default function Wallet(props: WalletProps) {
   const { getFaucet } = useFaucet();
   const { balance, privateBalance, setBalance, getBalance, setPrivateBalance } =
     useBalance();
+
+  const { sendTxHash, sendLoadingId, sendToken } = useSendToken();
+  const { shieldTxHash, shieldLoadingId, shieldToken } = useShieldToken();
+  const { redeemTxHash, isRedeemLoading, redeemToken } = useRedeemToken();
+
+  const [activeTab, setActiveTab] = useState('send');
+  const [sendAmount, setSendAmount] = useState<number>(0);
+  const [recepient, setRecepient] = useState<string>('');
+  const [faucetClicked, setFacuetClicked] = useState(false);
+  const [txHash, setTxHash] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  console.log('gasToken: ', gasToken);
-  console.log('address: ', address);
-
-  const [txHash, setTxHash] = useState<string>('');
-  const { sendTxHash, loadingId, sendToken } = useSendToken();
-  const { shieldTxHash, shieldToken } = useShieldToken();
 
   useEffect(() => {
     if (sendTxHash && txHash !== sendTxHash) {
@@ -45,11 +53,11 @@ export default function Wallet(props: WalletProps) {
     if (shieldTxHash && txHash !== shieldTxHash) {
       setTxHash(shieldTxHash);
     }
-  }, [sendTxHash, shieldTxHash]);
 
-  const [sendAmount, setSendAmount] = useState<number>(0);
-  const [recepient, setRecepient] = useState<string>('');
-  const [faucetClicked, setFacuetClicked] = useState(false);
+    if (redeemTxHash && txHash !== redeemTxHash) {
+      setTxHash(redeemTxHash);
+    }
+  }, [sendTxHash, shieldTxHash, redeemTxHash]);
 
   async function handleFaucet(pub: boolean) {
     setFacuetClicked(true);
@@ -72,19 +80,36 @@ export default function Wallet(props: WalletProps) {
     if (address) {
       await sendToken(gasToken, address, recepient, sendAmount, pub);
       const balance = await getBalance(gasToken, address);
-      setBalance(balance[0]);
+      if (pub) {
+        setBalance(balance[0]);
+      } else {
+        setPrivateBalance(balance[1]);
+      }
     } else {
       console.log('address not set');
     }
     setLoading(false);
   }
 
-  async function handleShieldToken() {
+  async function handleShieldToken(shield: boolean) {
     setLoading(true);
     if (address) {
-      await shieldToken(gasToken, address, sendAmount);
+      await shieldToken(gasToken, address, sendAmount, shield);
       const balance = await getBalance(gasToken, address);
-      setBalance(balance[1]);
+      setBalance(balance[0]);
+      setPrivateBalance(balance[1]);
+    } else {
+      console.log('address not set');
+    }
+    setLoading(false);
+  }
+
+  async function handleRedeemToken() {
+    setLoading(true);
+    if (address) {
+      await redeemToken(gasToken, address, sendAmount);
+      const balance = await getBalance(gasToken, address);
+      setPrivateBalance(balance[1]);
     } else {
       console.log('address not set');
     }
@@ -108,6 +133,7 @@ export default function Wallet(props: WalletProps) {
       <Box
         style={{
           maxWidth: '650px',
+          minHeight: '610px',
           padding: '50px',
           margin: 'auto',
           marginTop: '3.5rem',
@@ -139,9 +165,6 @@ export default function Wallet(props: WalletProps) {
             </Group>
           </Stack>
           <Stack align="center" mt={15} gap={3}>
-            {/* <Text style={textTextStyle} size="lg">
-              Current Balances
-            </Text> */}
             <Group gap={50}>
               <Stack align="center">
                 <Text mb={-15} style={{ ...textTextStyle, opacity: '50%' }}>
@@ -161,45 +184,63 @@ export default function Wallet(props: WalletProps) {
               </Stack>
             </Group>
           </Stack>
-          <Tabs mt={10} defaultValue={'send'}>
+          <Tabs mt={10} value={activeTab}>
             <Tabs.List mb={30} style={{ justifyContent: 'center' }}>
               <Tabs.Tab
                 value="send"
-                style={{ width: '50%', backgroundColor: 'transparent' }}
+                style={{ width: '33%', backgroundColor: 'transparent' }}
+                onClick={() => setActiveTab('send')}
               >
                 <Text style={{ ...textTextStyle, fontSize: '20px' }}>Send</Text>
               </Tabs.Tab>
               <Tabs.Tab
                 value="shield"
-                style={{ width: '50%', backgroundColor: 'transparent' }}
+                style={{ width: '34%', backgroundColor: 'transparent' }}
+                onClick={() => setActiveTab('shield')}
               >
                 <Text style={{ ...textTextStyle, fontSize: '20px' }}>
                   Shield
                 </Text>
               </Tabs.Tab>
+              <Tabs.Tab
+                value="redeem"
+                style={{ width: '33%', backgroundColor: 'transparent' }}
+                onClick={() => setActiveTab('redeem')}
+              >
+                <Text style={{ ...textTextStyle, fontSize: '20px' }}>
+                  Redeem
+                </Text>
+              </Tabs.Tab>
             </Tabs.List>
             <Stack mt={20} align="center" style={{ boxShadow: '1rm' }}>
-              <Text
-                mr={220}
-                mb={-10}
-                style={{
-                  fontSize: '12px',
-                  color: props.isDarkTheme ? 'white' : 'gray',
-                }}
-              >
-                recipient address
-              </Text>
-              <TextInput
-                style={{
-                  width: '350px',
-                  backgroundColor: 'transparent',
-                }}
-                variant="filled"
-                radius="md"
-                placeholder="0x123.."
-                size="sm"
-                onChange={(event) => setRecepient(event.currentTarget.value)}
-              />
+              {activeTab == 'send' && (
+                <>
+                  <Text
+                    mr={220}
+                    mb={-10}
+                    style={{
+                      fontSize: '12px',
+                      color: props.isDarkTheme ? 'white' : 'gray',
+                    }}
+                  >
+                    recipient address
+                  </Text>
+                  <TextInput
+                    style={{
+                      width: '350px',
+                      backgroundColor: 'transparent',
+                    }}
+                    variant="filled"
+                    radius="md"
+                    placeholder="0x123.."
+                    size="sm"
+                    onChange={(event) =>
+                      setRecepient(event.currentTarget.value)
+                    }
+                  />
+                </>
+              )}
+
               <Text
                 mr={280}
                 mb={-10}
@@ -230,7 +271,7 @@ export default function Wallet(props: WalletProps) {
                     mt={30}
                     color="#3B77A0"
                     size="md"
-                    loading={loading && loadingId == 1}
+                    loading={loading && sendLoadingId == 1}
                     disabled={loading}
                     onClick={() => {
                       setErrorMessage('');
@@ -247,7 +288,7 @@ export default function Wallet(props: WalletProps) {
                     mt={30}
                     color="#633BA0"
                     size="md"
-                    loading={loading && loadingId == 2}
+                    loading={loading && sendLoadingId == 2}
                     disabled={loading}
                     onClick={() => {
                       setErrorMessage('');
@@ -268,12 +309,12 @@ export default function Wallet(props: WalletProps) {
                     mt={30}
                     color="#3B77A0"
                     size="md"
-                    loading={loading}
+                    loading={loading && shieldLoadingId == 2}
                     disabled={loading}
                     onClick={() => {
                       setErrorMessage('');
                       if (address && gasToken && sendAmount) {
-                        // handleSendToken();
+                        handleShieldToken(false);
                       } else {
                         setErrorMessage('Inputs not defined');
                       }
@@ -285,12 +326,12 @@ export default function Wallet(props: WalletProps) {
                     mt={30}
                     color="#633BA0"
                     size="md"
-                    loading={loading}
+                    loading={loading && shieldLoadingId == 1}
                     disabled={loading}
                     onClick={() => {
                       setErrorMessage('');
-                      if (address && gasToken && recepient && sendAmount) {
-                        // handleSendToken();
+                      if (address && gasToken && sendAmount) {
+                        handleShieldToken(true);
                       } else {
                         setErrorMessage('Inputs not defined');
                       }
@@ -299,6 +340,25 @@ export default function Wallet(props: WalletProps) {
                     Shield
                   </Button>
                 </Group>
+              </Tabs.Panel>
+              <Tabs.Panel value="redeem">
+                <Button
+                  mt={30}
+                  color="#633BA0"
+                  size="md"
+                  loading={isRedeemLoading}
+                  disabled={isRedeemLoading}
+                  onClick={() => {
+                    setErrorMessage('');
+                    if (address && gasToken && sendAmount) {
+                      handleRedeemToken();
+                    } else {
+                      setErrorMessage('Inputs not defined');
+                    }
+                  }}
+                >
+                  Redeem
+                </Button>
               </Tabs.Panel>
 
               <Stack gap={5} mt={10}>

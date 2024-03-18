@@ -62,3 +62,26 @@ export async function confirmCreateAuthWitness(
     },
   })) as boolean;
 }
+
+export async function confirmRedeemShield(
+  from: string,
+  to: string,
+  amount: string,
+): Promise<boolean> {
+  return (await snap.request({
+    method: 'snap_dialog',
+    params: {
+      type: 'confirmation',
+      content: panel([
+        heading('Redeem Shield'),
+        divider(),
+        text('Sender Address:'),
+        copyable(from),
+        text('Token Address:'),
+        copyable(to),
+        text('Amount:'),
+        copyable(amount),
+      ]),
+    },
+  })) as boolean;
+}

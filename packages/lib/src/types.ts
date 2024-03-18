@@ -1,8 +1,12 @@
 export type * from '@abstract-crypto/aztec-snap';
 import type {
   CreateAuthWitnessParam,
+  CreateSecretParams,
+  GetPendingShields,
+  RedeemShieldParams,
+  RedeemablePendingShield,
   SendTxParams,
-} from '@abstract-crypto/aztec-snap/dest/index';
+} from '@abstract-crypto/aztec-snap';
 
 // Type for getAddress function
 // export type GetAddressFunction = () => Promise<string>;
@@ -18,6 +22,11 @@ export type RpcMethods = {
   accounts: () => Promise<string[]>;
   // should be restricted non snap wallet apps
   createAccount: () => Promise<string>;
+  createSecret: (createSecretParams: CreateSecretParams) => Promise<string>;
+  getPendingShields: (
+    getPendingShieldsParams: GetPendingShields,
+  ) => Promise<RedeemablePendingShield[]>;
+  redeemShield: (redeemShieldParams: RedeemShieldParams) => Promise<string>;
 };
 
 type InferArgs<M extends keyof RpcMethods> = RpcMethods[M] extends (

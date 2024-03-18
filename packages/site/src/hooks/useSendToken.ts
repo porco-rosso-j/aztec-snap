@@ -1,7 +1,7 @@
 import { AztecAddress } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
-import useBalance from './useBalance';
+import { useBalance } from './useBalance';
 import { useAppContext } from '../contexts/useAppContext';
 
 export const useSendToken = () => {
@@ -9,7 +9,7 @@ export const useSendToken = () => {
   const { snapWallet } = useAppContext();
   const { getBalance } = useBalance();
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingId, setLoadingId] = useState(0);
+  const [sendLoadingId, setSendLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
 
   const sendToken = async (
@@ -27,7 +27,7 @@ export const useSendToken = () => {
       setError(undefined);
       setTxHash(undefined);
       setIsLoading(true);
-      setLoadingId(pub ? 1 : 2);
+      setSendLoadingId(pub ? 1 : 2);
 
       const tokenContract = await TokenContract.at(
         AztecAddress.fromString(token),
@@ -72,5 +72,5 @@ export const useSendToken = () => {
     setIsLoading(false);
   };
 
-  return { sendTxHash, isLoading, loadingId, error, sendToken };
+  return { sendTxHash, isLoading, sendLoadingId, error, sendToken };
 };

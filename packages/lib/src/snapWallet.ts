@@ -7,7 +7,17 @@ import {
 import { SnapAccountInterface } from './snapWalletInterface.js';
 import { requestSnap } from './snap-utils/request.js';
 import { defaultSnapOrigin } from './constants.js';
-import { createAccountSnap, getAddressSnap } from './snapRpcMethods.js';
+import {
+  createAccountSnap,
+  getAddressSnap,
+  getPendingShieldsSnap,
+  redeemShieldSnap,
+} from './snapRpcMethods.js';
+import {
+  GetPendingShields,
+  RedeemShieldParams,
+  RedeemablePendingShield,
+} from '@abstract-crypto/aztec-snap';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
  */
@@ -15,6 +25,33 @@ export class SnapWallet extends AccountWallet {
   constructor(_pxe: PXE, _address: CompleteAddress, _snapRpc?: string) {
     const account = new SnapAccountInterface(_pxe, _address, _snapRpc);
     super(_pxe, account);
+  }
+
+  public async getPendingShields(
+    from: string,
+    token: string,
+    amount: number,
+  ): Promise<RedeemablePendingShield[] | undefined> {
+    return await getPendingShieldsSnap({
+      from,
+      token,
+      amount,
+    } as GetPendingShields);
+  }
+
+  public async redeemShield(
+    from: string,
+    token: string,
+    amount: number,
+    secretIndex: number,
+  ): Promise<string> {
+    return await redeemShieldSnap({
+      from,
+      token,
+      amount,
+      secretIndex,
+      redeemAll: false,
+    } as RedeemShieldParams);
   }
 }
 

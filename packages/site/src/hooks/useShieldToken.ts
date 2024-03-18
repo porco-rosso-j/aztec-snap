@@ -6,17 +6,25 @@ import {
 } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
-import useBalance from './useBalance';
+import { useBalance } from './useBalance';
 import { useAppContext } from '../contexts/useAppContext';
+import { addPendingShieldNoteToPXE } from '../utils';
+import { createSecretSnap } from '@abstract-crypto/aztec-snap-lib';
 
 export const useShieldToken = () => {
   const [shieldTxHash, setTxHash] = useState<string | undefined>();
   const { snapWallet } = useAppContext();
   const { getBalance } = useBalance();
   const [isLoading, setIsLoading] = useState(false);
+  const [shieldLoadingId, setShieldLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
 
-  const shieldToken = async (token: string, from: string, amount: number) => {
+  const shieldToken = async (
+    token: string,
+    from: string,
+    amount: number,
+    shield: boolean,
+  ) => {
     if (isLoading || !snapWallet) {
       return;
     }
@@ -25,23 +33,54 @@ export const useShieldToken = () => {
       setError(undefined);
       setTxHash(undefined);
       setIsLoading(true);
+      setShieldLoadingId(shield ? 1 : 2);
 
       const tokenContract = await TokenContract.at(
         AztecAddress.fromString(token),
         snapWallet,
       );
 
-      const secret = Fr.random();
-      const secretHash = computeMessageSecretHash(secret);
+      let sentTx;
+      if (shield) {
+        // const secret = Fr.random();
+        // console.log('secret: ', secret.toString());
+        // const secretHash = computeMessageSecretHash(secret);
+        const secretHash = await createSecretSnap({ from: from });
+        console.log('secretHash: ', secretHash);
 
-      console.log('sending: ');
-      const sentTx: SentTx = tokenContract.methods
-        .shield(AztecAddress.fromString(from), BigInt(amount), secretHash, 0)
-        .send();
+        console.log('sending: ');
+        sentTx = tokenContract.methods
+          .shield(
+            AztecAddress.fromString(from),
+            BigInt(amount),
+            Fr.fromString(secretHash),
+            0,
+          )
+          .send();
 
-      console.log('sentTx: ', sentTx);
+        console.log('sentTx: ', sentTx);
 
-      await sentTx.wait();
+        await sentTx.wait();
+
+        await addPendingShieldNoteToPXE(
+          AztecAddress.fromString(from),
+          AztecAddress.fromString(token),
+          BigInt(amount),
+          Fr.fromString(secretHash),
+          await sentTx.getTxHash(),
+        );
+      } else {
+        sentTx = tokenContract.methods
+          .unshield(
+            AztecAddress.fromString(from),
+            AztecAddress.fromString(from),
+            BigInt(amount),
+            0,
+          )
+          .send();
+        await sentTx.wait();
+      }
+
       console.log('sent?: ');
       const txHash = await sentTx.getTxHash();
       console.log('txHash: ', txHash);
@@ -55,5 +94,5 @@ export const useShieldToken = () => {
     setIsLoading(false);
   };
 
-  return { shieldTxHash, isLoading, error, shieldToken };
+  return { shieldTxHash, isLoading, shieldLoadingId, error, shieldToken };
 };

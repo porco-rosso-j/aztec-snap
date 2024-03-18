@@ -4,6 +4,10 @@ import {
   CreateAuthWitnessParam,
   SnapRpcRequestParams,
   RpcMethodTypes,
+  CreateSecretParams,
+  RedeemablePendingShield,
+  RedeemShieldParams,
+  GetPendingShields,
 } from './types';
 
 export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
@@ -83,6 +87,55 @@ export const createAccountSnap = async (snapId?: string): Promise<string> => {
       snapId: snapId ? snapId : defaultSnapOrigin,
     });
     return address;
+  } catch (e) {
+    console.log('e: ', e);
+    return '';
+  }
+};
+
+export const createSecretSnap = async (
+  createSecretParams: CreateSecretParams,
+  snapId?: string,
+): Promise<string> => {
+  try {
+    const secret = await snapRpcRequest({
+      snapRpcMethod: 'createSecret',
+      params: createSecretParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+    return secret;
+  } catch (e) {
+    console.log('e: ', e);
+    return '';
+  }
+};
+
+export const getPendingShieldsSnap = async (
+  getPendingShieldsParams: GetPendingShields,
+  snapId?: string,
+): Promise<RedeemablePendingShield[] | undefined> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'getPendingShields',
+      params: getPendingShieldsParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+    return undefined;
+  }
+};
+
+export const redeemShieldSnap = async (
+  redeemShieldParams: RedeemShieldParams,
+  snapId?: string,
+): Promise<string> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'redeemShield',
+      params: redeemShieldParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
   } catch (e) {
     console.log('e: ', e);
     return '';

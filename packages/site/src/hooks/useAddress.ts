@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import {
-  AztecSnap,
-  SnapWallet,
-  getAddressSnap,
-} from '@abstract-crypto/aztec-snap-lib';
+import { AztecSnap } from '@abstract-crypto/aztec-snap-lib';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
 import { useAppContext } from '../contexts/useAppContext';
-import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
+import { CompleteAddress } from '@aztec/aztec.js';
 import { PXE_URL } from '../utils';
 // import { CompleteAddress } from '@aztec/aztec.js';
 

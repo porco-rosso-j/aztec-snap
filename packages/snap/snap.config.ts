@@ -1,5 +1,5 @@
 import type { SnapConfig } from '@metamask/snaps-cli';
-import { resolve } from 'path';
+import path, { resolve } from 'path';
 import { merge } from '@metamask/snaps-cli';
 import webpack from 'webpack';
 
@@ -57,7 +57,10 @@ const config: SnapConfig = {
       mode: 'production',
 
       resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.ts', '.js'],
+        alias: {
+          src: path.resolve(__dirname, 'src/'), // Match the baseUrl in tsconfig.json
+        },
         fallback: {
           crypto: false,
           os: false,
