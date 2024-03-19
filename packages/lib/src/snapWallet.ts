@@ -6,21 +6,29 @@ import {
 } from '@aztec/aztec.js';
 import { SnapAccountInterface } from './snapWalletInterface.js';
 import { requestSnap } from './snap-utils/request.js';
-import { defaultSnapOrigin } from './constants.js';
+import { defaultSnapOrigin, snapVersion } from './constants.js';
 import {
+  addTokenSnap,
   createAccountSnap,
   createSecretSnap,
   getAddressSnap,
   getBalanceSnap,
   getPendingShieldsSnap,
+  getTokensSnap,
+  getTransactionsSnap,
   redeemShieldSnap,
 } from './snapRpcMethods.js';
 import {
+  AddTokenParams,
   CreateSecretParams,
   GetBalanceParams,
   GetPendingShields,
+  GetTokensParams,
+  GetTransactionsParams,
   RedeemShieldParams,
   RedeemablePendingShield,
+  Token,
+  Transaction,
 } from '@abstract-crypto/aztec-snap';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
@@ -77,6 +85,26 @@ export class SnapWallet extends AccountWallet {
       redeemAll: false,
     } as RedeemShieldParams);
   }
+
+  public async getTransactions(from: string): Promise<Transaction[]> {
+    return await getTransactionsSnap({
+      from,
+    } as GetTransactionsParams);
+  }
+
+  public async getTokens(from: string): Promise<Token[]> {
+    return await getTokensSnap({
+      from,
+    } as GetTokensParams);
+  }
+
+  public async addToken(from: string, address: string, token: Token) {
+    await addTokenSnap({
+      from,
+      address,
+      token,
+    } as AddTokenParams);
+  }
 }
 
 export class AztecSnap {
@@ -88,13 +116,11 @@ export class AztecSnap {
     this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
   }
   async connect() {
-    await requestSnap(this.snapRpc, '0.1.0');
+    await requestSnap(this.snapRpc, snapVersion);
 
     let address = await this.getSelectedAddress();
-    console.log('address: ', address);
     if (!address) {
       address = await createAccountSnap(this.snapRpc);
-      console.log('created address: ', address);
     }
     return this.getSnapWallet(CompleteAddress.fromString(address));
   }

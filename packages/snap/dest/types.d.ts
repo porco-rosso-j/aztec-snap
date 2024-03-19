@@ -21,7 +21,7 @@ export type ApiParams = {
     keyDeriver?: BIP44AddressKeyDeriver;
     aztec: any;
 };
-export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams;
+export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams | GetTokensParams | AddTokenParams;
 export type SerializedFunctionCall = {
     to: string;
     functionData: string;
@@ -64,6 +64,27 @@ export type GetBalanceParams = {
     from: string;
     address: string;
     token: string;
+};
+export type GetTokensParams = {
+    from: string;
+};
+export type AddTokenParams = {
+    from: string;
+    token: Token;
+};
+export type Token = {
+    address: string;
+    name: string;
+    symbol: string;
+    decimal: number;
+};
+export type GetTransactionsParams = {
+    from: string;
+};
+export type Transaction = {
+    txHash: string;
+    contract: string;
+    private: boolean;
 };
 export type PrivateKeys = {
     encryptionPrivateKey: GrumpkinPrivateKey;

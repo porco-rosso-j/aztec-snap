@@ -19,6 +19,9 @@ import {
   getRedeemablePendingShields,
   redeemShield,
   getBalance,
+  addToken,
+  getTokens,
+  getTransactions,
 } from './rpc';
 import { getAddressKeyDeriver } from './utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
@@ -88,14 +91,12 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'aztec_redeemShield':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return redeemShield(apiParams);
-
-    // generateSecret
-    // addNote
-    // addTokens
-    // getTokens
-    // getPendingShields
-    // getBalance
-    // redeem_shield
+    case 'aztec_addToken':
+      return addToken(apiParams);
+    case 'aztec_getTokens':
+      return getTokens(apiParams);
+    case 'aztec_getTransactions':
+      return getTransactions(apiParams);
 
     default:
       throw new Error('Method not found.');

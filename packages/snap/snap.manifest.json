@@ -7,11 +7,11 @@
     "url": "https://github.com/porco-rosso-j/aztec-snap.git"
   },
   "source": {
-    "shasum": "kCaK8+7yrLfphyZfdYgDdzuGsmJ4vQJVXQC1QwVA5hc=",
+    "shasum": "AvOyzCb+TofxvUyY7NvSs+jv3mfKtp/UGAbNzclpqXA=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
-        "iconPath": "images/icon.svg",
+        "iconPath": "images/icon-w.svg",
         "packageName": "@abstract-crypto/aztec-snap",
         "registry": "https://registry.npmjs.org/"
       }

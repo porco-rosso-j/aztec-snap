@@ -39,33 +39,3 @@ export const createSecretHash = async (apiParams: ApiParams) => {
 
   return secretHash.toString();
 };
-
-// const secrets = [
-//   {
-//     index: 0,
-//     salt: 0,
-//     secertHash: '0x0000',
-//     txHash: '0x0000',
-//   },
-// ];
-
-/*
-
-app side
-
-struct PendingShield {
-    index: number,
-    salt: string,
-    secretHash: string
-}
-
-mapping (bytes32 => PendingShield) public shields; // tx hash => ps
-
-how to recover secrets?
-just loop but how many times?
-up to nonce but more efficient way?
-can token contract provide info of how many pending shield an account has?
-how to exclude already-read ones?
-by number of note given by `pxe.getNotes` or getNoteNonces()
-
-*/

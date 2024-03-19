@@ -1,19 +1,18 @@
 export type * from '@abstract-crypto/aztec-snap';
 import type {
+  AddTokenParams,
   CreateAuthWitnessParam,
   CreateSecretParams,
   GetBalanceParams,
   GetPendingShields,
+  GetTokensParams,
+  GetTransactionsParams,
   RedeemShieldParams,
   RedeemablePendingShield,
   SendTxParams,
+  Token,
+  Transaction,
 } from '@abstract-crypto/aztec-snap';
-
-// Type for getAddress function
-// export type GetAddressFunction = () => Promise<string>;
-// export type createAccountFunction = () => Promise<string>;
-// // export type GetTxFunction = () => Promise<any[]>; // Replace 'any' with a more specific type if possible
-// export type SendTxFunction = ({ txRequest }: SendTxParams) => Promise<string>;
 
 export type RpcMethods = {
   sendTx: (sendTxParams: SendTxParams) => Promise<string>;
@@ -29,6 +28,11 @@ export type RpcMethods = {
   ) => Promise<RedeemablePendingShield[]>;
   redeemShield: (redeemShieldParams: RedeemShieldParams) => Promise<string>;
   getBalance: (getBalanceParams: GetBalanceParams) => Promise<number[]>;
+  addToken: (addTokenParams: AddTokenParams) => void;
+  getTokens: (getTokenParams: GetTokensParams) => Token[];
+  getTransactions: (
+    getTransactionsParams: GetTransactionsParams,
+  ) => Transaction[];
 };
 
 type InferArgs<M extends keyof RpcMethods> = RpcMethods[M] extends (
@@ -46,7 +50,5 @@ export type RpcMethodTypes = {
 
 export type SnapRpcRequestParams<M extends keyof RpcMethodTypes> =
   RpcMethodTypes[M]['input'] extends undefined
-    ? { snapRpcMethod: M; snapId: string } // Include snapId here
+    ? { snapRpcMethod: M; snapId: string }
     : { snapRpcMethod: M; params: RpcMethodTypes[M]['input']; snapId: string };
-// ? { snapRpcMethod: M }
-// : { snapRpcMethod: M; params: RpcMethodTypes[M]['input'] };

@@ -8,14 +8,12 @@ export const computeSecret = async (
     Buffer.from(new TextEncoder().encode('aztec_createSecretHash')),
   );
 
-  console.log('domainSeparatorBuffer ', domainSeparatorBuffer);
-
   return aztec.Fr.fromBuffer(
     aztec.sha256(
       Buffer.concat([
         domainSeparatorBuffer,
         privateKey,
-        Buffer.from(contract),
+        aztec.AztecAddress.fromString(contract).toBuffer(),
         new aztec.Fr(index).toBuffer(),
       ]),
     ),

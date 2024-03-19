@@ -16,16 +16,12 @@ export function Header(props: HeaderProps) {
   const { isFlask, snapsDetected, installedSnap, detect } =
     useMetaMaskContext();
 
-  console.log('installedSnap: ', installedSnap);
-
   const navigate = useNavigate();
   const [memuId, setMenuId] = useState(0);
 
   const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
     ? isFlask
     : snapsDetected;
-
-  console.log('isMetaMaskReady: ', isMetaMaskReady);
 
   const menuTextStyle = (_menuId: number) => {
     return {
@@ -44,7 +40,9 @@ export function Header(props: HeaderProps) {
         : menu_id == 1
         ? '/token'
         : menu_id == 2
-        ? '/transaction'
+        ? '/bridge'
+        : menu_id == 3
+        ? '/defi'
         : '/',
     );
   };
@@ -83,7 +81,10 @@ export function Header(props: HeaderProps) {
           Tokens
         </Text>
         <Text style={menuTextStyle(2)} onClick={() => handleNavigate(2)}>
-          Transactions
+          Bridge
+        </Text>
+        <Text style={menuTextStyle(3)} onClick={() => handleNavigate(3)}>
+          DeFi
         </Text>
       </Group>
 

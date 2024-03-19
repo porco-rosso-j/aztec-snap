@@ -9,6 +9,11 @@ import {
   RedeemShieldParams,
   GetPendingShields,
   GetBalanceParams,
+  AddTokenParams,
+  GetTokensParams,
+  Token,
+  GetTransactionsParams,
+  Transaction,
 } from './types';
 
 export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
@@ -151,6 +156,53 @@ export const getBalanceSnap = async (
     return await snapRpcRequest({
       snapRpcMethod: 'getBalance',
       params: getBalanceParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+    return [];
+  }
+};
+
+export const addTokenSnap = async (
+  addTokenParams: AddTokenParams,
+  snapId?: string,
+) => {
+  try {
+    await snapRpcRequest({
+      snapRpcMethod: 'addToken',
+      params: addTokenParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+  }
+};
+
+export const getTokensSnap = async (
+  getTokensParams: GetTokensParams,
+  snapId?: string,
+): Promise<Token[]> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'getTokens',
+      params: getTokensParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+    return [];
+  }
+};
+
+export const getTransactionsSnap = async (
+  getTransactionsParams: GetTransactionsParams,
+  snapId?: string,
+): Promise<Transaction[]> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'getTransactions',
+      params: getTransactionsParams,
       snapId: snapId ? snapId : defaultSnapOrigin,
     });
   } catch (e) {

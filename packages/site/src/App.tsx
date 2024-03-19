@@ -3,7 +3,7 @@ import '@mantine/notifications/styles.css';
 import { useTheme } from './contexts/theme';
 import { AppContextProviderComponent } from './contexts/useAppContext';
 import { MetaMaskProvider } from './contexts/MetamaskContext';
-import { AppShell, Box, Button, Group, MantineProvider } from '@mantine/core';
+import { AppShell, Box, MantineProvider } from '@mantine/core';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Wallet from './components/Wallet';
 import { Header } from './components';
@@ -19,9 +19,20 @@ const App = () => {
       <MantineProvider>
         <AppContextProviderComponent>
           <AppShell
-            style={{ backgroundColor: isDarkTheme ? '#35194D' : '#E8E0F0' }}
+            style={{
+              // backgroundColor: isDarkTheme
+              //   ? 'linear-gradient(135deg, #463D3B, #3D085F)'
+              //   : '#E8E0F0',
+              background: isDarkTheme ? '#251D37' : '#CEAAFD',
+            }}
           >
-            <AppShell.Main>
+            <AppShell.Main
+              style={{
+                background: isDarkTheme
+                  ? 'linear-gradient(135deg, #251D37, #3D085F)'
+                  : 'linear-gradient(135deg, #CEAAFD, #F9F5FD)',
+              }}
+            >
               <Notifications />
               <MetaMaskProvider>
                 <HashRouter>
@@ -36,10 +47,8 @@ const App = () => {
                       }
                     />
                     <Route path="/token" element={<Box>Tokens</Box>} />
-                    <Route
-                      path="/transaction"
-                      element={<Box>Transaction</Box>}
-                    />
+                    <Route path="/bridge" element={<Box>bridge</Box>} />
+                    <Route path="/defi" element={<Box>defi</Box>} />
                   </Routes>
                   <Footer isDarkTheme={isDarkTheme} />
                 </HashRouter>

@@ -145,7 +145,10 @@ export default function Wallet(props: WalletProps) {
           marginBottom: '1.5rem',
           boxShadow: 'rgb(0 0 0 / 8%) 0rem 0.37rem 0.62rem',
           borderRadius: '1.37rem',
-          backgroundColor: props.isDarkTheme ? '#402F51' : 'white',
+          backgroundColor: props.isDarkTheme ? '#2E213E' : 'white',
+          background: props.isDarkTheme
+            ? 'radial-gradient(at center bottom, #2E213E, #412E4D)'
+            : 'radial-gradient(at center bottom, #FFFFFF, #F2F0FF)',
         }}
       >
         {/* <Onboard address={address} getAddress={getAddress} /> */}

@@ -1,4 +1,5 @@
 import { Group, Text, Anchor } from '@mantine/core';
+import MetamaskLogo from '../assets/metamask_fox.svg';
 
 type FooterProps = {
   isDarkTheme: boolean;
@@ -15,22 +16,27 @@ export function Footer(props: FooterProps) {
 
   return (
     <Group
-      py={20}
+      mt={60}
+      pb={20}
       justify="center"
       style={{
-        position: 'fixed', // Fix position to the bottom
         bottom: 0,
         left: 0,
         right: 0,
       }}
     >
       <Anchor
-        href="https://github.com/porco-rosso-j/aztec-snap/tree/dev"
+        mr={20}
+        href="https://github.com/porco-rosso-j/aztec-snap"
         target="_blank"
         rel="noreferrer"
       >
         <Text style={menuTextStyle}>github</Text>
       </Anchor>
+      <Text mr={-6} style={menuTextStyle}>
+        Powered by
+      </Text>
+      <img src={MetamaskLogo} style={{ width: 20, height: 20 }} />
     </Group>
   );
 }
