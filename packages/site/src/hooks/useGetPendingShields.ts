@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAppContext } from '../contexts/useAppContext';
 import { RedeemablePendingShield } from '@abstract-crypto/aztec-snap-lib';
 
-export const useGetPendingShields = () => {
-  const { gasToken, snapWallet } = useAppContext();
+export const useGetPendingShields = (token: string) => {
+  const { snapWallet } = useAppContext();
   const [pendingShields, setPendingShields] = useState<
     RedeemablePendingShield[] | undefined
   >(undefined);
@@ -14,7 +14,7 @@ export const useGetPendingShields = () => {
     if (snapWallet) {
       const response = await snapWallet.getPendingShields(
         snapWallet.getAddress().toString(),
-        gasToken,
+        token,
       );
       setPendingShields(response);
     }
@@ -22,7 +22,7 @@ export const useGetPendingShields = () => {
 
   useEffect(() => {
     fetchPendingShields();
-  }, [snapWallet, gasToken]);
+  }, [snapWallet, token]);
 
   return {
     pendingShields,

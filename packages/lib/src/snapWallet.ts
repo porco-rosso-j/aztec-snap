@@ -98,10 +98,9 @@ export class SnapWallet extends AccountWallet {
     } as GetTokensParams);
   }
 
-  public async addToken(from: string, address: string, token: Token) {
+  public async addToken(from: string, token: Token) {
     await addTokenSnap({
       from,
-      address,
       token,
     } as AddTokenParams);
   }

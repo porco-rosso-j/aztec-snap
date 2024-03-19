@@ -25,14 +25,6 @@ export function Footer(props: FooterProps) {
         right: 0,
       }}
     >
-      <Anchor
-        mr={20}
-        href="https://github.com/porco-rosso-j/aztec-snap"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <Text style={menuTextStyle}>github</Text>
-      </Anchor>
       <Text mr={-6} style={menuTextStyle}>
         Powered by
       </Text>

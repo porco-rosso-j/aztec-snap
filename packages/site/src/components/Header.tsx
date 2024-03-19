@@ -1,11 +1,17 @@
 import { Group, Text, Button, Anchor } from '@mantine/core';
 import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
+import imgGithub from '../../public/github-mark.png';
+import imgGithubWhite from '../../public/github-mark-w.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { PXE_URL, defaultSnapOrigin } from '../utils';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
-import { AztecSnap, isLocalSnap } from '@abstract-crypto/aztec-snap-lib';
+import {
+  AztecSnap,
+  isLocalSnap,
+  defaultSnapOrigin,
+  PXE_URL,
+} from '@abstract-crypto/aztec-snap-lib';
 
 type HeaderProps = {
   isDarkTheme: boolean;
@@ -38,10 +44,8 @@ export function Header(props: HeaderProps) {
       menu_id == 0
         ? '/'
         : menu_id == 1
-        ? '/token'
-        : menu_id == 2
         ? '/bridge'
-        : menu_id == 3
+        : menu_id == 2
         ? '/defi'
         : '/',
     );
@@ -50,7 +54,6 @@ export function Header(props: HeaderProps) {
   const handleRequest = async () => {
     const aztecSnap = new AztecSnap(PXE_URL);
     const snapWallet = await aztecSnap.connect();
-    console.log('snapWallet.getAddress: ', snapWallet.getAddress());
     if (snapWallet) {
       detect();
       saveSnapWallet(snapWallet);
@@ -75,20 +78,33 @@ export function Header(props: HeaderProps) {
       </Text>
       <Group gap={30} mt={5}>
         <Text style={menuTextStyle(0)} onClick={() => handleNavigate(0)}>
-          Home
+          Wallet
         </Text>
         <Text style={menuTextStyle(1)} onClick={() => handleNavigate(1)}>
-          Tokens
-        </Text>
-        <Text style={menuTextStyle(2)} onClick={() => handleNavigate(2)}>
           Bridge
         </Text>
-        <Text style={menuTextStyle(3)} onClick={() => handleNavigate(3)}>
+        <Text style={menuTextStyle(2)} onClick={() => handleNavigate(2)}>
           DeFi
         </Text>
       </Group>
 
       <Group gap={30}>
+        <Anchor
+          pt={7}
+          mr={-3}
+          href="https://github.com/porco-rosso-j/aztec-snap"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            src={props.isDarkTheme ? imgGithubWhite : imgGithub}
+            alt="github"
+            style={{
+              width: 25,
+              height: 25,
+            }}
+          />
+        </Anchor>
         {props.isDarkTheme ? (
           <IconSun
             style={{ color: 'white' }}
@@ -126,13 +142,6 @@ export function Header(props: HeaderProps) {
           >
             Reconnect
           </Button>
-          //   <Button
-          //   style={BottunStyle}
-          //   onClick={logout}
-          //   disabled={!installedSnap}
-          // >
-          //   Disconnect
-          // </Button>
         )}
       </Group>
     </Group>

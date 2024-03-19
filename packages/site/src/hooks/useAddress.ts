@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { AztecSnap } from '@abstract-crypto/aztec-snap-lib';
+import { AztecSnap, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';
 import { useAppContext } from '../contexts/useAppContext';
 import { CompleteAddress } from '@aztec/aztec.js';
-import { PXE_URL } from '../utils';
-// import { CompleteAddress } from '@aztec/aztec.js';
 
 export const useAddress = () => {
   const { installedSnap } = useMetaMaskContext();
   const { snapWallet, saveSnapWallet } = useAppContext();
   const [address, setAddress] = useState<string>('');
-  console.log('address: ', address);
-  console.log('snapWallet in use add: ', snapWallet);
 
   useEffect(() => {
     if (installedSnap && !address) {

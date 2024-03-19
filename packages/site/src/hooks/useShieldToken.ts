@@ -1,15 +1,9 @@
-import {
-  AztecAddress,
-  Fr,
-  SentTx,
-  computeMessageSecretHash,
-} from '@aztec/aztec.js';
+import { AztecAddress, Fr } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { useState } from 'react';
 import { useBalance } from './useBalance';
 import { useAppContext } from '../contexts/useAppContext';
 import { addPendingShieldNoteToPXE } from '../utils';
-import { createSecretSnap } from '@abstract-crypto/aztec-snap-lib';
 
 export const useShieldToken = () => {
   const [shieldTxHash, setTxHash] = useState<string | undefined>();

@@ -1,5 +1,5 @@
 import { PXE, AccountWallet, CompleteAddress } from '@aztec/aztec.js';
-import { RedeemablePendingShield } from '@abstract-crypto/aztec-snap';
+import { RedeemablePendingShield, Token, Transaction } from '@abstract-crypto/aztec-snap';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
  */
@@ -9,6 +9,9 @@ export declare class SnapWallet extends AccountWallet {
     createSecretHash(from: string, contract: string): Promise<string>;
     getPendingShields(from: string, token: string): Promise<RedeemablePendingShield[] | undefined>;
     redeemShield(from: string, token: string, amount: number, secretIndex: number): Promise<string>;
+    getTransactions(from: string): Promise<Transaction[]>;
+    getTokens(from: string): Promise<Token[]>;
+    addToken(from: string, token: Token): Promise<void>;
 }
 export declare class AztecSnap {
     private pxe;

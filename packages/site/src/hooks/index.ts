@@ -6,3 +6,4 @@ export * from './useSendToken';
 export * from './useShieldToken';
 export * from './useRedeemToken';
 export * from './useGetPendingShields';
+export * from './useGetTokens';

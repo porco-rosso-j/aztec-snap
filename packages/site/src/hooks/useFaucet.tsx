@@ -4,7 +4,7 @@ import {
   computeMessageSecretHash,
   createPXEClient,
 } from '@aztec/aztec.js';
-import { PXE_URL } from '../utils';
+import { Token, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
 import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
 import { TokenContract } from '@aztec/noir-contracts.js';
 import { notifications } from '@mantine/notifications';
@@ -12,99 +12,105 @@ import { useAppContext } from '../contexts/useAppContext';
 import { addPendingShieldNoteToPXE } from '../utils';
 
 export function useFaucet() {
-  const { gasToken, saveGasToken } = useAppContext();
+  const { snapWallet } = useAppContext();
 
-  async function getFaucet(recipient: string, pub: boolean): Promise<string> {
+  async function getFaucet(
+    recipient: string,
+    token_num: number,
+  ): Promise<string> {
+    if (!snapWallet) return '';
+
     notifications.show({
       title: 'Requesting Faucet',
-      message: 'it may take more than 20 seconds...',
+      message: 'it may take more than 30 seconds...',
     });
     const pxe = createPXEClient(PXE_URL);
     const wallet = (await getInitialTestAccountsWallets(pxe))[0];
 
+    let token: Token = {
+      address: '',
+      name: 'Token' + token_num.toString(),
+      symbol: 'TKN' + token_num.toString(),
+      decimal: 18,
+    };
+
     let tokenContract;
     try {
-      if (gasToken) {
-        tokenContract = await TokenContract.at(
-          AztecAddress.fromString(gasToken),
-          wallet,
-        );
-      } else {
-        notifications.show({
-          title: 'Deploying Token',
-          message: 'gas token being deployed...',
-        });
-        tokenContract = await TokenContract.deploy(
-          wallet,
+      notifications.show({
+        title: 'Deploying Token',
+        message: 'token being deployed...',
+      });
+
+      tokenContract = await TokenContract.deploy(
+        wallet,
+        wallet.getAddress(),
+        token.name,
+        token.symbol,
+        token.decimal,
+      )
+        .send()
+        .deployed();
+
+      token.address = tokenContract.address.toString();
+
+      console.log('token: ', token);
+
+      notifications.show({
+        title: 'Minting Token Publicly',
+        message: 'token being minted...',
+      });
+      await tokenContract.methods
+        .mint_public(AztecAddress.fromString(recipient), 1000n)
+        .send()
+        .wait();
+
+      const secret = Fr.random();
+      const secretHash = computeMessageSecretHash(secret);
+
+      notifications.show({
+        title: 'Minting Token Privately',
+        message: 'token being minted...',
+      });
+      const tx = await tokenContract.methods
+        .mint_private(100n, secretHash)
+        .send()
+        .wait();
+
+      await addPendingShieldNoteToPXE(
+        wallet.getAddress(),
+        AztecAddress.fromString(token.address),
+        100n,
+        secretHash,
+        tx.txHash,
+      );
+
+      notifications.show({
+        title: 'Redeeming Token',
+        message: 'token being redeemed...',
+      });
+
+      await tokenContract.methods
+        .redeem_shield(wallet.getAddress(), 100n, secret)
+        .send()
+        .wait();
+
+      const sendTx = await tokenContract.methods
+        .transfer(
           wallet.getAddress(),
-          'GAS Token',
-          'GAS',
-          18,
-        )
-          .send()
-          .deployed();
-
-        saveGasToken(tokenContract.address.toString());
-      }
-
-      if (pub) {
-        const tx = await tokenContract.methods
-          .mint_public(AztecAddress.fromString(recipient), 1000n)
-          .send()
-          .wait();
-
-        console.log('ret: ', tx);
-        notifications.show({
-          title: 'Faucet Sent!',
-          message: 'check your public balance',
-        });
-      } else {
-        const secret = Fr.random();
-        const secretHash = computeMessageSecretHash(secret);
-
-        const tx = await tokenContract.methods
-          .mint_private(1000n, secretHash)
-          .send()
-          .wait();
-
-        console.log('wallet.getAddress(): ', wallet.getAddress());
-        console.log(
-          'AztecAddress.fromString(recipient): ',
           AztecAddress.fromString(recipient),
-        );
+          100n,
+          0,
+        )
+        .send()
+        .wait();
 
-        await addPendingShieldNoteToPXE(
-          wallet.getAddress(),
-          AztecAddress.fromString(gasToken),
-          1000n,
-          secretHash,
-          tx.txHash,
-        );
+      console.log('sendTx: ', sendTx);
+      notifications.show({
+        title: 'Faucet Sent!',
+        message: 'check your public and private balance',
+      });
 
-        const redeemTx = await tokenContract.methods
-          .redeem_shield(wallet.getAddress(), 1000n, secret)
-          .send()
-          .wait();
-
-        console.log('redeemTx: ', redeemTx);
-
-        const sendTx = await tokenContract.methods
-          .transfer(
-            wallet.getAddress(),
-            AztecAddress.fromString(recipient),
-            1000n,
-            0,
-          )
-          .send()
-          .wait();
-
-        console.log('ret: ', tx);
-        console.log('sendTx: ', sendTx);
-        notifications.show({
-          title: 'Faucet Sent!',
-          message: 'check your private balance',
-        });
-      }
+      await snapWallet.addToken(snapWallet.getAddress().toString(), token);
 
       return tokenContract.address.toString();
     } catch (e) {
