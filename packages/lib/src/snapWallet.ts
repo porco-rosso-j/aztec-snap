@@ -119,12 +119,11 @@ export class AztecSnap {
 
     let address = await this.getSelectedAddress();
     if (!address) {
+      // doesn't have to deploy a new acc here but just for ease atm
       address = await createAccountSnap(this.snapRpc);
     }
     return this.getSnapWallet(CompleteAddress.fromString(address));
   }
-
-  reconnect() {}
 
   disconnect() {}
 

@@ -18,7 +18,6 @@ export declare class AztecSnap {
     protected readonly snapRpc: string;
     constructor(_PXE_URL: string, _snapRpc?: string);
     connect(): Promise<SnapWallet>;
-    reconnect(): void;
     disconnect(): void;
     getSelectedAddress(): Promise<string>;
     getSnapWallet(address: CompleteAddress): Promise<SnapWallet>;

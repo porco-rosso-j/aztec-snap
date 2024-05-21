@@ -1,8 +1,8 @@
 import { Group, Text, Button, Anchor } from '@mantine/core';
 import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
-import imgGithub from '../../public/github-mark.png';
-import imgGithubWhite from '../../public/github-mark-w.png';
+import imgGithub from '../assets/github-mark.png';
+import imgGithubWhite from '../assets/github-mark-w.png';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useMetaMaskContext } from '../contexts/MetamaskContext';

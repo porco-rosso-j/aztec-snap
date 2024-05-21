@@ -7,22 +7,11 @@ import type {
 } from '@aztec/aztec.js';
 import { Account, ApiParams } from '../types';
 
-// export type Salt = Fr | number | bigint;
-// export const getEcdsaAccountManager = async (
-//   apiParams: ApiParams,
-//   pxe: PXE,
-//   encryptionPrivateKey: Fq,
-//   signingPrivateKey: Buffer,
-//   salt?: Salt | CompleteAddress,
-// ) => {
-//   const aztecAccount = await import('@aztec/accounts/ecdsa');
-//   return new apiParams.aztec.AccountManager(
-//     pxe,
-//     encryptionPrivateKey,
-//     new aztecAccount.EcdsaAccountContract(signingPrivateKey),
-//     salt,
-//   );
-// };
+export type Salt = Fr | number | bigint;
+export const salt = async (): Promise<Salt> => {
+  const aztec = await import(`@aztec/aztec.js`);
+  return new aztec.Fr(0);
+};
 
 export const getECDSAWallet = async (
   pxe: PXE,
@@ -38,10 +27,6 @@ export const getECDSAWallet = async (
 
   return account;
 };
-// export const getECDSAAccount = async (privatekey:Buffer)  => {
-//   const aztecAccount = await import('@aztec/accounts/ecdsa');
-//   return new aztecAccount.EcdsaAccountContract(privatekey),
-// }
 
 export const validateSender = async (
   apiParams: ApiParams,

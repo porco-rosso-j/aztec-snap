@@ -1,9 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Box, Text, Group, Stack } from '@mantine/core';
-import { IconCopy, IconCopyCheck } from '@tabler/icons-react';
+import {
+  Box,
+  Text,
+  Group,
+  Stack,
+  CopyButton,
+  ActionIcon,
+  rem,
+  Tooltip,
+} from '@mantine/core';
+import { IconCheck, IconCopy, IconCopyCheck } from '@tabler/icons-react';
 import { TokenWithBalance, shortenAddress } from '../utils';
 import { useBalance, useAddress, useGetTokens } from '../hooks';
 import { ManageToken, Faucet, TokenList } from '.';
+import { IconTooltip } from '@tabler/icons-react';
+import { CopyButtonIcon } from './CopyButtonIcon';
 
 type WalletProps = {
   isDarkTheme: boolean;
@@ -61,24 +72,12 @@ export default function Wallet(props: WalletProps) {
         <Stack align="center" gap="md">
           <Stack gap={1}>
             <Group>
-              <Text style={textTextStyle} size="lg">
+              <Text mr={-5} style={textTextStyle} size="lg">
                 {address ? shortenAddress(address) : 'No Address Found'}
               </Text>
-              {!copied ? (
-                <IconCopy
-                  onClick={handleCopy}
-                  color={props.isDarkTheme ? 'white' : 'gray'}
-                  size={'18px'}
-                />
-              ) : (
-                <IconCopyCheck
-                  color={props.isDarkTheme ? 'gray' : 'black'}
-                  size={'18px'}
-                />
-              )}
+              <CopyButtonIcon address={address} />
             </Group>
           </Stack>
-
           <Stack align="center" mt={15} gap={3}>
             <Group gap={50}>
               <Stack align="center">

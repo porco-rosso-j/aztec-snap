@@ -1,6 +1,6 @@
 import { AccountManager } from '@aztec/aztec.js';
 import { Account, ApiParams } from 'src/types';
-import { PXE_URL, confirmCreateAccount, getPrivateKeys } from 'src/utils';
+import { PXE_URL, confirmCreateAccount, getPrivateKeys, salt } from 'src/utils';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
   if (!(await confirmCreateAccount())) {
@@ -11,6 +11,11 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
     const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
       apiParams,
     );
+    console.log(
+      'encryptionPrivateKey createAcc: ',
+      encryptionPrivateKey.toString(),
+    );
+    console.log('signingPrivateKey createAcc: ', signingPrivateKey.toString());
 
     const pxe = apiParams.aztec.createPXEClient(PXE_URL);
 
@@ -20,6 +25,7 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
       pxe,
       encryptionPrivateKey,
       new aztecAccount.EcdsaAccountContract(signingPrivateKey),
+      // await salt() in prod
     );
 
     const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
