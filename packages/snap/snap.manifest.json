@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "description": "A snap to manage Dogecoin assets",
+  "description": "A snap to manage assets on Aztec Network",
   "proposedName": "Aztec Snap",
   "repository": {
     "type": "git",
     "url": "https://github.com/porco-rosso-j/aztec-snap.git"
   },
   "source": {
-    "shasum": "/uqHGJHCn+C5ZHXr3qzGQO4XSC1iUVPUfnC7dpKIyx0=",
+    "shasum": "m0iDkDwJTYUpEIngTaBotxRV9TcINpvGcTqXULalDC8=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -20,8 +20,10 @@
   "initialPermissions": {
     "snap_dialog": {},
     "endowment:rpc": {
-      "dapps": true,
-      "snaps": false
+      "allowedOrigins": [
+        "http://localhost:5173",
+        "http://localhost:8080"
+      ]
     },
     "endowment:webassembly": {},
     "endowment:network-access": {},

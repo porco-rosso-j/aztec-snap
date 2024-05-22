@@ -1,5 +1,5 @@
 import { ApiParams, CreateSecretParams } from 'src/types';
-import { getPrivateKeys, validateSender, computeSecret } from 'src/utils';
+import { getPrivateKeys, validateSender, computeSecret } from '../utils';
 
 export const createSecretHash = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as CreateSecretParams;

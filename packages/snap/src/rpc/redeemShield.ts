@@ -6,7 +6,7 @@ import {
   getPrivateKeys,
   getStateAccount,
   validateSender,
-} from 'src/utils';
+} from '../utils';
 
 export const redeemShield = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as RedeemShieldParams;

@@ -18,7 +18,6 @@ export default defineConfig({
       './node_modules/@aztec/foundation',
       './node_modules/@aztec/noir-contracts.js',
       './node_modules/@aztec/protocol-contracts',
-      './node_modules/@aztec/types',
     ],
   },
   build: {

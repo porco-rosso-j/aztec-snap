@@ -1,4 +1,5 @@
-import { TxExecutionRequest } from '@aztec/aztec.js';
+import { AuthWitness, TxExecutionRequest } from '@aztec/aztec.js';
+import { ExecutionRequestInit } from '@aztec/aztec.js/entrypoint';
 import { ApiParams, SendTxParams } from 'src/types';
 import {
   PXE_URL,
@@ -8,7 +9,7 @@ import {
   getStateAccount,
   validateSender,
   deserializeFunctionCall,
-} from 'src/utils';
+} from '../utils';
 
 export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   const requestParams = apiParams.requestParams as SendTxParams;
@@ -33,8 +34,18 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
     throw new Error('Transaction must be approved by user');
   }
 
+  const authWit = await account.createAuthWit({
+    caller: account.getAddress(),
+    action: functionCall,
+  });
+
+  const execRequest: ExecutionRequestInit = {
+    calls: [functionCall],
+    authWitnesses: [authWit],
+  };
+
   const signedTxRequest: TxExecutionRequest =
-    await account.createTxExecutionRequest([functionCall]);
+    await account.createTxExecutionRequest(execRequest);
   // should save this tx hash in the state
   return signedTxRequest.toString();
 };

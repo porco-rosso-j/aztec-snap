@@ -1,7 +1,7 @@
 import {
   AztecAddress,
   Fr,
-  computeMessageSecretHash,
+  computeSecretHash,
   createPXEClient,
 } from '@aztec/aztec.js';
 import { Token, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
@@ -65,7 +65,7 @@ export function useFaucet() {
         .wait();
 
       const secret = Fr.random();
-      const secretHash = computeMessageSecretHash(secret);
+      const secretHash = computeSecretHash(secret);
 
       notifications.show({
         title: 'Minting Token Privately',

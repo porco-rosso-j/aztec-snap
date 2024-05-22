@@ -1,7 +1,8 @@
 import {
   AuthWitness,
   FunctionCall,
-  PackedArguments,
+  // PackedArguments,
+  PackedValues,
   TxExecutionRequest,
   CompleteAddress,
   Fr,
@@ -12,6 +13,7 @@ import { TxContext } from '@aztec/circuits.js';
 import { SerializedFunctionCall } from './types';
 import { defaultSnapOrigin } from './constants';
 import { createAuthWitnessSnap, sendTxSnap } from './snapRpcMethods';
+import { ExecutionRequestInit } from '@aztec/aztec.js/dest/entrypoint/entrypoint';
 
 export class SnapAccountInterface implements AccountInterface {
   private completeAddress: CompleteAddress;
@@ -24,31 +26,46 @@ export class SnapAccountInterface implements AccountInterface {
     this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
   }
 
+  getAddress() {
+    return this.getCompleteAddress().address;
+  }
+  getChainId() {
+    throw new Error('Method not implemented.');
+  }
+  getVersion() {
+    throw new Error('Method not implemented.');
+  }
+  createAuthWit(messageHashOrIntent: any): Promise<AuthWitness> {
+    throw new Error('Method not implemented.');
+  }
+
   async createTxExecutionRequest(
-    executions: FunctionCall[],
+    executions: ExecutionRequestInit,
   ): Promise<TxExecutionRequest> {
-    if (executions.length !== 1) {
-      throw new Error(
-        `Unexpected number of executions. Expected 1 but received ${executions.length}).`,
-      );
+    const { calls, authWitnesses = [], packedArguments = [] } = executions;
+
+    if (calls.length > 1) {
+      throw new Error(`Expected a single call, got ${calls.length}`);
     }
-    const [execution] = executions;
-    const packedArguments = PackedArguments.fromArgs(execution.args);
+
+    const call = calls[0];
+    const entrypointPackedValues = PackedValues.fromValues(call.args);
     const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
     const txContext = TxContext.empty(chainId, protocolVersion);
     const txRequest = new TxExecutionRequest(
-      execution.to,
-      execution.functionData,
-      packedArguments.hash,
+      call.to,
+      call.functionData,
+      entrypointPackedValues.hash,
       txContext,
-      [packedArguments],
+      [...packedArguments, entrypointPackedValues],
+      //authWitnesses,
       [],
     );
 
     const serializedFunctionCall: SerializedFunctionCall = {
-      to: execution.to.toString(),
+      to: call.to.toString(),
       functionData: txRequest.functionData.toBuffer().toString('hex'),
-      args: txRequest.packedArguments[0].args.map((argFr) => argFr.toString()),
+      args: txRequest.argsOfCalls.map((argFr) => argFr.toString()),
     };
 
     const sendTxParams = {

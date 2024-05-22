@@ -1,10 +1,4 @@
-import type {
-  AztecAddress,
-  CompleteAddress,
-  Fq,
-  Fr,
-  PXE,
-} from '@aztec/aztec.js';
+import type { AztecAddress, Fr, PXE } from '@aztec/aztec.js';
 import { Account, ApiParams } from '../types';
 
 export type Salt = Fr | number | bigint;
@@ -37,7 +31,7 @@ export const validateSender = async (
     (account) =>
       new apiParams.aztec.CompleteAddress(
         apiParams.aztec.AztecAddress.fromString(account.address),
-        apiParams.aztec.Point.fromString(account.publicKey),
+        // apiParams.aztec.Point.fromString(account.publicKey),
         apiParams.aztec.Fr.fromString(account.partialAddress),
       ).toString() === fromCompAddr,
   );

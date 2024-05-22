@@ -1,0 +1,94 @@
+diff --git a/node_modules/@aztec/foundation/dest/timer/timer.js b/node_modules/@aztec/foundation/dest/timer/timer.js
+index 253ca99..55bafe3 100644
+--- a/node_modules/@aztec/foundation/dest/timer/timer.js
++++ b/node_modules/@aztec/foundation/dest/timer/timer.js
+@@ -11,34 +11,36 @@
+  * \}, 1000);
+  */
+ export class Timer {
+-    constructor() {
+-        this.start = performance.now();
+-    }
+-    /**
+-     * Return microseconds.
+-     */
+-    us() {
+-        return this.ms() * 1000;
+-    }
+-    /**
+-     * Returns the elapsed time in milliseconds since the Timer instance was created.
+-     * Provides a simple and convenient way to measure the time duration between two events
+-     * or monitor performance of specific code sections.
+-     *
+-     * @returns The elapsed time in milliseconds.
+-     */
+-    ms() {
+-        return performance.now() - this.start;
+-    }
+-    /**
+-     * Returns the time elapsed since the Timer instance was created, in seconds.
+-     * The value is calculated by subtracting the initial start time from the current time
+-     * and dividing the result by 1000 to convert milliseconds to seconds.
+-     *
+-     * @returns The elapsed time in seconds.
+-     */
+-    s() {
+-        return this.ms() / 1000;
+-    }
++  constructor() {
++    // this.start = performance.now();
++    this.start = Date.now();
++  }
++  /**
++   * Return microseconds.
++   */
++  us() {
++    return this.ms() * 1000;
++  }
++  /**
++   * Returns the elapsed time in milliseconds since the Timer instance was created.
++   * Provides a simple and convenient way to measure the time duration between two events
++   * or monitor performance of specific code sections.
++   *
++   * @returns The elapsed time in milliseconds.
++   */
++  ms() {
++    // return performance.now() - this.start;
++    return Date.now() - this.start;
++  }
++  /**
++   * Returns the time elapsed since the Timer instance was created, in seconds.
++   * The value is calculated by subtracting the initial start time from the current time
++   * and dividing the result by 1000 to convert milliseconds to seconds.
++   *
++   * @returns The elapsed time in seconds.
++   */
++  s() {
++    return this.ms() / 1000;
++  }
+ }
+ //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGltZXIuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvdGltZXIvdGltZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7Ozs7Ozs7O0dBV0c7QUFDSCxNQUFNLE9BQU8sS0FBSztJQUdoQjtRQUNFLElBQUksQ0FBQyxLQUFLLEdBQUcsV0FBVyxDQUFDLEdBQUcsRUFBRSxDQUFDO0lBQ2pDLENBQUM7SUFFRDs7T0FFRztJQUNJLEVBQUU7UUFDUCxPQUFPLElBQUksQ0FBQyxFQUFFLEVBQUUsR0FBRyxJQUFJLENBQUM7SUFDMUIsQ0FBQztJQUVEOzs7Ozs7T0FNRztJQUNJLEVBQUU7UUFDUCxPQUFPLFdBQVcsQ0FBQyxHQUFHLEVBQUUsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDO0lBQ3hDLENBQUM7SUFFRDs7Ozs7O09BTUc7SUFDSSxDQUFDO1FBQ04sT0FBTyxJQUFJLENBQUMsRUFBRSxFQUFFLEdBQUcsSUFBSSxDQUFDO0lBQzFCLENBQUM7Q0FDRiJ9
+diff --git a/node_modules/@aztec/foundation/src/timer/timer.ts b/node_modules/@aztec/foundation/src/timer/timer.ts
+index ee96cbc..a04eea9 100644
+--- a/node_modules/@aztec/foundation/src/timer/timer.ts
++++ b/node_modules/@aztec/foundation/src/timer/timer.ts
+@@ -14,7 +14,8 @@ export class Timer {
+   private start: number;
+ 
+   constructor() {
+-    this.start = performance.now();
++    // this.start = performance.now();
++    this.start = Date.now();
+   }
+ 
+   /**
+@@ -32,7 +33,8 @@ export class Timer {
+    * @returns The elapsed time in milliseconds.
+    */
+   public ms() {
+-    return performance.now() - this.start;
++    // return performance.now() - this.start;
++    return Date.now() - this.start;
+   }
+ 
+   /**

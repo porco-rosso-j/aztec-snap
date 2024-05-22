@@ -23,14 +23,18 @@ import {
   getTokens,
   getTransactions,
 } from './rpc';
-import { getAddressKeyDeriver } from './utils';
+// import { getAddressKeyDeriver } from './utils';
+import { getAddressKeyDeriver } from './utils/key-utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
+// import { AztecAddress, CompleteAddress, Fr, Point } from '@aztec/aztec.js';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request,
 }) => {
+  console.log('ey yo');
   const requestParams = request?.params as unknown as ApiRequestParams;
+  console.log('1');
 
   let state: ManageStateResult = await snap.request({
     method: 'snap_manageState',
@@ -38,6 +42,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       operation: 'get',
     },
   });
+
+  console.log('2');
 
   if (!state) {
     state = {
@@ -56,47 +62,59 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       },
     });
   }
-  const aztec = await import('@aztec/aztec.js');
+
+  console.log('3');
+  console.log('method', request.method);
+  console.debug('method', request.method);
+
+  // const aztec = await import('@aztec/aztec.js');
+  // await aztec.initAztecJs();
   const apiParams: ApiParams = {
     state,
     requestParams,
-    aztec,
+    // aztec,
   };
 
-  console.log('requestParams: ', apiParams.requestParams);
-  console.log('requestParams: ', apiParams.state?.accounts);
+  console.log('4');
+
+  // console.log('requestParams: ', apiParams.requestParams);
+  // console.log('requestParams: ', apiParams.state?.accounts);
 
   switch (request.method) {
     case 'aztec_createAccount':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return createAccount(apiParams);
-    case 'aztec_getBalance':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return getBalance(apiParams);
+    // case 'aztec_createAccount':
+    //   return 'eeee';
+    // case 'aztec_getBalance':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return getBalance(apiParams);
     case 'aztec_accounts':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return getAddress(apiParams);
-    case 'aztec_createAuthWitness':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createAuthWitness(apiParams);
-    case 'aztec_sendTx':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return sendTx(apiParams);
-    case 'aztec_createSecretHash':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createSecretHash(apiParams);
-    case 'aztec_getPendingShields':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return getRedeemablePendingShields(apiParams);
-    case 'aztec_redeemShield':
-      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return redeemShield(apiParams);
-    case 'aztec_addToken':
-      return addToken(apiParams);
-    case 'aztec_getTokens':
-      return getTokens(apiParams);
-    case 'aztec_getTransactions':
-      return getTransactions(apiParams);
+    //  return [];
+
+    // case 'aztec_createAuthWitness':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return createAuthWitness(apiParams);
+    // case 'aztec_sendTx':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return sendTx(apiParams);
+    // case 'aztec_createSecretHash':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return createSecretHash(apiParams);
+    // case 'aztec_getPendingShields':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return getRedeemablePendingShields(apiParams);
+    // case 'aztec_redeemShield':
+    //   apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+    //   return redeemShield(apiParams);
+    // case 'aztec_addToken':
+    //   return addToken(apiParams);
+    // case 'aztec_getTokens':
+    //   return getTokens(apiParams);
+    // case 'aztec_getTransactions':
+    //   return getTransactions(apiParams);
 
     default:
       throw new Error('Method not found.');

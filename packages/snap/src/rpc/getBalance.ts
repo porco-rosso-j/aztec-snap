@@ -5,7 +5,7 @@ import {
   getPXE,
   getStateAccount,
   validateSender,
-} from 'src/utils';
+} from '../utils';
 
 export const getBalance = async (apiParams: ApiParams): Promise<number[]> => {
   const requestParams = apiParams.requestParams as GetBalanceParams;
@@ -30,12 +30,12 @@ export const getBalance = async (apiParams: ApiParams): Promise<number[]> => {
     .balance_of_public(
       apiParams.aztec.AztecAddress.fromString(requestParams.address),
     )
-    .view();
+    .simulate();
 
   const aztAddr = account.getAddress();
   const privateBalance = await l2tokenContract.methods
     .balance_of_private(aztAddr)
-    .view({ from: aztAddr });
+    .simulate({ from: aztAddr });
 
   console.log('privateBalance: ', privateBalance);
   return [Number(balance), Number(privateBalance)];

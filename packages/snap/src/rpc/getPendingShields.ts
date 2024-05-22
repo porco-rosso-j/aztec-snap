@@ -1,18 +1,21 @@
+// import { TokenContract } from '@aztec/noir-contracts.js';
 import {
   ApiParams,
   GetPendingShields,
   RedeemablePendingShield,
 } from 'src/types';
-import { computeSecret, getPXE, getPrivateKeys } from 'src/utils';
+import { computeSecret, getPXE, getPrivateKeys } from '../utils';
 
 export const getRedeemablePendingShields = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as GetPendingShields;
+
+  const tokenContract = await import('@aztec/noir-contracts.js');
 
   const filter = {
     contractAddress: apiParams.aztec.AztecAddress.fromString(
       requestParams.token,
     ),
-    storageSlot: new apiParams.aztec.Fr(5),
+    storageSlot: tokenContract.TokenContract.storage.pending_shields.slot,
     owner: apiParams.aztec.AztecAddress.fromString(requestParams.from),
     status: 1, // not-read yet
   };

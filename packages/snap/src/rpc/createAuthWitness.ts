@@ -6,7 +6,7 @@ import {
   getStateAccount,
   getECDSAWallet,
   validateSender,
-} from 'src/utils';
+} from '../utils';
 
 export const createAuthWitness = async (
   apiParams: ApiParams,
@@ -29,7 +29,7 @@ export const createAuthWitness = async (
     throw new Error('Message must be signed by user');
   }
 
-  const authWitness = await account.createAuthWitness(
+  const authWitness = await account.createAuthWit(
     apiParams.aztec.Fr.fromString(requestParams.message),
   );
 

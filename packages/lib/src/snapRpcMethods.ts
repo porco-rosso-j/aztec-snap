@@ -24,7 +24,7 @@ export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
     params: {
       request: {
         method: `aztec_${args.snapRpcMethod as string}`,
-        params: 'params' in args ? args.params : undefined,
+        params: 'params' in args ? args.params : [],
       },
       snapId: args.snapId,
     },

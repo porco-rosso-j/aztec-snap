@@ -1,4 +1,4 @@
-import { GrumpkinPrivateKey } from '@aztec/aztec.js';
+import type { Fr, GrumpkinPrivateKey } from '@aztec/aztec.js';
 import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { ManageStateResult } from '@metamask/snaps-sdk';
 
@@ -14,7 +14,6 @@ export type Snap = {
 export type Account = {
   addressIndex: number;
   address: string; // in hex
-  publicKey: string; // in hex
   partialAddress: string;
 };
 
@@ -22,7 +21,7 @@ export type ApiParams = {
   state: ManageStateResult;
   requestParams: ApiRequestParams;
   keyDeriver?: BIP44AddressKeyDeriver;
-  aztec: any;
+  aztec?: any;
 };
 
 export type ApiRequestParams =
@@ -117,6 +116,7 @@ export type Transaction = {
 };
 
 export type PrivateKeys = {
-  encryptionPrivateKey: GrumpkinPrivateKey;
+  // encryptionPrivateKey: GrumpkinPrivateKey;
+  encryptionPrivateKey: Fr;
   signingPrivateKey: Buffer;
 };
