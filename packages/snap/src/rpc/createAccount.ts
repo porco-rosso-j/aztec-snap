@@ -1,6 +1,5 @@
 import type { AccountManager } from '@aztec/aztec.js';
 import { Account, ApiParams } from 'src/types';
-// import { PXE_URL, confirmCreateAccount, getPrivateKeys, salt } from '../utils';
 import { PXE_URL, confirmCreateAccount, getPrivateKeys } from '../utils';
 
 export const createAccount = async (apiParams: ApiParams): Promise<string> => {
@@ -12,11 +11,6 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
     const { encryptionPrivateKey, signingPrivateKey } = await getPrivateKeys(
       apiParams,
     );
-    console.log(
-      'encryptionPrivateKey createAcc: ',
-      encryptionPrivateKey.toString(),
-    );
-    console.log('signingPrivateKey createAcc: ', signingPrivateKey.toString());
 
     const { createPXEClient, AccountManager } = await import('@aztec/aztec.js');
     const { EcdsaAccountContract } = await import('@aztec/accounts/ecdsa');
@@ -29,29 +23,12 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
       // await salt() in prod
     );
 
-    console.log('account: ', account);
-
-    // const ecdsaWallet = await account.deploy().then((tx) => tx.getWallet());
     const ecdsaWallet = await account.deploy().getWallet();
-    console.log('ecdsaWallet: ', ecdsaWallet.getAddress());
     const accounts: Account[] = apiParams.state?.accounts as Account[];
-
-    console.log(
-      'comp addr:addr: ',
-      ecdsaWallet.getCompleteAddress().address.toString(),
-    );
-    console.log(
-      'comp addr:partial: ',
-      ecdsaWallet.getCompleteAddress().partialAddress.toString(),
-    );
 
     const newAccount: Account = {
       addressIndex: accounts.length,
-      address: ecdsaWallet.getCompleteAddress().address.toString(),
-      // publicKey: ecdsaWallet.getCompleteAddress().publicKeys.toString(),
-      partialAddress: ecdsaWallet
-        .getCompleteAddress()
-        .partialAddress.toString(),
+      compAddress: ecdsaWallet.getCompleteAddress().toString(),
     };
 
     if (Array.isArray(accounts)) {
@@ -70,7 +47,7 @@ export const createAccount = async (apiParams: ApiParams): Promise<string> => {
       }
     }
 
-    return ecdsaWallet.getCompleteAddress().address.toString();
+    return ecdsaWallet.getCompleteAddress().toString();
   } else {
     return '';
   }

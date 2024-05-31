@@ -1,6 +1,6 @@
 import { ApiParams, GetBalanceParams } from 'src/types';
 import {
-  getECDSAWallet,
+  getSnapECDSAWallet,
   getPrivateKeys,
   getPXE,
   getStateAccount,
@@ -13,29 +13,25 @@ export const getBalance = async (apiParams: ApiParams): Promise<number[]> => {
     throw 'selected account does not match "from"';
   }
 
-  const { signingPrivateKey } = await getPrivateKeys(apiParams);
-  const account = await getECDSAWallet(
-    await getPXE(),
-    await getStateAccount(apiParams, 0),
-    signingPrivateKey,
-  );
+  const { AztecAddress } = await import('@aztec/aztec.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js');
 
-  const noirContracts = await import('@aztec/noir-contracts.js');
-  const l2tokenContract = await noirContracts.TokenContract.at(
-    apiParams.aztec.AztecAddress.fromString(requestParams.token),
+  const { signingPrivateKey } = await getPrivateKeys(apiParams);
+  const account = await getSnapECDSAWallet(apiParams, signingPrivateKey, 0);
+
+  const l2tokenContract = await TokenContract.at(
+    AztecAddress.fromString(requestParams.token),
     account,
   );
 
   const balance = await l2tokenContract.methods
-    .balance_of_public(
-      apiParams.aztec.AztecAddress.fromString(requestParams.address),
-    )
+    .balance_of_public(AztecAddress.fromString(requestParams.address))
     .simulate();
 
-  const aztAddr = account.getAddress();
+  const address = account.getAddress();
   const privateBalance = await l2tokenContract.methods
-    .balance_of_private(aztAddr)
-    .simulate({ from: aztAddr });
+    .balance_of_private(address)
+    .simulate({ from: address });
 
   console.log('privateBalance: ', privateBalance);
   return [Number(balance), Number(privateBalance)];

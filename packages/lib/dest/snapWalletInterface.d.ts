@@ -8,10 +8,9 @@ export declare class SnapAccountInterface implements AccountInterface {
     constructor(_pxe: PXE, _completeAddress: CompleteAddress, _snapRpc?: string);
     getAddress(): AztecAddress;
     getChainId(): void;
-    getVersion(): void;
-    createAuthWit(messageHashOrIntent: any): Promise<AuthWitness>;
+    getVersion(): Promise<NodeInfo>;
     createTxExecutionRequest(executions: ExecutionRequestInit): Promise<TxExecutionRequest>;
-    createAuthWitness(message: Fr): Promise<AuthWitness>;
+    createAuthWit(message: Fr): Promise<AuthWitness>;
     getCompleteAddress(): CompleteAddress;
     getSnapId(): string;
 }

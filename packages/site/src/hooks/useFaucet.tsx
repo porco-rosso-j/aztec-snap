@@ -1,12 +1,17 @@
 import {
+  AccountWallet,
   AztecAddress,
   Fr,
   computeSecretHash,
   createPXEClient,
 } from '@aztec/aztec.js';
 import { Token, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
-import { getInitialTestAccountsWallets } from '@aztec/accounts/testing';
-import { TokenContract } from '@aztec/noir-contracts.js';
+import {
+  getDeployedTestAccountsWallets,
+  getInitialTestAccountsWallets,
+} from '@aztec/accounts/testing';
+// import { TokenContract } from '@aztec/noir-contracts.js';
+import { TokenContract } from '@aztec/noir-contracts.js/Token';
 import { notifications } from '@mantine/notifications';
 import { useAppContext } from '../contexts/useAppContext';
 import { addPendingShieldNoteToPXE } from '../utils';
@@ -25,7 +30,7 @@ export function useFaucet() {
       message: 'it may take more than 30 seconds...',
     });
     const pxe = createPXEClient(PXE_URL);
-    const wallet = (await getInitialTestAccountsWallets(pxe))[0];
+    const wallet = (await getDeployedTestAccountsWallets(pxe))[0];
 
     let token: Token = {
       address: '',
@@ -51,9 +56,11 @@ export function useFaucet() {
         .send()
         .deployed();
 
+      console.log('tokenContract: ', tokenContract);
+
       token.address = tokenContract.address.toString();
 
-      console.log('token: ', token);
+      console.log('token useFaucet: ', token);
 
       notifications.show({
         title: 'Minting Token Publicly',

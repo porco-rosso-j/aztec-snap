@@ -43,11 +43,13 @@ export const useGetTokens = () => {
 
   const updateTokenBalance = async (tokenAddress: string) => {
     const tokenId = tokens.findIndex((token) => token.address == tokenAddress);
-
+    console.log('tokenId: ', tokenId);
     if (!snapWallet) return;
     const tempTokens = [...tokens];
+    console.log('tempTokens: ', tempTokens);
     const token = tokens[tokenId];
 
+    console.log('token: ', token);
     const balance = await getBalance(
       token.address,
       snapWallet.getAddress().toString(),

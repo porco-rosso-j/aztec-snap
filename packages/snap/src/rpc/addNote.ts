@@ -1,45 +1,54 @@
-import { ExtendedNote, Note } from '@aztec/aztec.js';
+// import { ExtendedNote, Note } from '@aztec/aztec.js';
 // import { TokenContract } from '@aztec/noir-contracts.js';
-import { ApiParams } from 'src/types';
+import { AddNoteParams, ApiParams } from 'src/types';
 import { getPXE } from '../utils';
-
-type AddNoteParams = {
-  from: string;
-  token: string;
-  amount: number;
-  secretHash: string;
-  txHash: string;
-};
-
-type PendingShieldsSecret = {
-  owner: string;
-  secret: string;
-  txHash?: string;
-};
 
 export async function addPendingShieldNoteToPXE(apiParams: ApiParams) {
   const requestParams = apiParams.requestParams as AddNoteParams;
 
-  const note = new Note([
-    new apiParams.aztec.Fr(BigInt(requestParams.amount)),
-    apiParams.aztec.Fr.fromString(requestParams.secretHash),
-  ]);
+  const { ExtendedNote, Note, Fr, AztecAddress, TxHash } = await import(
+    '@aztec/aztec.js'
+  );
+  const { TokenContract } = await import('@aztec/noir-contracts.js');
 
-  const tokenContract = await import('@aztec/noir-contracts.js');
+  const note = new Note([
+    new Fr(BigInt(requestParams.amount)),
+    Fr.fromString(requestParams.secretHash),
+  ]);
 
   const extendedNote = new ExtendedNote(
     note,
-    apiParams.aztec.AztecAddress.fromString(requestParams.from),
-    apiParams.aztec.AztecAddress.fromString(requestParams.token),
-    tokenContract.TokenContract.storage.pending_shields.slot,
-    tokenContract.TokenContract.notes.TransparentNote.id,
-    apiParams.aztec.TxHash.fromString(requestParams.txHash),
+    AztecAddress.fromString(requestParams.from),
+    AztecAddress.fromString(requestParams.token),
+    TokenContract.storage.pending_shields.slot,
+    TokenContract.notes.TransparentNote.id,
+    TxHash.fromString(requestParams.txHash),
   );
+
+  // const note = new Note([
+  //   new apiParams.aztec.Fr(BigInt(requestParams.amount)),
+  //   apiParams.aztec.Fr.fromString(requestParams.secretHash),
+  // ]);
+
+  // const extendedNote = new ExtendedNote(
+  //   note,
+  //   apiParams.aztec.AztecAddress.fromString(requestParams.from),
+  //   apiParams.aztec.AztecAddress.fromString(requestParams.token),
+  //   tokenContract.TokenContract.storage.pending_shields.slot,
+  //   tokenContract.TokenContract.notes.TransparentNote.id,
+  //   apiParams.aztec.TxHash.fromString(requestParams.txHash),
+  // );
 
   console.log('note: ', note);
   const pxe = await getPXE();
   await pxe.addNote(extendedNote);
 }
+
+// type PendingShieldsSecret = {
+//   owner: string;
+//   secret: string;
+//   txHash?: string;
+// };
 
 //   let psSecrets: string[] = apiParams.state
 //     ?.secrets as string[];

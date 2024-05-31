@@ -1,12 +1,10 @@
-import { AuthWitness, TxExecutionRequest } from '@aztec/aztec.js';
-import { ExecutionRequestInit } from '@aztec/aztec.js/entrypoint';
+import type { TxExecutionRequest } from '@aztec/aztec.js';
+import type { ExecutionRequestInit } from '@aztec/aztec.js/entrypoint';
 import { ApiParams, SendTxParams } from 'src/types';
 import {
-  PXE_URL,
   confirmSendTx,
   getPrivateKeys,
-  getECDSAWallet,
-  getStateAccount,
+  getSnapECDSAWallet,
   validateSender,
   deserializeFunctionCall,
 } from '../utils';
@@ -16,13 +14,14 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   if (!validateSender(apiParams, requestParams.from)) {
     throw 'selected account does not match "from"';
   }
-  const functionCall = await deserializeFunctionCall(apiParams);
-  const { signingPrivateKey } = await getPrivateKeys(apiParams);
-  const account = await getECDSAWallet(
-    apiParams.aztec.createPXEClient(PXE_URL),
-    await getStateAccount(apiParams, 0),
-    signingPrivateKey,
+  const { functionCall, packedValues } = await deserializeFunctionCall(
+    apiParams,
   );
+  console.log('functionCall: ', functionCall);
+  const { signingPrivateKey } = await getPrivateKeys(apiParams);
+
+  const account = await getSnapECDSAWallet(apiParams, signingPrivateKey, 0);
+  console.log('account: ', account);
 
   if (
     !(await confirmSendTx(
@@ -42,6 +41,7 @@ export const sendTx = async (apiParams: ApiParams): Promise<string> => {
   const execRequest: ExecutionRequestInit = {
     calls: [functionCall],
     authWitnesses: [authWit],
+    packedArguments: [packedValues],
   };
 
   const signedTxRequest: TxExecutionRequest =

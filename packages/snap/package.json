@@ -23,15 +23,16 @@
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!CHANGELOG.md' --ignore-path .gitignore",
     "serve": "mm-snap serve",
-    "start": "yarn clean && mm-snap watch",
+    "start": "mm-snap watch",
+    "start:clean": "yarn clean && mm-snap watch",
     "build": "mm-snap build",
     "build:types": "tsc -p tsconfig.build.json"
   },
   "dependencies": {
-    "@aztec/accounts": "0.40.1",
-    "@aztec/aztec.js": "0.40.1",
-    "@aztec/circuits.js": "0.40.1",
-    "@aztec/noir-contracts.js": "0.40.1",
+    "@aztec/accounts": "0.41.0",
+    "@aztec/aztec.js": "0.41.0",
+    "@aztec/circuits.js": "0.41.0",
+    "@aztec/noir-contracts.js": "0.41.0",
     "@metamask/snaps-sdk": "3.0.1",
     "buffer": "^6.0.3",
     "webpack": "^5.90.3"

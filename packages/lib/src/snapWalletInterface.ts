@@ -1,15 +1,11 @@
 import {
   AuthWitness,
-  FunctionCall,
-  // PackedArguments,
-  PackedValues,
   TxExecutionRequest,
   CompleteAddress,
   Fr,
   PXE,
 } from '@aztec/aztec.js';
 import { AccountInterface } from '@aztec/aztec.js/dest/account';
-import { TxContext } from '@aztec/circuits.js';
 import { SerializedFunctionCall } from './types';
 import { defaultSnapOrigin } from './constants';
 import { createAuthWitnessSnap, sendTxSnap } from './snapRpcMethods';
@@ -30,12 +26,11 @@ export class SnapAccountInterface implements AccountInterface {
     return this.getCompleteAddress().address;
   }
   getChainId() {
+    // TODO: const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
     throw new Error('Method not implemented.');
   }
   getVersion() {
-    throw new Error('Method not implemented.');
-  }
-  createAuthWit(messageHashOrIntent: any): Promise<AuthWitness> {
+    // TODO: const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
     throw new Error('Method not implemented.');
   }
 
@@ -49,23 +44,10 @@ export class SnapAccountInterface implements AccountInterface {
     }
 
     const call = calls[0];
-    const entrypointPackedValues = PackedValues.fromValues(call.args);
-    const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
-    const txContext = TxContext.empty(chainId, protocolVersion);
-    const txRequest = new TxExecutionRequest(
-      call.to,
-      call.functionData,
-      entrypointPackedValues.hash,
-      txContext,
-      [...packedArguments, entrypointPackedValues],
-      //authWitnesses,
-      [],
-    );
-
     const serializedFunctionCall: SerializedFunctionCall = {
       to: call.to.toString(),
-      functionData: txRequest.functionData.toBuffer().toString('hex'),
-      args: txRequest.argsOfCalls.map((argFr) => argFr.toString()),
+      functionData: call.functionData.toBuffer().toString('hex'),
+      args: call.args.map((argFr) => argFr.toString()),
     };
 
     const sendTxParams = {
@@ -78,7 +60,7 @@ export class SnapAccountInterface implements AccountInterface {
     return TxExecutionRequest.fromString(signedTxRequestStr);
   }
 
-  async createAuthWitness(message: Fr): Promise<AuthWitness> {
+  async createAuthWit(message: Fr): Promise<AuthWitness> {
     const authWitness = await createAuthWitnessSnap(
       {
         from: this.completeAddress.toString(),

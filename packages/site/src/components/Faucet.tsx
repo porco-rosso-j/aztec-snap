@@ -21,6 +21,7 @@ export function Faucet(props: FaucetProps) {
     if (props.address) {
       console.log('props.tokens_len + 1: ', props.tokens_len + 1);
       const token = await getFaucet(props.address, props.tokens_len + 1);
+      console.log('token: ', token);
       props.fetchTokens(); // update token list
       props.updateTokenBalance(token);
     } else {

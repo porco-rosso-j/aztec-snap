@@ -33,6 +33,12 @@ const config: SnapConfig = {
           Buffer: ['buffer', 'Buffer'],
         }),
       ],
+
+      optimization: {
+        minimize: true,
+        // runtimeChunk: true,
+        flagIncludedChunks: true,
+      },
     }),
 };
 

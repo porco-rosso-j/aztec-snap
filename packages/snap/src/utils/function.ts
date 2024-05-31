@@ -1,23 +1,35 @@
-import { FunctionCall } from '@aztec/aztec.js';
-import { FunctionData } from '@aztec/circuits.js';
+import type { FunctionCall, PackedValues } from '@aztec/aztec.js';
+import type { FunctionData } from '@aztec/circuits.js';
 import { ApiParams, SendTxParams } from 'src/types';
+
+type DeserializeFunctionCallReturn = {
+  functionCall: FunctionCall;
+  packedValues: PackedValues;
+};
 
 export const deserializeFunctionCall = async (
   apiParams: ApiParams,
-): Promise<FunctionCall> => {
+): Promise<DeserializeFunctionCallReturn> => {
   const requestParams = apiParams.requestParams as SendTxParams;
   const funcCall = requestParams.calls[0];
+  // TODO: funcCall.to == requestParams.from
 
-  const circuitjs = await import('@aztec/circuits.js');
-  const functionData = circuitjs.FunctionData.fromBuffer(
+  const { Fr, AztecAddress, PackedValues } = await import('@aztec/aztec.js');
+  const { FunctionData } = await import('@aztec/circuits.js');
+
+  const args = funcCall.args.map((argStr) => Fr.fromString(argStr));
+  const packedValues = PackedValues.fromValues(args);
+
+  const functionData = FunctionData.fromBuffer(
     Buffer.from(funcCall.functionData, 'hex'),
-  ) as FunctionData;
+  );
 
   const functionCall: FunctionCall = {
-    to: apiParams.aztec.AztecAddress.fromString(funcCall.to),
+    to: AztecAddress.fromString(funcCall.to),
     functionData: functionData,
-    args: funcCall.args.map((argStr) => apiParams.aztec.Fr.fromString(argStr)),
+    args: args,
+    isStatic: false,
   };
 
-  return functionCall;
+  return { functionCall, packedValues };
 };

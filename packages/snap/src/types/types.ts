@@ -13,8 +13,7 @@ export type Snap = {
 
 export type Account = {
   addressIndex: number;
-  address: string; // in hex
-  partialAddress: string;
+  compAddress: string;
 };
 
 export type ApiParams = {
@@ -35,7 +34,8 @@ export type ApiRequestParams =
   | GetPendingShields
   | GetBalanceParams
   | GetTokensParams
-  | AddTokenParams;
+  | AddTokenParams
+  | AddNoteParams;
 
 export type SerializedFunctionCall = {
   to: string;
@@ -106,6 +106,14 @@ export type Token = {
 
 export type GetTransactionsParams = {
   from: string;
+};
+
+export type AddNoteParams = {
+  from: string;
+  token: string;
+  amount: number;
+  secretHash: string;
+  txHash: string;
 };
 
 export type Transaction = {
