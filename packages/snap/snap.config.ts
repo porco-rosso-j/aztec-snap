@@ -1,6 +1,7 @@
 import type { SnapConfig } from '@metamask/snaps-cli';
 import { merge } from '@metamask/snaps-cli';
 import webpack from 'webpack';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const config: SnapConfig = {
   bundler: 'webpack',
@@ -32,13 +33,13 @@ const config: SnapConfig = {
           process: 'process/browser.js',
           Buffer: ['buffer', 'Buffer'],
         }),
+        new webpack.ProgressPlugin(),
+        // new BundleAnalyzerPlugin({
+        //   analyzerMode: 'static', // Generates a static HTML file
+        //   reportFilename: 'bundle-report.html', // The name of the report file
+        //   openAnalyzer: true, // Automatically opens the report in the default browser
+        // }),
       ],
-
-      optimization: {
-        minimize: true,
-        // runtimeChunk: true,
-        flagIncludedChunks: true,
-      },
     }),
 };
 

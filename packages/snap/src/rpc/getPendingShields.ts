@@ -1,4 +1,4 @@
-// import { TokenContract } from '@aztec/noir-contracts.js';
+// import { TokenContract } from '@aztec/noir-contracts.js/Token';
 import {
   ApiParams,
   GetPendingShields,
@@ -12,7 +12,7 @@ export const getRedeemablePendingShields = async (apiParams: ApiParams) => {
   const { AztecAddress, Fr, computeSecretHash } = await import(
     '@aztec/aztec.js'
   );
-  const { TokenContract } = await import('@aztec/noir-contracts.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
 
   const filter = {
     contractAddress: AztecAddress.fromString(requestParams.token),

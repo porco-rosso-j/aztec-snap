@@ -1,5 +1,3 @@
-// import { ExtendedNote, Note } from '@aztec/aztec.js';
-// import { TokenContract } from '@aztec/noir-contracts.js';
 import { AddNoteParams, ApiParams } from 'src/types';
 import { getPXE } from '../utils';
 
@@ -9,7 +7,7 @@ export async function addPendingShieldNoteToPXE(apiParams: ApiParams) {
   const { ExtendedNote, Note, Fr, AztecAddress, TxHash } = await import(
     '@aztec/aztec.js'
   );
-  const { TokenContract } = await import('@aztec/noir-contracts.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
 
   const note = new Note([
     new Fr(BigInt(requestParams.amount)),

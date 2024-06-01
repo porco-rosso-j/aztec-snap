@@ -28,7 +28,6 @@ import {
 // import { getAddress } from './rpc/getAddress';
 import { getAddressKeyDeriver } from './utils/key-utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
-// import { AztecAddress, CompleteAddress, Fr, Point } from '@aztec/aztec.js';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,

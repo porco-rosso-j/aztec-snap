@@ -17,7 +17,7 @@ export const redeemShield = async (apiParams: ApiParams) => {
   const account = await getSnapECDSAWallet(apiParams, signingPrivateKey, 0);
 
   const { AztecAddress, Fr } = await import('@aztec/aztec.js');
-  const { TokenContract } = await import('@aztec/noir-contracts.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
 
   const tokenContract = await TokenContract.at(
     AztecAddress.fromString(requestParams.token),

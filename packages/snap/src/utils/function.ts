@@ -1,5 +1,4 @@
 import type { FunctionCall, PackedValues } from '@aztec/aztec.js';
-import type { FunctionData } from '@aztec/circuits.js';
 import { ApiParams, SendTxParams } from 'src/types';
 
 type DeserializeFunctionCallReturn = {

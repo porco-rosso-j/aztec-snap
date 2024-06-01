@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { GrumpkinPrivateKey } from '@aztec/aztec.js';
+import type { Fr } from '@aztec/aztec.js';
 import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { ManageStateResult } from '@metamask/snaps-sdk';
 export type GetSnapsResponse = Record<string, Snap>;
@@ -11,17 +11,15 @@ export type Snap = {
 };
 export type Account = {
     addressIndex: number;
-    address: string;
-    publicKey: string;
-    partialAddress: string;
+    compAddress: string;
 };
 export type ApiParams = {
     state: ManageStateResult;
     requestParams: ApiRequestParams;
     keyDeriver?: BIP44AddressKeyDeriver;
-    aztec: any;
+    aztec?: any;
 };
-export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams | GetTokensParams | AddTokenParams;
+export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams | GetTokensParams | AddTokenParams | AddNoteParams;
 export type SerializedFunctionCall = {
     to: string;
     functionData: string;
@@ -81,12 +79,19 @@ export type Token = {
 export type GetTransactionsParams = {
     from: string;
 };
+export type AddNoteParams = {
+    from: string;
+    token: string;
+    amount: number;
+    secretHash: string;
+    txHash: string;
+};
 export type Transaction = {
     txHash: string;
     contract: string;
     private: boolean;
 };
 export type PrivateKeys = {
-    encryptionPrivateKey: GrumpkinPrivateKey;
+    encryptionPrivateKey: Fr;
     signingPrivateKey: Buffer;
 };

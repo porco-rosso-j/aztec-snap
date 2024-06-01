@@ -1,4 +1,4 @@
-import type { Fr, GrumpkinPrivateKey } from '@aztec/aztec.js';
+import type { Fr } from '@aztec/aztec.js';
 import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { ManageStateResult } from '@metamask/snaps-sdk';
 

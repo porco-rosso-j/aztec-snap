@@ -14,7 +14,7 @@ export const getBalance = async (apiParams: ApiParams): Promise<number[]> => {
   }
 
   const { AztecAddress } = await import('@aztec/aztec.js');
-  const { TokenContract } = await import('@aztec/noir-contracts.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
 
   const { signingPrivateKey } = await getPrivateKeys(apiParams);
   const account = await getSnapECDSAWallet(apiParams, signingPrivateKey, 0);
