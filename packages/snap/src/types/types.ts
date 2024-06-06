@@ -33,6 +33,8 @@ export type ApiRequestParams =
   | RedeemShieldParams
   | GetPendingShields
   | GetBalanceParams
+  | UpdateBalanceParams
+  | UpdateBalancesParams
   | GetTokensParams
   | AddTokenParams
   | AddNoteParams;
@@ -88,6 +90,19 @@ export type GetBalanceParams = {
   token: string;
 };
 
+export type UpdateBalanceParams = {
+  from: string;
+  address: string;
+  token: string;
+};
+
+export type UpdateBalancesParams = {
+  from: string;
+  address: string;
+  tokens: string[];
+  all: boolean;
+};
+
 export type GetTokensParams = {
   from: string;
 };
@@ -97,11 +112,20 @@ export type AddTokenParams = {
   token: Token;
 };
 
+// export type Token = {
+//   address: string;
+//   name: string;
+//   symbol: string;
+//   decimal: number;
+// };
+
 export type Token = {
   address: string;
   name: string;
   symbol: string;
-  decimal: number;
+  decimals: number;
+  pubBalance?: number;
+  priBalance?: number;
 };
 
 export type GetTransactionsParams = {

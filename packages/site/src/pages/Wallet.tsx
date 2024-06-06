@@ -1,31 +1,20 @@
 import { useEffect, useState } from 'react';
-import {
-  Box,
-  Text,
-  Group,
-  Stack,
-  CopyButton,
-  ActionIcon,
-  rem,
-  Tooltip,
-} from '@mantine/core';
-import { IconCheck, IconCopy, IconCopyCheck } from '@tabler/icons-react';
-import { TokenWithBalance, shortenAddress } from '../utils';
-import { useBalance, useAddress, useGetTokens } from '../hooks';
-import { ManageToken, Faucet, TokenList } from '.';
-import { IconTooltip } from '@tabler/icons-react';
-import { CopyButtonIcon } from './CopyButtonIcon';
+import { Box, Text, Group, Stack } from '@mantine/core';
+import { shortenAddress } from '../utils';
+import { useBalance, useAddress, useGetL2Tokens } from '../hooks';
+import { CopyButtonIcon, ManageToken, Faucet, TokenList } from '../components';
+import { Token } from '@abstract-crypto/aztec-snap-lib';
 
 type WalletProps = {
   isDarkTheme: boolean;
 };
 
-export default function Wallet(props: WalletProps) {
-  const { tokens, fetchTokens, updateTokenBalance } = useGetTokens();
+export function Wallet(props: WalletProps) {
+  const { l2Tokens, fetchTokens, updateTokenBalances } = useGetL2Tokens();
   const { address } = useAddress();
   const [selectedTokenId, setSelectedTokenId] = useState(0);
-  const [token, setToken] = useState<TokenWithBalance | undefined>(undefined);
-  const { getBalance } = useBalance();
+  const [token, setToken] = useState<Token | null>(null);
+  const { getL2Balance } = useBalance();
   const [isManageTokenOpen, setIsManageTokenOpen] = useState(false);
 
   const handleOpenManageToken = (open: boolean, tokenId: number) => {
@@ -34,21 +23,30 @@ export default function Wallet(props: WalletProps) {
   };
 
   useEffect(() => {
-    if (tokens.length !== 0) {
-      setToken(tokens[selectedTokenId]);
+    if (l2Tokens.length !== 0) {
+      setToken(l2Tokens[selectedTokenId]);
     }
-  }, [tokens, selectedTokenId]);
+  }, [l2Tokens, selectedTokenId]);
+
+  console.log('l2Tokens: ', l2Tokens);
+
+  const handleShowBalance = (pub: boolean): string => {
+    let balance = '0';
+    let symbol = '';
+    if (token) {
+      const _balance = pub ? token.pubBalance : token.priBalance;
+      if (_balance) {
+        balance = (_balance / 10 ** token.decimals).toFixed(2);
+      }
+      symbol = token.symbol ? token.symbol : 'ETH';
+    }
+
+    return balance + ' ' + symbol;
+  };
 
   const textTextStyle = {
     color: props.isDarkTheme ? 'white' : 'black',
     TextAlign: 'center',
-  };
-  const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1000);
   };
 
   return (
@@ -85,9 +83,7 @@ export default function Wallet(props: WalletProps) {
                   public balance
                 </Text>
                 <Text style={{ ...textTextStyle, fontSize: '35px' }} size="xl">
-                  {token
-                    ? token.pubBalance + ' ' + token.symbol
-                    : 0 + ' ' + 'TKN'}
+                  {handleShowBalance(true)}
                 </Text>
               </Stack>
               <Stack align="center">
@@ -95,9 +91,7 @@ export default function Wallet(props: WalletProps) {
                   private balance
                 </Text>
                 <Text style={{ ...textTextStyle, fontSize: '35px' }} size="xl">
-                  {token
-                    ? token.priBalance + ' ' + token.symbol
-                    : 0 + ' ' + 'TKN'}
+                  {handleShowBalance(false)}
                 </Text>
               </Stack>
             </Group>
@@ -107,13 +101,13 @@ export default function Wallet(props: WalletProps) {
               isDarkTheme={props.isDarkTheme}
               token={token}
               address={address}
-              updateTokenBalance={updateTokenBalance}
+              updateTokenBalances={updateTokenBalances}
               handleOpenManageToken={handleOpenManageToken}
             />
           ) : (
             <TokenList
               isDarkTheme={props.isDarkTheme}
-              tokens={tokens}
+              tokens={l2Tokens}
               handleOpenManageToken={handleOpenManageToken}
             />
           )}
@@ -121,9 +115,9 @@ export default function Wallet(props: WalletProps) {
       </Box>
       <Faucet
         address={address}
-        tokens_len={tokens.length}
-        getBalance={getBalance}
-        updateTokenBalance={updateTokenBalance}
+        tokens_len={l2Tokens.length}
+        getBalance={getL2Balance}
+        updateTokenBalances={updateTokenBalances}
         fetchTokens={fetchTokens}
       />
     </>

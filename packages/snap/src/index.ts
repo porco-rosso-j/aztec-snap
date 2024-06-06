@@ -22,10 +22,8 @@ import {
   addToken,
   getTokens,
   getTransactions,
+  updateBalances,
 } from './rpc';
-// import { getAddressKeyDeriver } from './utils';
-// import { createAccount } from './rpc/createAccount';
-// import { getAddress } from './rpc/getAddress';
 import { getAddressKeyDeriver } from './utils/key-utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
 
@@ -33,9 +31,7 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   origin,
   request,
 }) => {
-  console.log('ey yo');
   const requestParams = request?.params as unknown as ApiRequestParams;
-  console.log('1');
 
   let state: ManageStateResult = await snap.request({
     method: 'snap_manageState',
@@ -43,8 +39,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       operation: 'get',
     },
   });
-
-  console.log('2');
 
   if (!state) {
     state = {
@@ -64,22 +58,11 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     });
   }
 
-  console.log('3');
-  console.log('method', request.method);
   console.debug('method', request.method);
-
-  // const aztec = await import('@aztec/aztec.js');
-  // await aztec.initAztecJs();
   const apiParams: ApiParams = {
     state,
     requestParams,
-    // aztec,
   };
-
-  console.log('4');
-
-  // console.log('requestParams: ', apiParams.requestParams);
-  // console.log('requestParams: ', apiParams.state?.accounts);
 
   switch (request.method) {
     case 'aztec_createAccount':
@@ -89,6 +72,10 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     case 'aztec_getBalance':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
       return await getBalance(apiParams);
+
+    case 'aztec_updateBalances':
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return await updateBalances(apiParams);
 
     case 'aztec_accounts':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);

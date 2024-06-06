@@ -42,8 +42,6 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
   const [installedSnap, setInstalledSnap] = useState<Snap | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [isFlask, setIsFlask] = useState(false);
-  console.log('provider in MetaMaskProvider: ', provider);
-  console.log('installedSnap in MetaMaskProvider: ', installedSnap);
 
   const snapsDetected = provider !== null;
 
@@ -54,11 +52,9 @@ export const MetaMaskProvider = ({ children }: { children: ReactNode }) => {
   const detect = async () => {
     if (provider) {
       const isFlask = await detectFlask();
-      console.log('isFlask: ', isFlask);
       setIsFlask(isFlask);
 
       const installedSnap = await getSnap();
-      console.log('installedSnap here: ', installedSnap);
       setInstalledSnap(installedSnap);
     }
   };

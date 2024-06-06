@@ -1,17 +1,17 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-import { useTheme } from './contexts/theme';
-import { AppContextProviderComponent } from './contexts/useAppContext';
-import { MetaMaskProvider } from './contexts/MetamaskContext';
-import { AppShell, Box, MantineProvider } from '@mantine/core';
+import {
+  useTheme,
+  AppContextProviderComponent,
+  MetaMaskProvider,
+} from './contexts';
+import { AppShell, MantineProvider } from '@mantine/core';
 import { HashRouter, Route, Routes } from 'react-router-dom';
-import Wallet from './components/Wallet';
+import { Wallet, Bridge, Swap } from './pages';
 import { Header, Footer } from './components';
 import { Notifications } from '@mantine/notifications';
-
 const App = () => {
   const { isDarkTheme, toggleTheme } = useTheme();
-  console.log('isDarkTheme: ', isDarkTheme);
 
   return (
     <>
@@ -39,8 +39,22 @@ const App = () => {
                         </>
                       }
                     />
-                    <Route path="/bridge" element={<Box>bridge</Box>} />
-                    <Route path="/defi" element={<Box>defi</Box>} />
+                    <Route
+                      path="/bridge"
+                      element={
+                        <>
+                          <Bridge isDarkTheme={isDarkTheme} />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/swap"
+                      element={
+                        <>
+                          <Swap isDarkTheme={isDarkTheme} />
+                        </>
+                      }
+                    />
                   </Routes>
                   <Footer isDarkTheme={isDarkTheme} />
                 </HashRouter>

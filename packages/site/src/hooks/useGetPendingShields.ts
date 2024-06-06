@@ -12,10 +12,7 @@ export const useGetPendingShields = (token: string) => {
 
   const fetchPendingShields = async () => {
     if (snapWallet) {
-      const response = await snapWallet.getPendingShields(
-        snapWallet.getAddress().toString(),
-        token,
-      );
+      const response = await snapWallet.getPendingShields(token);
       setPendingShields(response);
     }
   };

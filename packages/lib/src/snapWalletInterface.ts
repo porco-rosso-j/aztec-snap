@@ -5,33 +5,43 @@ import {
   Fr,
   PXE,
 } from '@aztec/aztec.js';
-import { AccountInterface } from '@aztec/aztec.js/dest/account';
+import { AccountInterface } from '@aztec/aztec.js/account';
 import { SerializedFunctionCall } from './types';
 import { defaultSnapOrigin } from './constants';
 import { createAuthWitnessSnap, sendTxSnap } from './snapRpcMethods';
-import { ExecutionRequestInit } from '@aztec/aztec.js/dest/entrypoint/entrypoint';
+import { ExecutionRequestInit } from '@aztec/aztec.js/entrypoint';
+import { type NodeInfo } from '@aztec/types/interfaces';
 
 export class SnapAccountInterface implements AccountInterface {
   private completeAddress: CompleteAddress;
   private pxe: PXE;
   protected readonly snapRpc: string;
+  private chainId: Fr;
+  private version: Fr;
 
-  constructor(_pxe: PXE, _completeAddress: CompleteAddress, _snapRpc?: string) {
+  constructor(
+    _pxe: PXE,
+    _completeAddress: CompleteAddress,
+    _nodeInfo: NodeInfo,
+    _snapRpc?: string,
+  ) {
     this.pxe = _pxe;
     this.completeAddress = _completeAddress;
     this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
+    this.chainId = new Fr(_nodeInfo.chainId);
+    this.version = new Fr(_nodeInfo.protocolVersion);
   }
 
   getAddress() {
     return this.getCompleteAddress().address;
   }
-  getChainId() {
-    // TODO: const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
-    throw new Error('Method not implemented.');
+
+  getChainId(): Fr {
+    return this.chainId;
   }
-  getVersion() {
-    // TODO: const { chainId, protocolVersion } = await this.pxe.getNodeInfo();
-    throw new Error('Method not implemented.');
+
+  getVersion(): Fr {
+    return this.version;
   }
 
   async createTxExecutionRequest(

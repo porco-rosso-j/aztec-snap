@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Text, Center, Stack } from '@mantine/core';
-import { useFaucet } from '../hooks';
+import { useETHFaucet } from '../hooks/useETHFaucet';
 
 type FaucetProps = {
   address: string;
   tokens_len: number;
   getBalance: (token: string, address: string) => Promise<number[]>;
-  updateTokenBalance: (token: string) => void;
+  updateTokenBalances: (token: string[]) => void;
   fetchTokens: () => void;
 };
 
 export function Faucet(props: FaucetProps) {
-  const { getFaucet } = useFaucet();
+  const { getETHFaucet } = useETHFaucet();
   const [faucetClicked, setFacuetClicked] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -19,11 +19,8 @@ export function Faucet(props: FaucetProps) {
     setErrorMessage('');
     setFacuetClicked(true);
     if (props.address) {
-      console.log('props.tokens_len + 1: ', props.tokens_len + 1);
-      const token = await getFaucet(props.address, props.tokens_len + 1);
-      console.log('token: ', token);
-      props.fetchTokens(); // update token list
-      props.updateTokenBalance(token);
+      const token = await getETHFaucet();
+      props.updateTokenBalances([token]);
     } else {
       setErrorMessage('address not found');
     }
@@ -44,7 +41,7 @@ export function Faucet(props: FaucetProps) {
             }}
             onClick={() => handleFaucet()}
           >
-            Token Faucet
+            Get ETH Faucet
           </Text>
           {errorMessage && <Text c="red">{errorMessage}</Text>}
         </Stack>

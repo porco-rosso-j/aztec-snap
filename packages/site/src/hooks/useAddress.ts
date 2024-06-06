@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AztecSnap, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
-import { useMetaMaskContext } from '../contexts/MetamaskContext';
-import { useAppContext } from '../contexts/useAppContext';
 import { CompleteAddress } from '@aztec/aztec.js';
+import { AztecSnap, PXE_URL } from '@abstract-crypto/aztec-snap-lib';
+import { useAppContext, useMetaMaskContext } from '../contexts';
 
 export const useAddress = () => {
   const { installedSnap } = useMetaMaskContext();
@@ -21,8 +20,7 @@ export const useAddress = () => {
     }
   }, [installedSnap, address, snapWallet]);
 
-  // 1: get selected complete address
-  // 2: instantiate SnapWallet
+  // TODO: at least have this address this context
   const getSnapSelectedAddress = async () => {
     const aztecSnap = new AztecSnap(PXE_URL);
     const address = await aztecSnap.getSelectedAddress();
@@ -37,7 +35,8 @@ export const useAddress = () => {
 
   // 1: get aztec address in SnapWallet
   const getAddress = async () => {
-    const addressResponse = snapWallet?.getAddress();
+    if (!snapWallet) return;
+    const addressResponse = snapWallet.getAddress();
     console.log('addressResponse: ', addressResponse);
     if (addressResponse) {
       setAddress(addressResponse.toString());

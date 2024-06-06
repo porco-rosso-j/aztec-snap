@@ -3,6 +3,7 @@ import {
   AccountWallet,
   CompleteAddress,
   createPXEClient,
+  NodeInfo,
 } from '@aztec/aztec.js';
 import { SnapAccountInterface } from './snapWalletInterface.js';
 import { requestSnap } from './snap-utils/request.js';
@@ -17,6 +18,7 @@ import {
   getTokensSnap,
   getTransactionsSnap,
   redeemShieldSnap,
+  updateBalancesSnap,
 } from './snapRpcMethods.js';
 import {
   AddTokenParams,
@@ -29,56 +31,71 @@ import {
   RedeemablePendingShield,
   Token,
   Transaction,
+  UpdateBalancesParams,
 } from '@abstract-crypto/aztec-snap';
 /**
  * Wallet implementation which creates a transaction request directly to the requested contract without any signing.
  */
 export class SnapWallet extends AccountWallet {
-  constructor(_pxe: PXE, _address: CompleteAddress, _snapRpc?: string) {
-    const account = new SnapAccountInterface(_pxe, _address, _snapRpc);
+  constructor(
+    _pxe: PXE,
+    _address: CompleteAddress,
+    _nodeInfo: NodeInfo,
+    _snapRpc?: string,
+  ) {
+    const account = new SnapAccountInterface(
+      _pxe,
+      _address,
+      _nodeInfo,
+      _snapRpc,
+    );
     super(_pxe, account);
   }
 
-  public async getBalance(
-    from: string,
-    address: string,
-    token: string,
-  ): Promise<number[]> {
+  public async getBalance(address: string, token: string): Promise<number[]> {
     return await getBalanceSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
       address,
       token,
     } as GetBalanceParams);
   }
 
-  public async createSecretHash(
-    from: string,
-    contract: string,
-  ): Promise<string> {
+  public async updateBalances(
+    address: string,
+    tokens: string[],
+    all: boolean,
+  ): Promise<Token[]> {
+    return await updateBalancesSnap({
+      from: this.account.getCompleteAddress().toString(),
+      address,
+      tokens,
+      all,
+    } as UpdateBalancesParams);
+  }
+
+  public async createSecretHash(contract: string): Promise<string> {
     return await createSecretSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
       contract,
     } as CreateSecretParams);
   }
 
   public async getPendingShields(
-    from: string,
     token: string,
   ): Promise<RedeemablePendingShield[] | undefined> {
     return await getPendingShieldsSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
       token,
     } as GetPendingShields);
   }
 
   public async redeemShield(
-    from: string,
     token: string,
     amount: number,
     secretIndex: number,
   ): Promise<string> {
     return await redeemShieldSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
       token,
       amount,
       secretIndex,
@@ -86,21 +103,21 @@ export class SnapWallet extends AccountWallet {
     } as RedeemShieldParams);
   }
 
-  public async getTransactions(from: string): Promise<Transaction[]> {
+  public async getTransactions(): Promise<Transaction[]> {
     return await getTransactionsSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
     } as GetTransactionsParams);
   }
 
-  public async getTokens(from: string): Promise<Token[]> {
+  public async getTokens(): Promise<Token[]> {
     return await getTokensSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
     } as GetTokensParams);
   }
 
-  public async addToken(from: string, token: Token) {
+  public async addToken(token: Token) {
     await addTokenSnap({
-      from,
+      from: this.account.getCompleteAddress().toString(),
       token,
     } as AddTokenParams);
   }
@@ -133,6 +150,7 @@ export class AztecSnap {
 
   async getSnapWallet(address: CompleteAddress): Promise<SnapWallet> {
     // if (!this.address) throw 'No connection with accounts';
-    return new SnapWallet(this.pxe, address, this.snapRpc);
+    const nodeInfo = await this.pxe.getNodeInfo();
+    return new SnapWallet(this.pxe, address, nodeInfo, this.snapRpc);
   }
 }

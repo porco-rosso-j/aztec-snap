@@ -19,7 +19,7 @@ export type ApiParams = {
     keyDeriver?: BIP44AddressKeyDeriver;
     aztec?: any;
 };
-export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams | GetTokensParams | AddTokenParams | AddNoteParams;
+export type ApiRequestParams = GetAddressParams | GetTxParams | SendTxParams | CreateAccountParams | CreateAuthWitnessParam | CreateSecretParams | RedeemShieldParams | GetPendingShields | GetBalanceParams | UpdateBalanceParams | UpdateBalancesParams | GetTokensParams | AddTokenParams | AddNoteParams;
 export type SerializedFunctionCall = {
     to: string;
     functionData: string;
@@ -63,6 +63,17 @@ export type GetBalanceParams = {
     address: string;
     token: string;
 };
+export type UpdateBalanceParams = {
+    from: string;
+    address: string;
+    token: string;
+};
+export type UpdateBalancesParams = {
+    from: string;
+    address: string;
+    tokens: string[];
+    all: boolean;
+};
 export type GetTokensParams = {
     from: string;
 };
@@ -74,7 +85,9 @@ export type Token = {
     address: string;
     name: string;
     symbol: string;
-    decimal: number;
+    decimals: number;
+    pubBalance?: number;
+    priBalance?: number;
 };
 export type GetTransactionsParams = {
     from: string;
