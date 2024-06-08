@@ -7,6 +7,7 @@ export const useAddress = () => {
   const { installedSnap } = useMetaMaskContext();
   const { snapWallet, saveSnapWallet } = useAppContext();
   const [address, setAddress] = useState<string>('');
+  console.log('useAddress snapWallet: ', snapWallet);
 
   useEffect(() => {
     if (installedSnap && !address) {
@@ -29,6 +30,7 @@ export const useAddress = () => {
       const snapWallet = await aztecSnap.getSnapWallet(
         CompleteAddress.fromString(address),
       );
+      console.log('_snapWallet: ', snapWallet);
       saveSnapWallet(snapWallet);
     }
   };

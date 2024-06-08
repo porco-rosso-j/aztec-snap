@@ -16,6 +16,7 @@ export function useETHFaucet() {
     notifications.show({
       title: 'Requesting ETH Faucet',
       message: 'it may take more than 30 seconds...',
+      autoClose: 10000,
     });
 
     const pxe = createPXEClient(PXE_URL);
@@ -34,6 +35,7 @@ export function useETHFaucet() {
       notifications.show({
         title: 'WETH acquired on L1',
         message: 'depositing ETH to get WETH token',
+        autoClose: 10000,
       });
 
       const weth: UniSDKToken = new UniSDKToken(
@@ -52,6 +54,7 @@ export function useETHFaucet() {
       notifications.show({
         title: 'ETH being deployed',
         message: 'Wrapped WETH being deployed on Aztec',
+        autoClose: 10000,
       });
 
       await sdk.bridgeTokensFromL1ToL2({
@@ -67,6 +70,7 @@ export function useETHFaucet() {
       notifications.show({
         title: 'ETH Bridged',
         message: 'ETH claimed and redeemded on Aztec',
+        autoClose: 10000,
       });
 
       await tokenContract.methods
@@ -77,6 +81,7 @@ export function useETHFaucet() {
       notifications.show({
         title: 'Public ETH Faucet Sent',
         message: 'ETH sent to your address',
+        autoClose: 10000,
       });
 
       await tokenContract.methods
@@ -87,6 +92,7 @@ export function useETHFaucet() {
       notifications.show({
         title: 'Private ETH Faucet Sent',
         message: 'ETH sent to your address',
+        autoClose: 10000,
       });
 
       let l2eth: Token = {
@@ -97,6 +103,11 @@ export function useETHFaucet() {
       };
 
       await snapWallet.addToken(l2eth);
+      await snapWallet.updateBalances(
+        snapWallet.getAddress().toString(),
+        [tokenContract.address.toString()],
+        false,
+      );
       return tokenContract.address.toString();
     } catch (e) {
       console.log('e: ', e);

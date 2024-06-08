@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../contexts/useAppContext';
+import { useAppContext } from '../contexts';
 import { Token as L2Token } from '@abstract-crypto/aztec-snap-lib';
 
 export const useGetL2Tokens = () => {
@@ -8,10 +8,10 @@ export const useGetL2Tokens = () => {
 
   // TODO: place default eth when len == 0
   const fetchTokens = async () => {
-    console.log('fetchTokens: ');
+    console.log('Fetching Tokens from Snap... ');
     if (!snapWallet) return;
     let l2tokens: L2Token[] = await snapWallet.getTokens();
-    console.log('fetchTokens done ');
+    console.log('Fetching Tokens Complete: ', l2tokens);
     if (l2tokens.length == 0) return;
     l2tokens = sortArray(l2tokens);
 
@@ -48,17 +48,15 @@ export const useGetL2Tokens = () => {
   }
 
   useEffect(() => {
+    console.log('l2TokensStorage: ', l2TokensStorage);
     if (l2Tokens.length == 0 && l2TokensStorage.length != 0) {
       setL2Tokens(l2TokensStorage);
-      // TODO: make this periodical
-      // fetchTokens();
     }
-
 
     const intervalId = setInterval(fetchTokens, 30000);
     // Clear interval on component unmount
     return () => clearInterval(intervalId);
-  }, [l2Tokens, l2TokensStorage]);
+  }, [l2Tokens, l2TokensStorage, snapWallet]);
 
   return {
     l2Tokens,

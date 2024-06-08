@@ -41,7 +41,7 @@
     "@mantine/hooks": "^7.3.2",
     "@mantine/notifications": "^7.3.2",
     "@metamask/providers": "^15.0.0",
-    "@shieldswap/l1-transact": "^0.1.1",
+    "@shieldswap/l1-transact": "^0.1.2",
     "@tabler/icons-react": "^2.47.0",
     "@uniswap/sdk-core": "^5.0.0",
     "buffer": "^6.0.3",

@@ -46,12 +46,17 @@ export const AppContextProviderComponent: React.FC<AppContextProps> = ({
   const [bridgeSDK, setBridgeSDK] = useState<L1TransactSdk | null>(null);
   const [l2TokensStorage, setL2TokensStorage] = useState<Token[]>([]);
 
+  console.log('context snapWallet: ', snapWallet);
+
   useEffect(() => {
     if (l2TokensStorage.length == 0) {
-      const tokens = localStorage.getItem('l2_tokens');
-      setL2TokensStorage(tokens ? JSON.parse(tokens) : []);
+      const _tokens = localStorage.getItem('l2_tokens');
+      const tokens = _tokens ? JSON.parse(_tokens) : [];
+      if (tokens.length != 0) {
+        setL2TokensStorage(tokens);
+      }
     }
-  });
+  }, [l2TokensStorage]);
 
   const saveL2TokensStorage = (_l2Tokens: Token[]) => {
     setL2TokensStorage(_l2Tokens);

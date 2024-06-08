@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { ArrowsDownUp, ChevronDown } from 'tabler-icons-react';
 import { L1Token, l1Tokens } from '../utils';
+import { MainBoxStyle } from '../styles/styles';
 
 type SwapProps = {
   isDarkTheme: boolean;
@@ -44,22 +45,7 @@ export function Swap(props: SwapProps) {
 
   return (
     <>
-      <Box
-        style={{
-          maxWidth: '650px',
-          height: '650px',
-          padding: '50px',
-          margin: 'auto',
-          marginTop: '3.5rem',
-          marginBottom: '1.5rem',
-          boxShadow: 'rgb(0 0 0 / 8%) 0rem 0.37rem 0.62rem',
-          borderRadius: '1.37rem',
-          backgroundColor: props.isDarkTheme ? '#2E213E' : 'white',
-          background: props.isDarkTheme
-            ? 'radial-gradient(at center bottom, #2E213E, #412E4D)'
-            : 'radial-gradient(at center bottom, #FFFFFF, #F2F0FF)',
-        }}
-      >
+      <Box style={MainBoxStyle(props.isDarkTheme)}>
         <Stack
           align="center"
           justify="space-between"

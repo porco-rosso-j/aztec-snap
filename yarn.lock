@@ -49,6 +49,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.20.0
     buffer: ^6.0.3
     eslint: ^8.13.0
+    performance-polyfill: ^0.0.3
     prettier: ^2.6.2
     rimraf: ^3.0.2
     typescript: ^4.7.4
@@ -69,7 +70,7 @@ __metadata:
     "@mantine/hooks": ^7.3.2
     "@mantine/notifications": ^7.3.2
     "@metamask/providers": ^15.0.0
-    "@shieldswap/l1-transact": ^0.1.1
+    "@shieldswap/l1-transact": ^0.1.2
     "@tabler/icons-react": ^2.47.0
     "@types/node": ^20.10.6
     "@types/react": ^18.2.25
@@ -3087,9 +3088,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shieldswap/l1-transact@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "@shieldswap/l1-transact@npm:0.1.1"
+"@shieldswap/l1-transact@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@shieldswap/l1-transact@npm:0.1.2"
   dependencies:
     "@aztec/accounts": 0.41.0
     "@aztec/aztec.js": 0.41.0
@@ -3101,7 +3102,7 @@ __metadata:
     lodash-es: ^4.17.21
     qs: ^6.11.2
     ts-essentials: ^9.4.1
-  checksum: 4ada953b712f0bb3804ce17673fda7476ccd2da32f30ca8b78c853bb5fa2598d7f0dbd4acf618911cc00850ee26af7e61cb6368c73a3ffdb2ee5c02378608540
+  checksum: cdee58e3f66b61a505b706d4512145397969604910dd4e463a4da5bad662648c22eab7cb133cd332f188a1ae67bd5065ddcfb22492c18148c97fba2c6fcdd92c
   languageName: node
   linkType: hard
 
@@ -8971,6 +8972,13 @@ __metadata:
     safe-buffer: ^5.0.1
     sha.js: ^2.4.8
   checksum: 2c950a100b1da72123449208e231afc188d980177d021d7121e96a2de7f2abbc96ead2b87d03d8fe5c318face097f203270d7e27908af9f471c165a4e8e69c92
+  languageName: node
+  linkType: hard
+
+"performance-polyfill@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "performance-polyfill@npm:0.0.3"
+  checksum: fd69abcc4c1f6a3c0bb5adef882500f5573d45d74cb6899c645a7c4361cc534ba35a0ec9aece2cff50f7a551894026ab5976c3c931e7c9ecf70b8c102434982e
   languageName: node
   linkType: hard
 

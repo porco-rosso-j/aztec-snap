@@ -45,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
     "eslint": "^8.13.0",
+    "performance-polyfill": "^0.0.3",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
     "typescript": "^4.7.4",

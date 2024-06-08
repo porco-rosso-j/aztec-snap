@@ -12,6 +12,7 @@ import {
   getDAI,
   getUSDC,
   getWETH,
+  ETH,
 } from '../utils';
 import { useGetL2Tokens } from './useGetL2Tokens';
 
@@ -21,7 +22,18 @@ export function useBridge() {
 
   const { updateTokenBalances } = useGetL2Tokens();
 
-  async function setupBridgeAndL1Tokens() {
+  const setupBridgeSDK = async (): Promise<any> => {
+    const sdk = await L1TransactSdk.deploy({
+      pxeUrl: PXE_URL,
+      l1Deployer: ethWallet,
+      l2Deployer: (await getInitialTestAccountsWallets(pxe))[0],
+    });
+
+    saveBridgeSDK(sdk);
+    return sdk;
+  };
+
+  async function getL1Tokens() {
     if (!snapWallet) {
       return;
     }
@@ -32,13 +44,10 @@ export function useBridge() {
         message: 'it may take more than 30 seconds...',
       });
 
-      const sdk = await L1TransactSdk.deploy({
-        pxeUrl: PXE_URL,
-        l1Deployer: ethWallet,
-        l2Deployer: (await getInitialTestAccountsWallets(pxe))[0],
-      });
+      if (!bridgeSDK) {
+        await setupBridgeSDK();
+      }
 
-      saveBridgeSDK(sdk);
       await getWETH(ethWallet.address, 10);
       await getDAI(ethWallet.address, 10000);
       await getUSDC(ethWallet.address, 10000);
@@ -58,8 +67,9 @@ export function useBridge() {
   }
 
   async function bridgeAssetToL2(token: L1Token, amount: number) {
+    let sdk: L1TransactSdk = bridgeSDK ? bridgeSDK : await setupBridgeSDK();
 
-    if (!snapWallet || !metamaskWallet || !bridgeSDK) {
+    if (!snapWallet || !metamaskWallet || !sdk) {
       return;
     }
 
@@ -69,13 +79,11 @@ export function useBridge() {
       token.decimals,
       token.symbol,
     );
-    const tokenContract = await bridgeSDK.l2RegisterTokenIfNotRegistered(
-      uniSDKtoken,
-    );
+    const tokenContract = await sdk.l2RegisterTokenIfNotRegistered(uniSDKtoken);
 
     let _token = token;
-    if (_token.symbol == 'ETH') {
-      _token = WETH;
+    if (_token.symbol == 'WETH') {
+      _token = ETH;
     }
     let snapToken: SnapToken = {
       address: tokenContract.address.toString(),
@@ -86,7 +94,7 @@ export function useBridge() {
 
     const tokenAmount = token.decimals == 18 ? amount * 1e18 : amount * 1e6;
 
-    await bridgeSDK.bridgeTokensFromL1ToL2({
+    await sdk.bridgeTokensFromL1ToL2({
       l1From: metamaskWallet,
       l2To: snapWallet,
       amounts: [
@@ -102,8 +110,14 @@ export function useBridge() {
   }
 
   async function bridgeAssetToL1(token: L1Token, amount: number) {
+    console.log('snapWallet: ', snapWallet);
+    console.log('metamaskWallet: ', metamaskWallet);
+    console.log('bridgeSDK: ', bridgeSDK);
 
-    if (!snapWallet || !metamaskWallet || !bridgeSDK) {
+    let sdk: L1TransactSdk = bridgeSDK ? bridgeSDK : await setupBridgeSDK();
+
+    console.log('bridgeSDK: ', sdk);
+    if (!snapWallet || !metamaskWallet || !sdk) {
       return;
     }
 
@@ -121,10 +135,9 @@ export function useBridge() {
       true,
     );
 
-
     const tokenAmount = token.decimals == 18 ? amount * 1e18 : amount * 1e6;
 
-    await bridgeSDK.bridgeTokensFromL2ToL1({
+    await sdk.bridgeTokensFromL2ToL1({
       l2From: snapWallet,
       l1To: metamaskWallet,
       amounts: [
@@ -139,7 +152,7 @@ export function useBridge() {
   }
 
   return {
-    setupBridgeAndL1Tokens,
+    getL1Tokens,
     bridgeAssetToL2,
     bridgeAssetToL1,
   };

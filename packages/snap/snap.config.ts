@@ -1,7 +1,7 @@
 import type { SnapConfig } from '@metamask/snaps-cli';
 import { merge } from '@metamask/snaps-cli';
 import webpack from 'webpack';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const config: SnapConfig = {
   bundler: 'webpack',

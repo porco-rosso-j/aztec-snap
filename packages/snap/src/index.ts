@@ -64,6 +64,17 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     requestParams,
   };
 
+  // if (typeof performance !== 'undefined') {
+  //   console.log("typeof performance !== 'undefined'");
+  // } else {
+  //   console.log('performance defined:', performance);
+  // }
+
+  // console.log('performance.now: ', performance.now());
+  // if (typeof performance.now === 'function') {
+  //   console.log("typeof performance.now === 'function'");
+  // }
+
   switch (request.method) {
     case 'aztec_createAccount':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);

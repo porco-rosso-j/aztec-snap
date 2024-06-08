@@ -14,6 +14,7 @@ import { L1Token, l1Tokens } from '../utils';
 import { useMetaMaskContext, useAppContext } from '../contexts';
 import { BrowserProvider } from 'ethers';
 import { TokenMenu } from '../components';
+import { MainBoxStyle } from '../styles/styles';
 
 type BridgeProps = {
   isDarkTheme: boolean;
@@ -25,8 +26,7 @@ export function Bridge(props: BridgeProps) {
 
   const { snapWallet, metamaskWallet, saveMetamaskWallet } = useAppContext();
   const { provider } = useMetaMaskContext();
-  const { setupBridgeAndL1Tokens, bridgeAssetToL2, bridgeAssetToL1 } =
-    useBridge();
+  const { getL1Tokens, bridgeAssetToL2, bridgeAssetToL1 } = useBridge();
 
   const [isDeposit, setIsDeposit] = useState(true);
   const { l2Tokens } = useGetL2Tokens();
@@ -43,11 +43,12 @@ export function Bridge(props: BridgeProps) {
 
   const [faucetClicked, setFacuetClicked] = useState(false);
 
-  async function handleETHFaucet() {
+  async function handleTokensFaucet() {
     setErrorMessage('');
+
     setFacuetClicked(true);
     if (address) {
-      await setupBridgeAndL1Tokens();
+      await getL1Tokens();
     } else {
       setErrorMessage('address not found');
     }
@@ -58,14 +59,22 @@ export function Bridge(props: BridgeProps) {
     setL1Token(l1Token);
   };
 
-  const handleBridgeAsset = () => {
+  const handleBridgeAsset = async () => {
+    setLoading(true);
     if (isDeposit) {
       if (bridgeInputAmount <= L1TokenBalance) {
-        bridgeAssetToL2(l1Token, bridgeInputAmount);
+        await bridgeAssetToL2(l1Token, bridgeInputAmount);
+        setL1TokenBalance(L1TokenBalance - bridgeInputAmount);
+        setL2TokenBalance(L2TokenBalance + bridgeInputAmount);
       }
     } else {
-      bridgeAssetToL1(l1Token, bridgeInputAmount);
+      if (bridgeInputAmount <= L2TokenBalance) {
+        await bridgeAssetToL1(l1Token, bridgeInputAmount);
+        setL2TokenBalance(L2TokenBalance - bridgeInputAmount);
+        setL1TokenBalance(L1TokenBalance + bridgeInputAmount);
+      }
     }
+    setLoading(false);
   };
 
   const bridgeDirection = () => {
@@ -90,7 +99,7 @@ export function Bridge(props: BridgeProps) {
       if (isDeposit && metamaskWallet && l1Token.address) {
         const l1Address = await metamaskWallet.getAddress();
         const balance = await getL1TokenBalance(l1Token.address, l1Address);
-        console.log('balance: ', balance);
+        console.log('balance ss: ', balance);
         setL1TokenBalance(balance);
       } else if (!isDeposit && snapWallet) {
         const l2Token = l2Tokens.find((t) => t.name == l1Token.name);
@@ -112,22 +121,7 @@ export function Bridge(props: BridgeProps) {
 
   return (
     <>
-      <Box
-        style={{
-          maxWidth: '650px',
-          height: '650px',
-          padding: '50px',
-          margin: 'auto',
-          marginTop: '3.5rem',
-          marginBottom: '1.5rem',
-          boxShadow: 'rgb(0 0 0 / 8%) 0rem 0.37rem 0.62rem',
-          borderRadius: '1.37rem',
-          backgroundColor: props.isDarkTheme ? '#2E213E' : 'white',
-          background: props.isDarkTheme
-            ? 'radial-gradient(at center bottom, #2E213E, #412E4D)'
-            : 'radial-gradient(at center bottom, #FFFFFF, #F2F0FF)',
-        }}
-      >
+      <Box style={MainBoxStyle(props.isDarkTheme)}>
         <Stack
           h={450}
           align="center"
@@ -187,7 +181,9 @@ export function Bridge(props: BridgeProps) {
                 backgroundColor: 'transparent',
               }}
               error={
-                L1TokenBalance < bridgeInputAmount ? (
+                isDeposit ? (
+                  L1TokenBalance < bridgeInputAmount
+                ) : L2TokenBalance < bridgeInputAmount ? (
                   <Text size="12px">amount exceeds balance</Text>
                 ) : null
               }
@@ -267,19 +263,31 @@ export function Bridge(props: BridgeProps) {
           <Button
             color="#633BA0"
             size="md"
-            disabled={false}
+            disabled={loading}
+            loading={loading}
             onClick={() => {
               setErrorMessage('');
               console.log('bridgeInputAmount: ', bridgeInputAmount);
-              if (
-                bridgeInputAmount != 0 &&
-                bridgeInputAmount <= L1TokenBalance
-              ) {
-                handleBridgeAsset();
-              } else if (bridgeInputAmount > L1TokenBalance) {
-                setErrorMessage('Amount exceeds balance');
+              if (isDeposit) {
+                if (
+                  bridgeInputAmount != 0 &&
+                  bridgeInputAmount <= L1TokenBalance
+                ) {
+                  handleBridgeAsset();
+                } else if (bridgeInputAmount > L1TokenBalance) {
+                  setErrorMessage('Amount exceeds balance');
+                }
               } else {
-                setErrorMessage('Inputs not defined');
+                console.log('1');
+                if (
+                  bridgeInputAmount != 0 &&
+                  bridgeInputAmount <= L2TokenBalance
+                ) {
+                  console.log('2');
+                  handleBridgeAsset();
+                } else if (bridgeInputAmount > L2TokenBalance) {
+                  setErrorMessage('Amount exceeds balance');
+                }
               }
             }}
           >
@@ -299,9 +307,9 @@ export function Bridge(props: BridgeProps) {
                 cursor: 'pointer',
                 textAlign: 'center',
               }}
-              onClick={() => handleETHFaucet()}
+              onClick={() => handleTokensFaucet()}
             >
-              Setup Token Bridge and Get L1 Tokens
+              Get L1 Tokens Faucet
             </Text>
             {errorMessage && <Text c="red">{errorMessage}</Text>}
           </Stack>
