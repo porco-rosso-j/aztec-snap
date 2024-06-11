@@ -8,7 +8,7 @@ import { addPendingShieldNoteToPXE } from '../utils';
 export const useShieldToken = () => {
   const [shieldTxHash, setTxHash] = useState<string | undefined>();
   const { snapWallet } = useAppContext();
-  const { getBalance } = useBalance();
+  const { getL2Balance } = useBalance();
   const [isLoading, setIsLoading] = useState(false);
   const [shieldLoadingId, setShieldLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
@@ -36,7 +36,7 @@ export const useShieldToken = () => {
 
       let sentTx;
       if (shield) {
-        const secretHash = await snapWallet.createSecretHash(from, token);
+        const secretHash = await snapWallet.createSecretHash(token);
         console.log('secretHash: ', secretHash);
 
         console.log('sending: ');
@@ -77,7 +77,7 @@ export const useShieldToken = () => {
       console.log('txHash: ', txHash);
       setTxHash(txHash.toString());
 
-      const balance = await getBalance(token, from);
+      const balance = await getL2Balance(token, from);
       console.log('balance: ', balance);
     } catch (err: unknown) {
       console.log('err: ', err);

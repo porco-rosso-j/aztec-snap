@@ -1,11 +1,9 @@
 import { Group, Text, Button, Anchor } from '@mantine/core';
-import { useAppContext } from '../contexts/useAppContext';
 import { IconSun, IconMoonFilled } from '@tabler/icons-react';
-import imgGithub from '../assets/github-mark.png';
-import imgGithubWhite from '../assets/github-mark-w.png';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useMetaMaskContext } from '../contexts/MetamaskContext';
+import { imgGithub, imgGithubWhite } from '../assets';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useMetaMaskContext, useAppContext } from '../contexts';
 import {
   AztecSnap,
   isLocalSnap,
@@ -18,12 +16,26 @@ type HeaderProps = {
   toggleTheme: () => void;
 };
 export function Header(props: HeaderProps) {
+  const location = useLocation();
+
   const { saveSnapWallet } = useAppContext();
   const { isFlask, snapsDetected, installedSnap, detect } =
     useMetaMaskContext();
 
   const navigate = useNavigate();
-  const [memuId, setMenuId] = useState(0);
+  const [menuId, setMenuId] = useState(0);
+
+  useEffect(() => {
+    if (menuId == 0) {
+      let newMenuId = 0;
+      if (location.pathname == '/bridge') {
+        newMenuId = 1;
+      } else if (location.pathname == '/swap') {
+        newMenuId = 2;
+      }
+      setMenuId(newMenuId);
+    }
+  }, [location, menuId]);
 
   const isMetaMaskReady = isLocalSnap(defaultSnapOrigin)
     ? isFlask
@@ -32,7 +44,7 @@ export function Header(props: HeaderProps) {
   const menuTextStyle = (_menuId: number) => {
     return {
       color: props.isDarkTheme ? 'white' : 'black',
-      opacity: memuId == _menuId ? '100%' : '50%',
+      opacity: menuId == _menuId ? '100%' : '50%',
       fontSize: '18px',
       cursor: 'pointer',
     };
@@ -46,7 +58,7 @@ export function Header(props: HeaderProps) {
         : menu_id == 1
         ? '/bridge'
         : menu_id == 2
-        ? '/defi'
+        ? '/swap'
         : '/',
     );
   };
@@ -84,7 +96,7 @@ export function Header(props: HeaderProps) {
           Bridge
         </Text>
         <Text style={menuTextStyle(2)} onClick={() => handleNavigate(2)}>
-          DeFi
+          Swap
         </Text>
       </Group>
 

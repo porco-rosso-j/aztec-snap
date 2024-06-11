@@ -1,12 +1,14 @@
-import { Box, Button, Divider, Group, Stack, Text } from '@mantine/core';
-import React, { useState } from 'react';
-import { currencyIcons, TokenWithBalance } from '../utils';
+import { Box, Button, Divider, Group, Image, Stack, Text } from '@mantine/core';
+import { useState } from 'react';
+
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { ToggleLeft, ToggleRight } from 'tabler-icons-react';
+import { Token } from '@abstract-crypto/aztec-snap-lib';
+import { tokenIcons } from '../utils';
 
 type TokenListProps = {
   isDarkTheme: boolean;
-  tokens: TokenWithBalance[];
+  tokens: Token[];
   handleOpenManageToken: (open: boolean, id: number) => void;
 };
 
@@ -21,6 +23,20 @@ export function TokenList(props: TokenListProps) {
   const textStyle = {
     color: textColor,
     fontSize: '14px',
+  };
+
+  const showBalance = (
+    pubBal: number | undefined,
+    priBal: number | undefined,
+    decimals: number,
+  ): string => {
+    if (isPubBal && pubBal) {
+      return (pubBal / 10 ** decimals).toFixed(2);
+    } else if (!isPubBal && priBal) {
+      return (priBal / 10 ** decimals).toFixed(2);
+    } else {
+      return '0';
+    }
   };
 
   return (
@@ -60,7 +76,7 @@ export function TokenList(props: TokenListProps) {
         style={{ maxHeight: '260px', overflowY: 'auto' }}
       >
         {props.tokens.length !== 0 ? (
-          props.tokens.map((token: TokenWithBalance, index: number) => (
+          props.tokens.map((token: Token, index: number) => (
             <Box
               key={token.symbol}
               pr={15}
@@ -94,10 +110,7 @@ export function TokenList(props: TokenListProps) {
                     justifyContent: 'space-between',
                   }}
                 >
-                  {React.createElement(currencyIcons[index], {
-                    style: { color: textColor },
-                  })}
-
+                  {<Image w={20} src={tokenIcons[token.symbol]} />}
                   <Text
                     style={{
                       color: textColor,
@@ -113,7 +126,11 @@ export function TokenList(props: TokenListProps) {
                     fontSize: '15px',
                   }}
                 >
-                  {isPubBal ? token.pubBalance : token.priBalance}{' '}
+                  {showBalance(
+                    token.pubBalance,
+                    token.priBalance,
+                    token.decimals,
+                  )}{' '}
                   {token.symbol}
                 </Text>
               </Group>

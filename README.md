@@ -14,6 +14,13 @@ More specifically, it currently uses the derived private key as a signing key fo
 git clone git@github.com:porco-rosso-j/aztec-snap.git
 ```
 
+### run sandbox and local ethereum fork
+
+```shell
+cd .aztec
+aztec-sandbox
+```
+
 ### install packages and start
 
 install dependencies:

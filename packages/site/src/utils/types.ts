@@ -1,8 +1,8 @@
-export type TokenWithBalance = {
+export type L1Token = {
   address: string;
   name: string;
   symbol: string;
-  decimal: number;
-  pubBalance?: number;
-  priBalance?: number;
+  decimals: number;
+  icon: string;
+  balance?: number;
 };

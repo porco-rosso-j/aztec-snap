@@ -5,7 +5,7 @@ import { useAppContext } from '../contexts/useAppContext';
 export const useRedeemToken = () => {
   const [redeemTxHash, setTxHash] = useState<string | undefined>();
   const { snapWallet } = useAppContext();
-  const { getBalance } = useBalance();
+  const { getL2Balance } = useBalance();
   const [isRedeemLoading, setIsLoading] = useState(false);
   const [redeemLoadingId, setRedeemLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
@@ -26,21 +26,16 @@ export const useRedeemToken = () => {
       setIsLoading(true);
       setRedeemLoadingId(index);
 
-      const pendingShields = await snapWallet.getPendingShields(from, token);
+      const pendingShields = await snapWallet.getPendingShields(token);
       console.log('pendingShields: ', pendingShields);
 
       if (pendingShields) {
-        const txHash = await snapWallet.redeemShield(
-          from,
-          token,
-          amount,
-          index,
-        );
+        const txHash = await snapWallet.redeemShield(token, amount, index);
         console.log('txHash: ', txHash);
         setTxHash(txHash);
       }
 
-      const balance = await getBalance(token, from);
+      const balance = await getL2Balance(token, from);
       console.log('balance: ', balance);
     } catch (err: unknown) {
       console.log('err: ', err);

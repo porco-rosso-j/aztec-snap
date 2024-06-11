@@ -1,19 +1,23 @@
+// import { TokenContract } from '@aztec/noir-contracts.js/Token';
 import {
   ApiParams,
   GetPendingShields,
   RedeemablePendingShield,
 } from 'src/types';
-import { computeSecret, getPXE, getPrivateKeys } from 'src/utils';
+import { computeSecret, getPXE, getPrivateKeys } from '../utils';
 
 export const getRedeemablePendingShields = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as GetPendingShields;
 
+  const { AztecAddress, Fr, computeSecretHash } = await import(
+    '@aztec/aztec.js'
+  );
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
+
   const filter = {
-    contractAddress: apiParams.aztec.AztecAddress.fromString(
-      requestParams.token,
-    ),
-    storageSlot: new apiParams.aztec.Fr(5),
-    owner: apiParams.aztec.AztecAddress.fromString(requestParams.from),
+    contractAddress: AztecAddress.fromString(requestParams.token),
+    storageSlot: TokenContract.storage.pending_shields.slot,
+    owner: AztecAddress.fromString(requestParams.from),
     status: 1, // not-read yet
   };
 
@@ -44,9 +48,7 @@ export const getRedeemablePendingShields = async (apiParams: ApiParams) => {
     for (let j = 0; j < notes.length; j++) {
       const secretHashInNote = notes[j].note.items[1].toString();
 
-      const secretHashFromState = apiParams.aztec.computeMessageSecretHash(
-        apiParams.aztec.Fr.fromString(secrets[i]),
-      );
+      const secretHashFromState = computeSecretHash(Fr.fromString(secrets[i]));
 
       if (secretHashInNote == secretHashFromState.toString()) {
         redeemablePendingShields.push({

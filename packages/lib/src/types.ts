@@ -12,6 +12,7 @@ import type {
   SendTxParams,
   Token,
   Transaction,
+  UpdateBalancesParams,
 } from '@abstract-crypto/aztec-snap';
 
 export type RpcMethods = {
@@ -28,6 +29,9 @@ export type RpcMethods = {
   ) => Promise<RedeemablePendingShield[]>;
   redeemShield: (redeemShieldParams: RedeemShieldParams) => Promise<string>;
   getBalance: (getBalanceParams: GetBalanceParams) => Promise<number[]>;
+  updateBalances: (
+    updateBalancesParams: UpdateBalancesParams,
+  ) => Promise<Token[]>;
   addToken: (addTokenParams: AddTokenParams) => void;
   getTokens: (getTokenParams: GetTokensParams) => Token[];
   getTransactions: (

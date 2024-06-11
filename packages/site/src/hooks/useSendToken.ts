@@ -7,7 +7,7 @@ import { useAppContext } from '../contexts/useAppContext';
 export const useSendToken = () => {
   const [sendTxHash, setTxHash] = useState<string | undefined>();
   const { snapWallet } = useAppContext();
-  const { getBalance } = useBalance();
+  const { getL2Balance } = useBalance();
   const [isLoading, setIsLoading] = useState(false);
   const [sendLoadingId, setSendLoadingId] = useState(0);
   const [error, setError] = useState<string | undefined>();
@@ -64,7 +64,7 @@ export const useSendToken = () => {
       console.log('txHash: ', txHash);
       setTxHash(txHash.toString());
 
-      const balance = await getBalance(token, from);
+      const balance = await getL2Balance(token, from);
       console.log('balance: ', balance);
     } catch (err: unknown) {
       console.log('err: ', err);

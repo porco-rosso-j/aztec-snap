@@ -1,5 +1,5 @@
 import { ApiParams, CreateSecretParams } from 'src/types';
-import { getPrivateKeys, validateSender, computeSecret } from 'src/utils';
+import { getPrivateKeys, validateSender, computeSecret } from '../utils';
 
 export const createSecretHash = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as CreateSecretParams;
@@ -34,7 +34,8 @@ export const createSecretHash = async (apiParams: ApiParams) => {
   }
 
   // secret hash
-  const secretHash = apiParams.aztec.computeMessageSecretHash(secret);
+  const { computeSecretHash } = await import('@aztec/aztec.js');
+  const secretHash = computeSecretHash(secret);
   console.log('secretHash: ', secretHash.toString());
 
   return secretHash.toString();

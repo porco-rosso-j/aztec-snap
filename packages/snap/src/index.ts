@@ -22,8 +22,9 @@ import {
   addToken,
   getTokens,
   getTransactions,
+  updateBalances,
 } from './rpc';
-import { getAddressKeyDeriver } from './utils';
+import { getAddressKeyDeriver } from './utils/key-utils';
 import { Account, ApiParams, ApiRequestParams } from './types';
 
 export const onRpcRequest: OnRpcRequestHandler = async ({
@@ -56,47 +57,69 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       },
     });
   }
-  const aztec = await import('@aztec/aztec.js');
+
+  console.debug('method', request.method);
   const apiParams: ApiParams = {
     state,
     requestParams,
-    aztec,
   };
 
-  console.log('requestParams: ', apiParams.requestParams);
-  console.log('requestParams: ', apiParams.state?.accounts);
+  // if (typeof performance !== 'undefined') {
+  //   console.log("typeof performance !== 'undefined'");
+  // } else {
+  //   console.log('performance defined:', performance);
+  // }
+
+  // console.log('performance.now: ', performance.now());
+  // if (typeof performance.now === 'function') {
+  //   console.log("typeof performance.now === 'function'");
+  // }
 
   switch (request.method) {
     case 'aztec_createAccount':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createAccount(apiParams);
+      return await createAccount(apiParams);
+
     case 'aztec_getBalance':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return getBalance(apiParams);
+      return await getBalance(apiParams);
+
+    case 'aztec_updateBalances':
+      apiParams.keyDeriver = await getAddressKeyDeriver(snap);
+      return await updateBalances(apiParams);
+
     case 'aztec_accounts':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return getAddress(apiParams);
+      return await getAddress(apiParams);
+
     case 'aztec_createAuthWitness':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createAuthWitness(apiParams);
+      return await createAuthWitness(apiParams);
+
     case 'aztec_sendTx':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return sendTx(apiParams);
+      return await sendTx(apiParams);
+
     case 'aztec_createSecretHash':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return createSecretHash(apiParams);
+      return await createSecretHash(apiParams);
+
     case 'aztec_getPendingShields':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return getRedeemablePendingShields(apiParams);
+      return await getRedeemablePendingShields(apiParams);
+
     case 'aztec_redeemShield':
       apiParams.keyDeriver = await getAddressKeyDeriver(snap);
-      return redeemShield(apiParams);
+      return await redeemShield(apiParams);
+
     case 'aztec_addToken':
-      return addToken(apiParams);
+      await addToken(apiParams);
+
     case 'aztec_getTokens':
-      return getTokens(apiParams);
+      return await getTokens(apiParams);
+
     case 'aztec_getTransactions':
-      return getTransactions(apiParams);
+      return await getTransactions(apiParams);
 
     default:
       throw new Error('Method not found.');
@@ -134,7 +157,7 @@ export const onHomePage: OnHomePageHandler = async () => {
 
     if (accounts[0]) {
       const account = accounts[0];
-      const userAddress = account.address;
+      const userAddress = account.compAddress;
       panelItems.push(
         row('Address', address(`${userAddress}` as `0x${string}`)),
       );

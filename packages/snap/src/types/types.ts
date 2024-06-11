@@ -1,4 +1,4 @@
-import { GrumpkinPrivateKey } from '@aztec/aztec.js';
+import type { Fr } from '@aztec/aztec.js';
 import type { BIP44AddressKeyDeriver } from '@metamask/key-tree';
 import type { ManageStateResult } from '@metamask/snaps-sdk';
 
@@ -13,16 +13,14 @@ export type Snap = {
 
 export type Account = {
   addressIndex: number;
-  address: string; // in hex
-  publicKey: string; // in hex
-  partialAddress: string;
+  compAddress: string;
 };
 
 export type ApiParams = {
   state: ManageStateResult;
   requestParams: ApiRequestParams;
   keyDeriver?: BIP44AddressKeyDeriver;
-  aztec: any;
+  aztec?: any;
 };
 
 export type ApiRequestParams =
@@ -35,8 +33,11 @@ export type ApiRequestParams =
   | RedeemShieldParams
   | GetPendingShields
   | GetBalanceParams
+  | UpdateBalanceParams
+  | UpdateBalancesParams
   | GetTokensParams
-  | AddTokenParams;
+  | AddTokenParams
+  | AddNoteParams;
 
 export type SerializedFunctionCall = {
   to: string;
@@ -89,6 +90,19 @@ export type GetBalanceParams = {
   token: string;
 };
 
+export type UpdateBalanceParams = {
+  from: string;
+  address: string;
+  token: string;
+};
+
+export type UpdateBalancesParams = {
+  from: string;
+  address: string;
+  tokens: string[];
+  all: boolean;
+};
+
 export type GetTokensParams = {
   from: string;
 };
@@ -98,15 +112,32 @@ export type AddTokenParams = {
   token: Token;
 };
 
+// export type Token = {
+//   address: string;
+//   name: string;
+//   symbol: string;
+//   decimal: number;
+// };
+
 export type Token = {
   address: string;
   name: string;
   symbol: string;
-  decimal: number;
+  decimals: number;
+  pubBalance?: number;
+  priBalance?: number;
 };
 
 export type GetTransactionsParams = {
   from: string;
+};
+
+export type AddNoteParams = {
+  from: string;
+  token: string;
+  amount: number;
+  secretHash: string;
+  txHash: string;
 };
 
 export type Transaction = {
@@ -117,6 +148,7 @@ export type Transaction = {
 };
 
 export type PrivateKeys = {
-  encryptionPrivateKey: GrumpkinPrivateKey;
+  // encryptionPrivateKey: GrumpkinPrivateKey;
+  encryptionPrivateKey: Fr;
   signingPrivateKey: Buffer;
 };

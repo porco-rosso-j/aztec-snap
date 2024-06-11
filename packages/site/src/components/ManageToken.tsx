@@ -10,24 +10,25 @@ import {
   Anchor,
   Tabs,
 } from '@mantine/core';
-import { TokenWithBalance, shortenTxHash } from '../utils';
+import { shortenTxHash } from '../utils';
 import {
   useSendToken,
   useShieldToken,
   useRedeemToken,
   useGetPendingShields,
 } from '../hooks';
+import { Token } from '@abstract-crypto/aztec-snap-lib';
 
 type ManageTokenProps = {
   isDarkTheme: boolean;
-  token: TokenWithBalance;
+  token: Token;
   address: string;
-  updateTokenBalance: (token: string) => void;
+  updateTokenBalances: (token: string[]) => void;
   handleOpenManageToken: (open: boolean, id: number) => void;
 };
 
 export function ManageToken(props: ManageTokenProps) {
-  const token = props.token.address;
+  const token = props.token.address ? props.token.address : '';
   const { sendTxHash, sendLoadingId, sendToken } = useSendToken();
   const { shieldTxHash, shieldLoadingId, shieldToken } = useShieldToken();
   const { redeemTxHash, isRedeemLoading, redeemLoadingId, redeemToken } =
@@ -59,7 +60,7 @@ export function ManageToken(props: ManageTokenProps) {
     setLoading(true);
     if (props.address) {
       await sendToken(token, props.address, recepient, sendAmount, pub);
-      props.updateTokenBalance(token);
+      props.updateTokenBalances([token]);
     } else {
       console.log('address not set');
     }
@@ -70,7 +71,7 @@ export function ManageToken(props: ManageTokenProps) {
     setLoading(true);
     if (props.address) {
       await shieldToken(token, props.address, sendAmount, shield);
-      props.updateTokenBalance(token);
+      props.updateTokenBalances([token]);
       await fetchPendingShields();
     } else {
       console.log('props.address not set');
@@ -82,7 +83,7 @@ export function ManageToken(props: ManageTokenProps) {
     setLoading(true);
     if (props.address) {
       await redeemToken(token, props.address, amount, index);
-      props.updateTokenBalance(token);
+      props.updateTokenBalances([token]);
       await fetchPendingShields();
     } else {
       console.log('address not set');

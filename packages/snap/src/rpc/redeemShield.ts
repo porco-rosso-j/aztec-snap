@@ -1,12 +1,10 @@
 import { ApiParams, RedeemShieldParams } from 'src/types';
 import {
   confirmRedeemShield,
-  getECDSAWallet,
-  getPXE,
+  getSnapECDSAWallet,
   getPrivateKeys,
-  getStateAccount,
   validateSender,
-} from 'src/utils';
+} from '../utils';
 
 export const redeemShield = async (apiParams: ApiParams) => {
   const requestParams = apiParams.requestParams as RedeemShieldParams;
@@ -16,27 +14,22 @@ export const redeemShield = async (apiParams: ApiParams) => {
 
   const { signingPrivateKey } = await getPrivateKeys(apiParams);
 
-  const pxe = await getPXE();
-  const account = await getECDSAWallet(
-    pxe,
-    await getStateAccount(apiParams, 0),
-    signingPrivateKey,
-  );
+  const account = await getSnapECDSAWallet(apiParams, signingPrivateKey, 0);
 
-  const noirContracts = await import('@aztec/noir-contracts.js');
-  const tokenContract = await noirContracts.TokenContract.at(
-    apiParams.aztec.AztecAddress.fromString(requestParams.token),
+  const { AztecAddress, Fr } = await import('@aztec/aztec.js');
+  const { TokenContract } = await import('@aztec/noir-contracts.js/Token');
+
+  const tokenContract = await TokenContract.at(
+    AztecAddress.fromString(requestParams.token),
     account,
   );
 
   const secrets: string[] = apiParams.state?.secrets as string[];
-  const secret = apiParams.aztec.Fr.fromString(
-    secrets[requestParams.secretIndex],
-  );
+  const secret = Fr.fromString(secrets[requestParams.secretIndex]);
 
   const sentTx = tokenContract.methods
     .redeem_shield(
-      apiParams.aztec.AztecAddress.fromString(requestParams.from),
+      AztecAddress.fromString(requestParams.from),
       BigInt(requestParams.amount),
       secret,
     )

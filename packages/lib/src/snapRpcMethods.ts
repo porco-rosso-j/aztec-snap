@@ -11,6 +11,7 @@ import {
   GetBalanceParams,
   AddTokenParams,
   GetTokensParams,
+  UpdateBalancesParams,
   Token,
   GetTransactionsParams,
   Transaction,
@@ -24,7 +25,7 @@ export const snapRpcRequest = async <M extends keyof RpcMethodTypes>(
     params: {
       request: {
         method: `aztec_${args.snapRpcMethod as string}`,
-        params: 'params' in args ? args.params : undefined,
+        params: 'params' in args ? args.params : [],
       },
       snapId: args.snapId,
     },
@@ -155,6 +156,22 @@ export const getBalanceSnap = async (
   try {
     return await snapRpcRequest({
       snapRpcMethod: 'getBalance',
+      params: getBalanceParams,
+      snapId: snapId ? snapId : defaultSnapOrigin,
+    });
+  } catch (e) {
+    console.log('e: ', e);
+    return [];
+  }
+};
+
+export const updateBalancesSnap = async (
+  getBalanceParams: UpdateBalancesParams,
+  snapId?: string,
+): Promise<Token[]> => {
+  try {
+    return await snapRpcRequest({
+      snapRpcMethod: 'updateBalances',
       params: getBalanceParams,
       snapId: snapId ? snapId : defaultSnapOrigin,
     });

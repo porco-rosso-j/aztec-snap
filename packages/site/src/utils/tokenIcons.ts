@@ -1,70 +1,50 @@
+// import { CircleLetterT } from 'tabler-icons-react';
+import { ethIcon, wethIcon, daiIcon, usdcIcon } from '../assets';
 import {
-  CurrencyEthereum,
-  CoinBitcoin,
-  CoinMonero,
-  CircleLetterD,
-  CircleLetterC,
-  CircleLetterB,
-  CircleLetterA,
-  CircleLetterE,
-  CircleLetterF,
-  CircleLetterG,
-  CircleLetterH,
-  CircleLetterI,
-  CircleLetterJ,
-} from 'tabler-icons-react';
+  DAI_ADDRESS,
+  ETH_ADDRESS,
+  USDC_ADDRESS,
+  WETH_ADDRESS,
+} from './constants';
+import { L1Token } from './types';
 
-export const currencyIcons = [
-  CircleLetterA,
-  CircleLetterB,
-  CircleLetterC,
-  CircleLetterD,
-  CircleLetterE,
-  CircleLetterF,
-  CircleLetterG,
-  CircleLetterH,
-  CircleLetterI,
-  CircleLetterJ,
-];
-
-export type Token = {
-  address: string;
-  name: string;
-  symbol: string;
-  balance: number;
-  price: number;
+export const tokenIcons: { [key: string]: string } = {
+  ETH: ethIcon,
+  WETH: wethIcon,
+  DAI: daiIcon,
+  USDC: usdcIcon,
 };
 
-const ETH = {
+export const ETH = {
+  address: ETH_ADDRESS,
   name: 'Ethereum',
   symbol: 'ETH',
-  icon: CurrencyEthereum,
-  balance: 10,
-  price: 3000,
+  icon: ethIcon,
+  decimals: 18,
 };
 
-const BTC = {
-  name: 'Bitcoin',
-  symbol: 'BTC',
-  icon: CoinBitcoin,
-  balance: 1,
-  price: 50000,
-};
-
-const XMR = {
-  name: 'Monero',
-  symbol: 'XMR',
-  icon: CoinMonero,
-  balance: 24,
-  price: 100,
+export const WETH = {
+  address: WETH_ADDRESS,
+  name: 'Wrapped Ethereum',
+  symbol: 'WETH',
+  icon: wethIcon,
+  decimals: 18,
 };
 
 const DAI = {
+  address: DAI_ADDRESS,
   name: 'Dai Stablecoin',
   symbol: 'DAI',
-  icon: CircleLetterD,
-  balance: 1000,
-  price: 1,
+  icon: daiIcon,
+  decimals: 18,
 };
 
-export const tokens = [ETH, BTC, XMR, DAI];
+const USDC = {
+  address: USDC_ADDRESS,
+  name: 'USD Coin',
+  symbol: 'USDC',
+  icon: usdcIcon,
+  decimals: 6,
+};
+
+export const l1Tokens: L1Token[] = [WETH, USDC, DAI];

@@ -1,5 +1,5 @@
 import { Group, Text, Anchor } from '@mantine/core';
-import MetamaskLogo from '../assets/metamask_fox.svg';
+import { MetamaskLogo } from '../assets';
 
 type FooterProps = {
   isDarkTheme: boolean;

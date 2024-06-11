@@ -1,7 +1,7 @@
 import { getBIP44AddressKeyDeriver } from '@metamask/key-tree';
 import { SnapsProvider } from '@metamask/snaps-sdk';
 import { ApiParams, PrivateKeys } from '../types';
-import { Fq } from '@aztec/aztec.js';
+import type { Fr } from '@aztec/aztec.js';
 
 export const getAddressKeyDeriver = async (snap: SnapsProvider) => {
   // https://trezor.io/learn/a/what-is-bip44
@@ -28,9 +28,14 @@ export const getPrivateKeys = async (
 ): Promise<PrivateKeys> => {
   const { privateKey } = await apiParams.keyDeriver!(0);
   console.log('privateKey: ', privateKey);
-  const reducedPK: Fq = new apiParams.aztec.Fq(
-    BigInt(privateKey as string) % apiParams.aztec.Fq.MODULUS,
-  );
+  // const reducedPK: Fq = new apiParams.aztec.Fq(
+  //   BigInt(privateKey as string) % apiParams.aztec.Fq.MODULUS,
+  // );
+  // const reducedPK: Fr = new apiParams.aztec.Fr(
+  //   BigInt(privateKey as string) % apiParams.aztec.Fr.MODULUS,
+  // );
+  const { Fr } = await import('@aztec/aztec.js');
+  const reducedPK: Fr = new Fr(BigInt(privateKey as string) % Fr.MODULUS);
   console.log('reducedPK: ', reducedPK.toString());
 
   return {
