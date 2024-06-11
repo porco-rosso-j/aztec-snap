@@ -43,18 +43,13 @@ export class SnapWallet extends AccountWallet {
     _nodeInfo: NodeInfo,
     _snapRpc?: string,
   ) {
-    const account = new SnapAccountInterface(
-      _pxe,
-      _address,
-      _nodeInfo,
-      _snapRpc,
-    );
+    const account = new SnapAccountInterface(_address, _nodeInfo, _snapRpc);
     super(_pxe, account);
   }
 
   public async getBalance(address: string, token: string): Promise<number[]> {
     return await getBalanceSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       address,
       token,
     } as GetBalanceParams);
@@ -66,7 +61,7 @@ export class SnapWallet extends AccountWallet {
     all: boolean,
   ): Promise<Token[]> {
     return await updateBalancesSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       address,
       tokens,
       all,
@@ -75,7 +70,7 @@ export class SnapWallet extends AccountWallet {
 
   public async createSecretHash(contract: string): Promise<string> {
     return await createSecretSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       contract,
     } as CreateSecretParams);
   }
@@ -84,7 +79,7 @@ export class SnapWallet extends AccountWallet {
     token: string,
   ): Promise<RedeemablePendingShield[] | undefined> {
     return await getPendingShieldsSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       token,
     } as GetPendingShields);
   }
@@ -95,7 +90,7 @@ export class SnapWallet extends AccountWallet {
     secretIndex: number,
   ): Promise<string> {
     return await redeemShieldSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       token,
       amount,
       secretIndex,
@@ -105,21 +100,25 @@ export class SnapWallet extends AccountWallet {
 
   public async getTransactions(): Promise<Transaction[]> {
     return await getTransactionsSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
     } as GetTransactionsParams);
   }
 
   public async getTokens(): Promise<Token[]> {
     return await getTokensSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
     } as GetTokensParams);
   }
 
   public async addToken(token: Token) {
     await addTokenSnap({
-      from: this.account.getCompleteAddress().toString(),
+      from: this.getSender(),
       token,
     } as AddTokenParams);
+  }
+
+  getSender() {
+    return this.account.getCompleteAddress().toString();
   }
 }
 
@@ -145,6 +144,9 @@ export class AztecSnap {
   disconnect() {}
 
   async getSelectedAddress(): Promise<string> {
+    // TODO: this should return multiple addresses
+    // and the user chooses one they want it to be connected
+    // and instantiate SnapWallet()
     return (await getAddressSnap(this.snapRpc))[0];
   }
 
