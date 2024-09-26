@@ -3,10 +3,10 @@ import {
   TxExecutionRequest,
   CompleteAddress,
   Fr,
-  PXE,
+  AztecAddress,
 } from '@aztec/aztec.js';
 import { AccountInterface } from '@aztec/aztec.js/account';
-import { SerializedFunctionCall } from './types';
+import { SendTxParams, SerializedFunctionCall } from './types';
 import { defaultSnapOrigin } from './constants';
 import { createAuthWitnessSnap, sendTxSnap } from './snapRpcMethods';
 import { ExecutionRequestInit } from '@aztec/aztec.js/entrypoint';
@@ -14,26 +14,32 @@ import { type NodeInfo } from '@aztec/types/interfaces';
 
 export class SnapAccountInterface implements AccountInterface {
   private completeAddress: CompleteAddress;
-  private pxe: PXE;
   protected readonly snapRpc: string;
   private chainId: Fr;
   private version: Fr;
 
   constructor(
-    _pxe: PXE,
     _completeAddress: CompleteAddress,
     _nodeInfo: NodeInfo,
     _snapRpc?: string,
   ) {
-    this.pxe = _pxe;
     this.completeAddress = _completeAddress;
     this.snapRpc = _snapRpc ? _snapRpc : defaultSnapOrigin;
     this.chainId = new Fr(_nodeInfo.chainId);
     this.version = new Fr(_nodeInfo.protocolVersion);
   }
 
-  getAddress() {
+  getAddress(): AztecAddress {
     return this.getCompleteAddress().address;
+  }
+
+  // TODO: have this in localstorage so that it can be fetched w/ `getSelectedAddress`?
+  getCompleteAddress(): CompleteAddress {
+    return this.completeAddress;
+  }
+
+  getSnapId(): string {
+    return this.snapRpc;
   }
 
   getChainId(): Fr {
@@ -47,20 +53,19 @@ export class SnapAccountInterface implements AccountInterface {
   async createTxExecutionRequest(
     executions: ExecutionRequestInit,
   ): Promise<TxExecutionRequest> {
-    const { calls, authWitnesses = [], packedArguments = [] } = executions;
+    const { calls } = executions;
 
     if (calls.length > 1) {
       throw new Error(`Expected a single call, got ${calls.length}`);
     }
 
-    const call = calls[0];
     const serializedFunctionCall: SerializedFunctionCall = {
-      to: call.to.toString(),
-      functionData: call.functionData.toBuffer().toString('hex'),
-      args: call.args.map((argFr) => argFr.toString()),
+      to: calls[0].to.toString(),
+      functionData: calls[0].functionData.toBuffer().toString('hex'),
+      args: calls[0].args.map((argFr) => argFr.toString()),
     };
 
-    const sendTxParams = {
+    const sendTxParams: SendTxParams = {
       from: this.completeAddress.toString(),
       calls: [serializedFunctionCall],
       simulatePublic: true,
@@ -79,13 +84,5 @@ export class SnapAccountInterface implements AccountInterface {
       this.snapRpc,
     );
     return AuthWitness.fromString(authWitness);
-  }
-
-  getCompleteAddress(): CompleteAddress {
-    return this.completeAddress;
-  }
-
-  getSnapId(): string {
-    return this.snapRpc;
   }
 }

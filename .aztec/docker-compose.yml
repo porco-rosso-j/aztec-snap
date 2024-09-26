@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   ethereum:
     image: ghcr.io/foundry-rs/foundry@sha256:29ba6e34379e79c342ec02d437beb7929c9e254261e8032b17e187be71a2609f
@@ -10,19 +10,19 @@ services:
       anvil -p $$ANVIL_PORT --host 0.0.0.0 --chain-id 31337 --silent $$ARGS
       '
     ports:
-      - "${ANVIL_PORT:-8545}:${ANVIL_PORT:-8545}"
+      - '${ANVIL_PORT:-8545}:${ANVIL_PORT:-8545}'
     environment:
-      FORK_URL: "https://eth-mainnet.g.alchemy.com/v2/E63nfe-0QvGO00TjKld260K_CRcHEhEo"
+      FORK_URL: 'https://eth-mainnet.g.alchemy.com/v2/E63nfe-0QvGO00TjKld260K_CRcHEhEo'
       FORK_BLOCK_NUMBER:
       ANVIL_PORT: ${ANVIL_PORT:-8545}
 
   aztec:
-    image: "aztecprotocol/aztec:0.41.0"
+    image: 'aztecprotocol/aztec:0.41.0'
     ports:
-      - "${PXE_PORT:-8080}:${PXE_PORT:-8080}"
+      - '${PXE_PORT:-8080}:${PXE_PORT:-8080}'
     environment:
       DEBUG: # Loaded from the user shell if explicitly set
-      HOST_WORKDIR: "${PWD}" # Loaded from the user shell to show log files absolute path in host
+      HOST_WORKDIR: '${PWD}' # Loaded from the user shell to show log files absolute path in host
       ETHEREUM_HOST: http://ethereum:${ANVIL_PORT:-8545}
       CHAIN_ID: 31337
       ARCHIVER_POLLING_INTERVAL_MS: 50

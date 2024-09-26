@@ -126,22 +126,22 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   }
 };
 
-export const onInstall: OnInstallHandler = async () => {
-  const component = panel([
-    text('Your MetaMask wallet is now compatible with Aztec Sandbox!'),
-    text(
-      `To manage your Aztec account and send and receive funds, visit the [companion dapp for Starknet](${'http://localhost:5173'}).`,
-    ),
-  ]);
+// export const onInstall: OnInstallHandler = async () => {
+//   const component = panel([
+//     text('Your MetaMask wallet is now compatible with Aztec Sandbox!'),
+//     text(
+//       `To manage your Aztec account and send and receive funds, visit the [companion dapp for Starknet](${'http://localhost:5173'}).`,
+//     ),
+//   ]);
 
-  await snap.request({
-    method: 'snap_dialog',
-    params: {
-      type: 'alert',
-      content: component,
-    },
-  });
-};
+//   await snap.request({
+//     method: 'snap_dialog',
+//     params: {
+//       type: 'alert',
+//       content: component,
+//     },
+//   });
+// };
 
 export const onHomePage: OnHomePageHandler = async () => {
   const panelItems = [];

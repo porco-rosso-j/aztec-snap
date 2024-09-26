@@ -13,6 +13,7 @@ export declare class SnapWallet extends AccountWallet {
     getTransactions(): Promise<Transaction[]>;
     getTokens(): Promise<Token[]>;
     addToken(token: Token): Promise<void>;
+    getSender(): string;
 }
 export declare class AztecSnap {
     private pxe;
